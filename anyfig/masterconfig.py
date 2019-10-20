@@ -2,6 +2,7 @@ from abc import ABC
 import pprint
 import inspect
 from dataclasses import FrozenInstanceError
+import pickle
 
 
 def load_config(path):
