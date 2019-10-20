@@ -3,6 +3,7 @@ import pprint
 import inspect
 from dataclasses import FrozenInstanceError
 import pickle
+from pathlib import Path
 
 
 def is_anyfig_class(obj):
@@ -10,6 +11,7 @@ def is_anyfig_class(obj):
 
 
 def load_config(path):
+  path = Path(path)
   with open(path, 'rb') as f:
     obj = pickle.load(f)
 
@@ -18,6 +20,7 @@ def load_config(path):
 
 
 def save_config(obj, path):
+  path = Path(path)
   err_msg = f"Can only save anyfig config objects, not {type(obj)}"
   assert is_anyfig_class(type(obj)), err_msg
   with open(path, 'wb') as f:
