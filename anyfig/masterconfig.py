@@ -5,21 +5,26 @@ from dataclasses import FrozenInstanceError
 import pickle
 
 
+def is_anyfig_class(obj):
+  return inspect.isclass(obj) and issubclass(obj, MasterConfig)
+
+
 def load_config(path):
-  # TODO: Add checks so that object is config
-  print("Loading config")
   with open(path, 'rb') as f:
-    return pickle.load(f)
+    obj = pickle.load(f)
+
+  assert is_anyfig_class(type(obj)), 'Can only load anyfig config objects'
+  return obj
 
 
-def save_config(config_obj, path):
-  # TODO: Add checks so that object is config
-  print(f"Saving config @ {path}")
+def save_config(obj, path):
+  err_msg = f"Can only save anyfig config objects, not {type(obj)}"
+  assert is_anyfig_class(type(obj)), err_msg
   with open(path, 'wb') as f:
-    pickle.dump(config_obj, f, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
 
   with open(path + '.txt', 'w') as f:
-    f.write(str(config_obj))
+    f.write(str(obj))
 
 
 class MasterConfig(ABC):
@@ -36,8 +41,9 @@ class MasterConfig(ABC):
   def __str__(self):
     str_ = ""
     params = vars(self)
-    params.pop('_frozen')  # Dont print frozen
     for key, val in params.items():
+      if key == '_frozen':  # Dont print frozen
+        continue
       if hasattr(val, '__anyfig_print_source__'):
         cls_str = val.__anyfig_print_source__()
         s = f"'{key}':\n{cls_str}"

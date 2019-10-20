@@ -49,6 +49,10 @@ class Train(anyfig.MasterConfig):
 def main():
   config = anyfig.setup_config(default_config='Train')
   print(config)
+  # anyfig.save_config('adasdas', 'config.cfg')
+  anyfig.save_config(config, 'config.cfg')
+  anyfig.load_config('config.cfg')
+  # anyfig.load_config('config.cfg.txt')
 
 
 if __name__ == '__main__':

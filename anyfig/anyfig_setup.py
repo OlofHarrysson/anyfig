@@ -3,7 +3,7 @@ import fire
 import inspect
 import argparse
 import sys
-from .masterconfig import MasterConfig
+from .masterconfig import MasterConfig, is_anyfig_class
 
 
 def setup_config(default_config=None):  # TODO: Handle None
@@ -48,7 +48,7 @@ def choose_config(config_str):
 def get_available_configs():
   available_configs = {}
   for name, obj in inspect.getmembers(sys.modules[__name__]):
-    if inspect.isclass(obj) and issubclass(obj, MasterConfig):
+    if is_anyfig_class(obj):
       available_configs[name] = obj
   available_configs.pop('MasterConfig')
   return available_configs
