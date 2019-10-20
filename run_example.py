@@ -25,14 +25,15 @@ class Transformer():
     self.primitive = x
 
 
-# @config_class
-# class MainConfig(MasterConfig):
-#   def __init__(self):
-#     print("MAIN CONFIG SUPER")
-#     self.start_time = time.time()
-#     self.img_size = 100
-#     self.classes = ['car', 'dog']
-#     self.freeze_config = False
+@anyfig.config_class
+class MainConfig(anyfig.MasterConfig):
+  def __init__(self):
+    print("MAIN CONFIG SUPER")
+    super().__init__()
+    # self.start_time = time.time()
+    self.img_size = 100
+    self.classes = ['car', 'dog']
+    self.freeze_config = False
 
 
 @anyfig.config_class

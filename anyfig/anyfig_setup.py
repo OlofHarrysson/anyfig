@@ -31,7 +31,10 @@ def choose_config(config_str):
     config_class_ = available_configs[config_str]
     config_obj = config_class_()
   except KeyError as e:
-    err_msg = f"Config class '{config_str}' wasn't found. Feel free to create it as a new config class or use one of the existing ones marked as '@config_class' -> {set(available_configs)}"
+    err_msg = (
+      f"Config class '{config_str}' wasn't found. Feel free to create "
+      "it as a new config class or use one of the existing ones marked as "
+      f"'@config_class' -> {set(available_configs)}")
     raise KeyError(err_msg) from e
 
   # Overwrite parameters via optional input flags
@@ -67,8 +70,12 @@ def overwrite(config_obj):
   sys.stdout = sys.__stdout__
 
   for key, val in extra_arguments.items():
+    if key == 'config':  # Argparse deals with this one
+      continue
     if key not in vars(config_obj):
-      err_str = f"The input parameter '{key}' isn't allowed. It's only possible to overwrite attributes that exist in the DefaultConfig class. Add your input parameter to the default class or catch it before this message"
+      err_str = (
+        f"The input parameter '{key}' isn't allowed. It's only possible "
+        "to overwrite attributes that exist in the active config class")
       raise NotImplementedError(err_str)
     setattr(config_obj, key, val)
 
@@ -107,8 +114,8 @@ def print_source(func):
         src += __print_source__(val)
 
     # TODO: Source code can have different indention than \t
-    # Make it a config to anyfig?
-    # Adds one indention
+    # Make it a config to anyfig? Check the first indention and add that
+    # Adds indention
     src = src.replace('\n', '\n  ')
     return src
 
