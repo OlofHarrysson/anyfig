@@ -26,7 +26,7 @@ def save_config(obj, path):
   with open(path, 'wb') as f:
     pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
 
-  with open(path + '.txt', 'w') as f:
+  with open(path.with_suffix('.txt'), 'w') as f:
     f.write(str(obj))
 
 
