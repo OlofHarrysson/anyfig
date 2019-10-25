@@ -1,4 +1,5 @@
 import anyfig
+import other_file
 
 
 @anyfig.print_source
@@ -47,7 +48,8 @@ class Train(anyfig.MasterConfig):
 
 
 def main():
-  config = anyfig.setup_config(default_config='Train')
+  config = anyfig.setup_config()
+  # config = anyfig.setup_config(default_config='Train')
   print(config)
   # anyfig.save_config('adasdas', 'config.cfg')
   anyfig.save_config(config, 'config.cfg')

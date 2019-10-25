@@ -6,7 +6,7 @@ import sys
 from .masterconfig import MasterConfig, is_anyfig_class
 
 
-def setup_config(default_config=None):  # TODO: Handle None
+def setup_config(default_config=None):
   config_str = parse_args(default_config)
   config = choose_config(config_str)
   return config
@@ -27,14 +27,21 @@ def parse_args(default_config):
 def choose_config(config_str):
   # Create config object
   available_configs = get_available_configs()
+  err_msg = (
+    "Specify which config to use by either starting your python script with "
+    "the input argument --config=YourConfigClass or set "
+    "'default_config=YourConfigClass' in anyfigs setup_config method")
+  if config_str == None:
+    raise RuntimeError(err_msg)
+
   try:
     config_class_ = available_configs[config_str]
     config_obj = config_class_()
   except KeyError as e:
     err_msg = (
       f"Config class '{config_str}' wasn't found. Feel free to create "
-      "it as a new config class or use one of the existing ones marked as "
-      f"'@config_class' -> {set(available_configs)}")
+      "it as a new config class or use one of the existing ones "
+      f"{list(available_configs)}")
     raise KeyError(err_msg) from e
 
   # Overwrite parameters via optional input flags
@@ -84,13 +91,26 @@ def overwrite(config_obj):
 
 def config_class(func):
   class_name = func.__name__
+  module_name = sys.modules[__name__]
+
   err_msg = (f"Can't decorate '{class_name}' of type {type(func)}. "
              "Can only be used for classes")
   assert inspect.isclass(func), err_msg
+
   err_msg = (f"Can't decorate '{class_name}' since it's not a sublass of "
              "'chilliconfig.MasterConfig'")
   assert issubclass(func, MasterConfig), err_msg
-  setattr(sys.modules[__name__], class_name, func)
+
+  err_msg = "The class name 'MasterConfig' is reserved"
+  assert class_name != 'MasterConfig', err_msg
+
+  err_msg = (
+    f"The config class {class_name} has already been registered. "
+    "Duplicated names aren't allowed. Either change the name or avoid "
+    "importing the duplicated classes at the same time")
+  assert not hasattr(module_name, class_name), err_msg
+
+  setattr(module_name, class_name, func)
 
   return func
 
