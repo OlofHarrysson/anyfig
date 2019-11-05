@@ -52,6 +52,24 @@ Voila! This demonstrates the power of generating a config at runtime. But what d
 Have to different entrypoints with different default values without duplicated code
 
 
+```python
+import argparse
+import random
+parser = argparse.ArgumentParser()
+debug_default = False
+parser.add_argument("--debug", default=debug_default)
+
+if debug_default:
+  parser.add_argument("--seed", default=80085)
+else:
+  parser.add_argument("--seed", default=random.randint(0, 1000))
+```
+
+
+
+
+
+
 move to what anyfig offers
 
 TODO: Possibly go from file seed -> solved by argparse -> but argparse doesnt solve this case.
