@@ -1,5 +1,6 @@
 Would like to be able to use dataclasses structure. Its possible now but the type hinting is needed, and its not enforced so just seems bad to use.
 
+Can do I want to remove the inheritence from anyfig.MasterConfig? It looks neater but might be a bit harder for people to grasp what is happening. I don't want it to inherit form masterConfig and then when people inherit other shit it breaks.
 
 make it so __repr__ is ambigious
 
@@ -17,4 +18,4 @@ Mark them as strict? @config_class(strict=True). If one tries to overwrite attri
 
 Interface classes? Where the attributes are set to anyfig.placeholder and throws error if its not overwritten?
 
-@config_class(argparse=True) - Config class will do argparse parse_known instead of setting attributes? Would need multiple parse_known() which I dont know if it works. What would get exposed to the commandline with --help?
+Expose to the commandline with --help

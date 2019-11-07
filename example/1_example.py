@@ -1,5 +1,4 @@
 import anyfig
-# import other_file
 
 
 @anyfig.print_source
@@ -15,13 +14,14 @@ class Flip():
     self.x = x
     self.y = y
     self.noise3 = Noise(1, 2)
+    self.noise1 = Noise(1, 2)
 
 
 @anyfig.print_source
 class Transformer():
   def __init__(self, x):
     # self.noise1 = Noise(x, x)
-    # self.flip = Flip(4, 0)
+    self.flip = Flip(4, 0)
     # self.noise2 = Noise(4, 0)
     self.primitive = x
 
