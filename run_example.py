@@ -1,5 +1,5 @@
 import anyfig
-import other_file
+# import other_file
 
 
 @anyfig.print_source
@@ -47,13 +47,23 @@ class Train(anyfig.MasterConfig):
     # self.frozen = 123
 
 
+@anyfig.config_class
+class Config(anyfig.MasterConfig):
+  def __init__(self):
+    super().__init__()
+    self.name = 'oldname1111'
+    self.transforms111 = Transformer(100)
+    # self.freeze_config = False
+    # self.frozen = 123
+
+
 def main():
-  config = anyfig.setup_config()
-  # config = anyfig.setup_config(default_config='Train')
+  # config = anyfig.setup_config()
+  config = anyfig.setup_config(default_config='Train')
   print(config)
   # anyfig.save_config('adasdas', 'config.cfg')
-  anyfig.save_config(config, 'config.cfg')
-  anyfig.load_config('config.cfg')
+  # anyfig.save_config(config, 'config.cfg')
+  # anyfig.load_config('config.cfg')
   # anyfig.load_config('config.cfg.txt')
 
 
