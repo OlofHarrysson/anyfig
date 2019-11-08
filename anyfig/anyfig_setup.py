@@ -5,6 +5,8 @@ import argparse
 import sys
 from .masterconfig import MasterConfig, is_anyfig_class
 
+registered_config_classes = {}
+
 
 def setup_config(default_config=None):
   config_str = parse_args(default_config)
@@ -26,7 +28,7 @@ def parse_args(default_config):
 
 def choose_config(config_str):
   # Create config object
-  available_configs = get_available_configs()
+  available_configs = registered_config_classes
   err_msg = (
     "Specify which config to use by either starting your python script with "
     "the input argument --config=YourConfigClass or set "
@@ -35,7 +37,9 @@ def choose_config(config_str):
     raise RuntimeError(err_msg)
 
   try:
+    from types import MethodType
     config_class_ = available_configs[config_str]
+
     config_obj = config_class_()
   except KeyError as e:
     err_msg = (
@@ -50,15 +54,6 @@ def choose_config(config_str):
   # Freezes config
   config_obj.frozen(freeze=True)
   return config_obj
-
-
-def get_available_configs():
-  available_configs = {}
-  for name, obj in inspect.getmembers(sys.modules[__name__]):
-    if is_anyfig_class(obj):
-      available_configs[name] = obj
-  available_configs.pop('MasterConfig')
-  return available_configs
 
 
 def overwrite(config_obj):
@@ -93,25 +88,28 @@ def config_class(func):
   class_name = func.__name__
   module_name = sys.modules[__name__]
 
+  # Makes sure that nothing fishy is going on...
   err_msg = (f"Can't decorate '{class_name}' of type {type(func)}. "
              "Can only be used for classes")
   assert inspect.isclass(func), err_msg
 
-  err_msg = (f"Can't decorate '{class_name}' since it's not a sublass of "
-             "'chilliconfig.MasterConfig'")
-  assert issubclass(func, MasterConfig), err_msg
-
-  err_msg = "The class name 'MasterConfig' is reserved"
-  assert class_name != 'MasterConfig', err_msg
-
   err_msg = (
-    f"The config class {class_name} has already been registered. "
+    f"The config class '{class_name}' has already been registered. "
     "Duplicated names aren't allowed. Either change the name or avoid "
-    "importing the duplicated classes at the same time")
-  assert not hasattr(module_name, class_name), err_msg
+    "importing the duplicated classes at the same time. "
+    f"The registered classes are '{registered_config_classes}'")
+  assert class_name not in registered_config_classes, err_msg
 
-  setattr(module_name, class_name, func)
+  # Transfers the functions from MasterConfig to config class
+  for name, member in inspect.getmembers(MasterConfig):
+    if inspect.isfunction(member):
+      setattr(func, name, member)
 
+  # Manually transfers attributes from MasterConfig to config class
+  setattr(func, "_frozen", False)
+  setattr(func, "config_class", func.__name__)
+
+  registered_config_classes[class_name] = func
   return func
 
 
