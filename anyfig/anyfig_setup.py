@@ -100,12 +100,16 @@ def config_class(func):
     f"The registered classes are '{registered_config_classes}'")
   assert class_name not in registered_config_classes, err_msg
 
-  # Transfers the functions from MasterConfig to config class
-  for name, member in inspect.getmembers(MasterConfig):
-    if inspect.isfunction(member):
+  # Config class functions
+  members = inspect.getmembers(func, inspect.isfunction)
+  members = {name: function for name, function in members}
+
+  # Transfers functions from MasterConfig to config class
+  for name, member in inspect.getmembers(MasterConfig, inspect.isfunction):
+    if name not in members:  # Only transfer not implemented functions
       setattr(func, name, member)
 
-  # Manually transfers attributes from MasterConfig to config class
+  # Manually add attributes to config class
   setattr(func, "_frozen", False)
   setattr(func, "config_class", func.__name__)
 

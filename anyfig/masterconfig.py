@@ -30,7 +30,7 @@ def save_config(obj, path):
     f.write(str(obj))
 
 
-class MasterConfig():
+class MasterConfig(ABC):
   def frozen(self, freeze=True):
     self._frozen = freeze
 
