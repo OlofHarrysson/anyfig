@@ -1,6 +1,6 @@
 import anyfig
 import random
-import otherfile
+# import otherfile
 
 
 class RandomClass():
@@ -9,7 +9,7 @@ class RandomClass():
     self.hej = 'wowowo'
 
 
-@anyfig.config_class
+# @anyfig.config_class
 class FooConfig(RandomClass):
   def __init__(self):
     print("INIT FOOCONFIG")

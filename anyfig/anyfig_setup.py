@@ -28,24 +28,27 @@ def parse_args(default_config):
 
 def choose_config(config_str):
   # Create config object
-  available_configs = registered_config_classes
   err_msg = (
     "Specify which config to use by either starting your python script with "
     "the input argument --config=YourConfigClass or set "
-    "'default_config=YourConfigClass' in anyfigs setup_config method")
+    "'default_config=YourConfigClass' in anyfigs 'setup_config' method")
   if config_str == None:
     raise RuntimeError(err_msg)
 
-  try:
-    from types import MethodType
-    config_class_ = available_configs[config_str]
+  err_msg = ("There aren't any registered config classes. Decorate a class "
+             "with '@anyfig.config_class' and make sure that the class is "
+             "imported to the file where the function 'anyfig.setup_config' "
+             "is called from")
+  assert len(registered_config_classes), err_msg
 
+  try:
+    config_class_ = registered_config_classes[config_str]
     config_obj = config_class_()
   except KeyError as e:
     err_msg = (
       f"Config class '{config_str}' wasn't found. Feel free to create "
       "it as a new config class or use one of the existing ones "
-      f"{list(available_configs)}")
+      f"{list(registered_config_classes)}")
     raise KeyError(err_msg) from e
 
   # Overwrite parameters via optional input flags
