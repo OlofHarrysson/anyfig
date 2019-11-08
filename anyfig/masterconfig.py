@@ -4,6 +4,7 @@ import inspect
 from dataclasses import FrozenInstanceError
 import pickle
 from pathlib import Path
+import copy
 
 
 def is_anyfig_class(obj):
@@ -33,9 +34,12 @@ def save_config(obj, path):
 class MasterConfig(ABC):
   def frozen(self, freeze=True):
     self._frozen = freeze
+    return self
 
   def get_parameters(self):
-    return self.__dict__
+    params = copy.deepcopy(self.__dict__)
+    params.pop('_frozen')
+    return params
 
   def __str__(self):
     str_ = ""
@@ -57,13 +61,12 @@ class MasterConfig(ABC):
 
   def __setattr__(self, name, value):
     # Raise error if frozen unless we're trying to unfreeze the config
-    if hasattr(self, '_frozen'):
-      if name == '_frozen':
-        pass
-      elif self._frozen:
-        err_msg = (f"Cannot set attribute '{name}'. Config object is frozen. "
-                   "Unfreeze the config for a mutable config object")
-        raise FrozenInstanceError(err_msg)
+    if name == '_frozen':
+      pass
+    elif self._frozen:
+      err_msg = (f"Cannot set attribute '{name}'. Config object is frozen. "
+                 "Unfreeze the config for a mutable config object")
+      raise FrozenInstanceError(err_msg)
 
     # Check for reserved names
     name_taken_msg = f"The attribute '{name}' can't be assigned to config '{type(self).__name__}' since it already has a method by that name"

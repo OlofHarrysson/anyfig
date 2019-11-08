@@ -9,7 +9,7 @@ class RandomClass():
     self.hej = 'wowowo'
 
 
-# @anyfig.config_class
+@anyfig.config_class
 class FooConfig(RandomClass):
   def __init__(self):
     print("INIT FOOCONFIG")
@@ -27,5 +27,3 @@ class FooConfig(RandomClass):
 
 config = anyfig.setup_config(default_config='FooConfig')
 print(config)
-# print(config.seed)  # Prints -1
-# print(dir(config))
