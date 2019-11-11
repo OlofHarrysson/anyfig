@@ -10,7 +10,7 @@ class RandomClass():
 
 
 @anyfig.config_class
-class FooConfig(RandomClass):
+class FooConfig2(RandomClass):
   def __init__(self):
     print("INIT FOOCONFIG")
     super().__init__()
