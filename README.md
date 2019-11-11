@@ -13,8 +13,10 @@ pip install git+https://github.com/OlofHarrysson/anyfig/archive/master.zip
 TODO: Clone this into a github hosted notebook
 
 ### The basics
-Create a class, decorate & inherit from Anyfig. Add config-parameters and its done!
-TODO: Link to decorate
+1. Decorate a class with '@anyfig.config_class'.
+2. Add config-parameters as attributes in the class
+3. Call the 'setup_config' function to instantiate the config object
+
 
 ```python
 import anyfig
@@ -32,7 +34,10 @@ print(config)
 print(config.seed)
 ```
 
-TODO: A bit of explanation of what is seen here in the code
+#### Under the Hood - How Anyfig Works
+The 'config_class' decorator adds some functions to the class e.g. __str__ that makes the class human readable. The decorator also registers the class with the anyfig module so that the 'setup_config' function can find it.
+
+The 'setup_config' function checks if the class specified in its 'default_config' argument is among the registered config-classes. If it is, a object is instantiated from the class definition and returned.
 
 ### Command line input
 
@@ -52,21 +57,19 @@ class FooConfig():
     self.seed = random.randint(0, 80085)
 
 config = anyfig.setup_config(default_config='FooConfig')
-print(config.seed) # Output: 69
+print(config.seed) # Output: 69. Overwritten from command line
 ```
 
 ### Multiple Configs & Class Inheritence
 
 It's possible to have multiple config classes defined and select one at runtime. This could be useful if you e.g. have one default config and one for debugging.
 
-To select a config class, specify the config class in the input arguments with the --config flag
+To select a config class, specify the config class in the input arguments with the '--config' flag
 
 ```bash
 python path/to/file.py --config=FooConfig
 python path/to/file.py --config=BarConfig
 ```
-
-It's possible for a config class to inherit from any Python class as long as that class ultimately inherits from the Anyfig.MasterConfig class.
 
 ```python
 import anyfig
@@ -86,7 +89,7 @@ class BarConfig(FooConfig):
     self.bar = 'beer'
 
 config = anyfig.setup_config() # Removed the default class
-print(config) # Different output depending on which config class that was selected
+print(config) # Different output depending on which config class that was selected via the command line
 ```
 
 ### Complex Config Attributes
@@ -95,7 +98,7 @@ blabla
 
 
 ### Saving & Loading Configs
-Anyfig offers functions for both saving and loading a config. When saving, Anygif serializes the config object with the pickle module as well as a .txt file.  
+Anyfig offers functions for both saving and loading a config. When saving, anyfig serializes the config object with the pickle module as well as a .txt file.  
 
 ```python
 import anyfig
