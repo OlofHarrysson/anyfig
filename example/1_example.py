@@ -27,10 +27,9 @@ class Transformer():
 
 
 @anyfig.config_class
-class MainConfig(anyfig.MasterConfig):
+class MainConfig():
   def __init__(self):
     print("MAIN CONFIG SUPER")
-    super().__init__()
     # self.start_time = time.time()
     self.img_size = 100
     self.classes = ['car', 'dog']
@@ -38,9 +37,8 @@ class MainConfig(anyfig.MasterConfig):
 
 
 @anyfig.config_class
-class Train(anyfig.MasterConfig):
+class Train():
   def __init__(self):
-    super().__init__()
     self.name = 'oldname'
     self.transforms111 = Transformer(100)
     # self.freeze_config = False
@@ -48,9 +46,8 @@ class Train(anyfig.MasterConfig):
 
 
 @anyfig.config_class
-class Config(anyfig.MasterConfig):
+class Config():
   def __init__(self):
-    super().__init__()
     self.name = 'oldname1111'
     self.transforms111 = Transformer(100)
     # self.freeze_config = False
