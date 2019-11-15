@@ -91,4 +91,4 @@ By using this structure it's clear to the developer that all that has changed wh
 
 This is why anyfig came to life but it has since then grown to encorporate other config needs. Stay tuned for more exciting updates :D
 
-[Anyfig Examples](../anyfig#usage)
+[Anyfig Examples](https://github.com/OlofHarrysson/anyfig#usage)
