@@ -51,7 +51,7 @@ class MasterConfig(ABC):
         cls_str = val.__anyfig_print_source__()
         s = f"'{key}':\n{cls_str}"
       else:
-        s = pprint.pformat({key: val})
+        s = pprint.pformat({key: str(val)})
 
         # Prettyprint adds some extra wings that I dont like
         s = s.lstrip('{').rstrip('}').replace('\n ', '\n')
