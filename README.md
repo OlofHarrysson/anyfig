@@ -5,7 +5,7 @@ Anyfig is a Python library for creating configurations (settings) at runtime. An
 ## Why Anyfig?
 Since the configs are defined in normal Python code, anyfig offers freedom and flexibility that isn't possible with other solutions.
 
-Neat Features in a Nutshell
+### Neat Features in a Nutshell
 * Work in Python. No parsing of .json or .yaml needed
 * Utilize Python code / packages to define configs at runtime
 * Avoid duplicated config-parameters with the help of inheritance
@@ -14,7 +14,7 @@ Neat Features in a Nutshell
 * Save / load configs
 
 
-For a more in depth view of why Anyfig has a place in this world: [The seed that grew into Anyfig](assets/anyfig_story.md)
+See [The seed that grew into Anyfig](assets/anyfig_story.md) for a more in depth view of why Anyfig has a place in this world 
 
 ## Installation
 The Anyfig package is in its infancy. Install it from pip or the github repo
@@ -52,9 +52,9 @@ print(config.seed)
 ```
 
 #### Under the Hood - How Anyfig Works
-The 'config_class' decorator adds some functions to the class e.g. 'get_parameters' for getting the parameters as a dict. The decorator also registers the class with the Anyfig module so that the 'setup_config' function can find it.
+The 'config_class' decorator adds some functions to the class e.g. 'get_parameters()'. The decorator also registers the class with the Anyfig module so that the 'setup_config()' function can find it.
 
-The 'setup_config' function checks if the class specified in its 'default_config' argument is among the registered config-classes. If it is, a object is instantiated from the class definition and returned.
+The 'setup_config()' function checks if the class specified in its 'default_config' argument is among the registered config-classes. If it is, a object is instantiated from the class definition and returned.
 
 ### Command line input
 
