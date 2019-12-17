@@ -6,6 +6,7 @@ import sys
 from .masterconfig import MasterConfig, is_anyfig_class
 
 registered_config_classes = {}
+registered_config_options = {}
 
 
 def setup_config(default_config=None):
@@ -145,4 +146,39 @@ def print_source(func):
     return src
 
   setattr(func, '__anyfig_print_source__', __print_source__)
+  return func
+
+
+def config_option(_cls=None, *, name=True):
+  def wrap(cls):
+    # print(cls)
+    mod_name = class_name = cls.__name__
+    print(mod_name)
+    # print(name)
+    return cls
+
+  # See if we're being called as @config_option or @config_option().
+  if _cls is None:
+    # We're called with parens.
+    return wrap
+
+  # We're called as @config_option without parens.
+  return wrap(_cls)
+
+  # class_name = _cls.__name__
+  # module_name = sys.modules[__name__]
+  # print(class_name)
+  # print(module_name)
+  # mm = sys.modules[_cls.__module__]
+  # print(mm)
+  # mm = inspect.getmodule(_cls)
+  # print(mm)
+  # err_msg = (
+  #   f"The config class '{class_name}' has already been registered. "
+  #   "Duplicated names aren't allowed. Either change the name or avoid "
+  #   "importing the duplicated classes at the same time. "
+  #   f"The registered classes are '{registered_config_classes}'")
+  # assert class_name not in registered_config_classes, err_msg
+
+  # registered_config_classes[class_name] = func
   return func

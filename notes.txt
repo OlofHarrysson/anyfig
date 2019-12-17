@@ -14,5 +14,7 @@ Mark them as strict? @config_class(strict=True). If one tries to overwrite attri
 
 
 Interface classes? Where the attributes are set to anyfig.placeholder and throws error if its not overwritten?
+Can maybe use __slots__ = ('x', 'y'), see https://blog.usejournal.com/a-quick-dive-into-pythons-slots-72cdc2d334e
+Maybe not, it seems static or something?
 
 Expose to the commandline with --help

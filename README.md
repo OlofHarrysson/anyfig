@@ -64,7 +64,7 @@ It's possible to overwrite existing config values by starting the python script 
 python path/to/file.py --seed=69
 ```
 
-If the input argument doesn't exist in the config class, Anyfig will throw and error.
+If the input argument doesn't exist in the config class, Anyfig will throw an error.
 
 ```python
 import anyfig
@@ -168,13 +168,12 @@ class FooConfig():
     self.foo = Bar()
 
 config = anyfig.setup_config(default_config='FooConfig')
-print(config)
-# Output:
-# 'foo':
+print(config.foo) # Output ->
+# class Bar():
+#   def __init__(self):
+#     self.x = 2 + 3
 
-#   class Bar():
-#     def __init__(self):
-#       self.x = 2 + 3
+  
 ```
 
 ## Contributing
