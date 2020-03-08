@@ -8,7 +8,8 @@ import copy
 
 
 def is_anyfig_class(obj):
-  return inspect.isclass(obj) and issubclass(obj, MasterConfig)
+  # TODO: Better way to check if anyfig class
+  return inspect.isclass(type(obj)) and hasattr(obj, '_config_class')
 
 
 def load_config(path):
@@ -50,11 +51,17 @@ class MasterConfig(ABC):
       if hasattr(val, '__anyfig_print_source__'):
         cls_str = val.__anyfig_print_source__()
         s = f"'{key}':\n{cls_str}"
+
+      # Recursively print anyfig classes
+      elif is_anyfig_class(val):
+        inner_config_string = '\n' + str(val)
+        inner_config_string = inner_config_string.replace('\n', '\n\t')
+        s = f"'{key}':{inner_config_string}"
+
       else:
         s = pprint.pformat({key: str(val)})
-
         # Prettyprint adds some extra wings that I dont like
-        s = s.lstrip('{').rstrip('}').replace('\n ', '\n')
+        s = s.lstrip('{').rstrip('}')
       str_ += s + '\n'
 
     return str_

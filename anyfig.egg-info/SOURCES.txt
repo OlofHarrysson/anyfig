@@ -1,0 +1,11 @@
+README.md
+setup.cfg
+setup.py
+anyfig/__init__.py
+anyfig/anyfig_setup.py
+anyfig/masterconfig.py
+anyfig.egg-info/PKG-INFO
+anyfig.egg-info/SOURCES.txt
+anyfig.egg-info/dependency_links.txt
+anyfig.egg-info/requires.txt
+anyfig.egg-info/top_level.txt

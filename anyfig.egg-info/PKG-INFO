@@ -1,0 +1,19 @@
+Metadata-Version: 1.1
+Name: anyfig
+Version: 0.0.2
+Summary: Config parameters in Python code. Anything is possible ;)
+Home-page: https://github.com/OlofHarrysson/anyfig
+Author: Olof Harrysson
+Author-email: harrysson.olof@gmail.com
+License: MIT
+Download-URL: https://github.com/OlofHarrysson/anyfig/archive/0.0.2.tar.gz
+Description: UNKNOWN
+Keywords: config,command line parsing,python classes,dynamic
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8

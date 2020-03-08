@@ -10,7 +10,7 @@ registered_config_options = {}
 
 
 def setup_config(default_config=None):
-  config_str = parse_args(default_config)
+  config_str = parse_args(default_config.__name__)
   config = choose_config(config_str)
   return config
 
@@ -33,7 +33,7 @@ def choose_config(config_str):
     "Specify which config to use by either starting your python script with "
     "the input argument --config=YourConfigClass or set "
     "'default_config=YourConfigClass' in anyfigs 'setup_config' method")
-  if config_str == None:
+  if config_str is None:
     raise RuntimeError(err_msg)
 
   err_msg = ("There aren't any registered config classes. Decorate a class "
@@ -43,8 +43,8 @@ def choose_config(config_str):
   assert len(registered_config_classes), err_msg
 
   try:
-    config_class_ = registered_config_classes[config_str]
-    config_obj = config_class_()
+    config_class_definition = registered_config_classes[config_str]
+    config_obj = config_class_definition()
   except KeyError as e:
     err_msg = (
       f"Config class '{config_str}' wasn't found. Feel free to create "
@@ -60,7 +60,7 @@ def choose_config(config_str):
   return config_obj
 
 
-def overwrite(config_obj):
+def overwrite(main_config_obj):
   ''' Overwrites parameters with input flags. Function is needed for the
   convenience of specifying parameters via a combination of the config classes
   and input flags. '''
@@ -75,22 +75,46 @@ def overwrite(config_obj):
   extra_arguments = fire.Fire(parse_unknown_flags)
   sys.stdout = sys.__stdout__
 
-  for key, val in extra_arguments.items():
-    if key == 'config':  # Argparse deals with this one
+  for argument_key, val in extra_arguments.items():
+    if argument_key == 'config':  # Argparse deals with this one
       continue
-    if key not in vars(config_obj):
-      err_str = (
-        f"The input parameter '{key}' isn't allowed. It's only possible "
-        "to overwrite attributes that exist in the active config class")
-      raise NotImplementedError(err_str)
-    setattr(config_obj, key, val)
 
-  return config_obj
+    # Seperate nested keys into outer and inner
+    outer_keys = argument_key.split('.')
+    inner_key = outer_keys.pop(-1)
+
+    # Get the innermost config object
+    config_obj = main_config_obj
+    for key_part in outer_keys:
+      err_msg = f"Error when trying to set '{argument_key}={val}'. '{key_part}' isn't an attribute in '{type(config_obj).__name__}'"
+      assert hasattr(config_obj, key_part), err_msg
+      config_obj = getattr(config_obj, key_part)
+      err_msg = f"Tried to set '{argument_key}' but '{'.'.join(outer_keys)}' wasn't an anyfig class"
+      assert is_anyfig_class(config_obj), err_msg
+
+    # Error if trying to set unknown attribute key
+    if inner_key not in vars(config_obj):
+      err_msg = (
+        f"The input parameter '{argument_key}' isn't allowed. It's only possible "
+        "to overwrite attributes that exist in the active config class")
+      raise NotImplementedError(err_msg)
+
+    # Create object with new value
+    value_class = type(getattr(config_obj, inner_key))
+    try:
+      value_obj = value_class(val)
+    except Exception:
+      err_msg = f"Input argument '{argument_key}' with value {val} can't create an object of the expected type {value_class}"
+      raise RuntimeError(err_msg)
+
+    # Overwrite old value
+    setattr(config_obj, inner_key, value_obj)
+
+  return main_config_obj
 
 
 def config_class(func):
   class_name = func.__name__
-  module_name = sys.modules[__name__]
 
   # Makes sure that nothing fishy is going on...
   err_msg = (f"Can't decorate '{class_name}' of type {type(func)}. "
@@ -114,8 +138,8 @@ def config_class(func):
       setattr(func, name, member)
 
   # Manually add attributes to config class
-  setattr(func, "_frozen", False)
-  setattr(func, "config_class", func.__name__)
+  setattr(func, '_frozen', False)
+  setattr(func, '_config_class', class_name)
 
   registered_config_classes[class_name] = func
   return func
@@ -146,39 +170,4 @@ def print_source(func):
     return src
 
   setattr(func, '__anyfig_print_source__', __print_source__)
-  return func
-
-
-def config_option(_cls=None, *, name=True):
-  def wrap(cls):
-    # print(cls)
-    mod_name = class_name = cls.__name__
-    print(mod_name)
-    # print(name)
-    return cls
-
-  # See if we're being called as @config_option or @config_option().
-  if _cls is None:
-    # We're called with parens.
-    return wrap
-
-  # We're called as @config_option without parens.
-  return wrap(_cls)
-
-  # class_name = _cls.__name__
-  # module_name = sys.modules[__name__]
-  # print(class_name)
-  # print(module_name)
-  # mm = sys.modules[_cls.__module__]
-  # print(mm)
-  # mm = inspect.getmodule(_cls)
-  # print(mm)
-  # err_msg = (
-  #   f"The config class '{class_name}' has already been registered. "
-  #   "Duplicated names aren't allowed. Either change the name or avoid "
-  #   "importing the duplicated classes at the same time. "
-  #   f"The registered classes are '{registered_config_classes}'")
-  # assert class_name not in registered_config_classes, err_msg
-
-  # registered_config_classes[class_name] = func
   return func
