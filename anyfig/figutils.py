@@ -6,10 +6,36 @@ import pickle
 from pathlib import Path
 import copy
 
+registered_config_classes = {}
+global_configs = {}
 
-def is_anyfig_class(obj):
-  # TODO: Better way to check if anyfig class
-  return inspect.isclass(type(obj)) and hasattr(obj, '_config_class')
+
+def set_global(config):
+  assert is_config_class(config), "Can only register anyfig config object"
+  global_configs[type(config).__name__] = config
+
+
+def cfg():
+  ''' Returns the config object that is registed with anyfig '''
+
+  # Normal case
+  if len(global_configs) == 1:
+    return next(iter(global_configs.values()))
+
+  # setup_config function adds one so this should never happen
+  elif len(global_configs) == 0:
+    raise RuntimeError("No global config has been registered")
+
+  # If multiple config objects has been marked as global
+  raise RuntimeError(
+    "Multiple config objects aren't supported. Create an issue if this is something you want to see"
+  )
+
+
+def is_config_class(obj):
+  ''' Returns True if object is a config class that is registered with anyfig '''
+  return inspect.isclass(
+    type(obj)) and type(obj).__name__ in registered_config_classes
 
 
 def load_config(path):
@@ -17,19 +43,34 @@ def load_config(path):
   with open(path, 'rb') as f:
     obj = pickle.load(f)
 
-  assert is_anyfig_class(type(obj)), 'Can only load anyfig config objects'
+  assert is_config_class(type(obj)), 'Can only load anyfig config objects'
   return obj
 
 
 def save_config(obj, path):
   path = Path(path)
   err_msg = f"Can only save anyfig config objects, not {type(obj)}"
-  assert is_anyfig_class(type(obj)), err_msg
+  assert is_config_class(type(obj)), err_msg
   with open(path, 'wb') as f:
     pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
 
   with open(path.with_suffix('.txt'), 'w') as f:
     f.write(str(obj))
+
+
+def register_config_class(class_name, class_def):
+  err_msg = (
+    f"The config class '{class_name}' has already been registered. "
+    "Duplicated names aren't allowed. Either change the name or avoid "
+    "importing the duplicated classes at the same time. "
+    f"The registered classes are '{registered_config_classes}'")
+  assert class_name not in registered_config_classes, err_msg
+
+  registered_config_classes[class_name] = class_def
+
+
+def get_registered_config_classes():
+  return registered_config_classes
 
 
 class MasterConfig(ABC):
@@ -53,7 +94,7 @@ class MasterConfig(ABC):
         s = f"'{key}':\n{cls_str}"
 
       # Recursively print anyfig classes
-      elif is_anyfig_class(val):
+      elif is_config_class(val):
         inner_config_string = '\n' + str(val)
         inner_config_string = inner_config_string.replace('\n', '\n\t')
         s = f"'{key}':{inner_config_string}"

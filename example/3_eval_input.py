@@ -20,4 +20,6 @@ class MainConfig():
 
 
 config = anyfig.setup_config(default_config=MainConfig)
-print(config)
+config2 = anyfig.cfg()
+print(config is config2)
+# print(config2)

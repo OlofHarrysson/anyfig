@@ -3,15 +3,13 @@ import fire
 import inspect
 import argparse
 import sys
-from .masterconfig import MasterConfig, is_anyfig_class
-
-registered_config_classes = {}
-registered_config_options = {}
+from . import figutils
 
 
 def setup_config(default_config=None):
   config_str = parse_args(default_config.__name__)
   config = choose_config(config_str)
+  figutils.set_global(config)
   return config
 
 
@@ -40,16 +38,17 @@ def choose_config(config_str):
              "with '@anyfig.config_class' and make sure that the class is "
              "imported to the file where the function 'anyfig.setup_config' "
              "is called from")
-  assert len(registered_config_classes), err_msg
+  registered_configs = figutils.get_registered_config_classes()
+  assert len(registered_configs), err_msg
 
   try:
-    config_class_definition = registered_config_classes[config_str]
+    config_class_definition = registered_configs[config_str]
     config_obj = config_class_definition()
   except KeyError as e:
     err_msg = (
       f"Config class '{config_str}' wasn't found. Feel free to create "
       "it as a new config class or use one of the existing ones "
-      f"{list(registered_config_classes)}")
+      f"{list(registered_configs)}")
     raise KeyError(err_msg) from e
 
   # Overwrite parameters via optional input flags
@@ -68,11 +67,8 @@ def overwrite(main_config_obj):
     def write(self, txt):
       pass
 
-  def parse_unknown_flags(**kwargs):
-    return kwargs
-
   sys.stdout = NullIO()
-  extra_arguments = fire.Fire(parse_unknown_flags)
+  extra_arguments = fire.Fire(lambda **kwargs: kwargs)
   sys.stdout = sys.__stdout__
 
   for argument_key, val in extra_arguments.items():
@@ -90,7 +86,7 @@ def overwrite(main_config_obj):
       assert hasattr(config_obj, key_part), err_msg
       config_obj = getattr(config_obj, key_part)
       err_msg = f"Tried to set '{argument_key}' but '{'.'.join(outer_keys)}' wasn't an anyfig class"
-      assert is_anyfig_class(config_obj), err_msg
+      assert figutils.is_config_class(config_obj), err_msg
 
     # Error if trying to set unknown attribute key
     if inner_key not in vars(config_obj):
@@ -121,27 +117,23 @@ def config_class(func):
              "Can only be used for classes")
   assert inspect.isclass(func), err_msg
 
-  err_msg = (
-    f"The config class '{class_name}' has already been registered. "
-    "Duplicated names aren't allowed. Either change the name or avoid "
-    "importing the duplicated classes at the same time. "
-    f"The registered classes are '{registered_config_classes}'")
-  assert class_name not in registered_config_classes, err_msg
-
   # Config class functions
   members = inspect.getmembers(func, inspect.isfunction)
   members = {name: function for name, function in members}
 
   # Transfers functions from MasterConfig to config class
-  for name, member in inspect.getmembers(MasterConfig, inspect.isfunction):
+  for name, member in inspect.getmembers(figutils.MasterConfig,
+                                         inspect.isfunction):
     if name not in members:  # Only transfer not implemented functions
       setattr(func, name, member)
 
   # Manually add attributes to config class
   setattr(func, '_frozen', False)
-  setattr(func, '_config_class', class_name)
 
-  registered_config_classes[class_name] = func
+  # TODO: Is this needed? Maybe if we want to print the name of the print(config)
+  # setattr(func, '_config_class', class_name)
+
+  figutils.register_config_class(class_name, func)
   return func
 
 
