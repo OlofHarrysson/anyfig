@@ -1,11 +1,4 @@
-Expose to the commandline with --help
-
-
 put in section in readme about local/private configs
-
-Would like to be able to use dataclasses structure. Its possible now but the type hinting is needed, and its not enforced so just seems bad to use.
-
-make it so __repr__ is ambigious
 
 
 Mark classes / properties as final? For properties, it would be cool to just

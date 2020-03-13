@@ -1,5 +1,4 @@
 from abc import ABC
-import pprint
 import inspect
 from dataclasses import FrozenInstanceError
 import pickle
@@ -10,7 +9,24 @@ registered_config_classes = {}
 global_configs = {}
 
 
-def set_global(config):
+def register_config_class(class_name, class_def):
+  ''' Saves the config class name and definition '''
+  err_msg = (
+    f"The config class '{class_name}' has already been registered. "
+    "Duplicated names aren't allowed. Either change the name or avoid "
+    "importing the duplicated classes at the same time. "
+    f"The registered classes are '{registered_config_classes}'")
+  assert class_name not in registered_config_classes, err_msg
+
+  registered_config_classes[class_name] = class_def
+
+
+def get_registered_config_classes():
+  return registered_config_classes
+
+
+def register_globally(config):
+  ''' Registers the config with anyfig to be accessible anywhere '''
   assert is_config_class(config), "Can only register anyfig config object"
   global_configs[type(config).__name__] = config
 
@@ -33,9 +49,10 @@ def cfg():
 
 
 def is_config_class(obj):
-  ''' Returns True if object is a config class that is registered with anyfig '''
-  return inspect.isclass(
-    type(obj)) and type(obj).__name__ in registered_config_classes
+  ''' Returns True if config class definition registered with anyfig '''
+  if obj.__class__ != type.__class__:
+    obj = type(obj)
+  return inspect.isclass(obj) and obj.__name__ in registered_config_classes
 
 
 def load_config(path):
@@ -58,54 +75,27 @@ def save_config(obj, path):
     f.write(str(obj))
 
 
-def register_config_class(class_name, class_def):
-  err_msg = (
-    f"The config class '{class_name}' has already been registered. "
-    "Duplicated names aren't allowed. Either change the name or avoid "
-    "importing the duplicated classes at the same time. "
-    f"The registered classes are '{registered_config_classes}'")
-  assert class_name not in registered_config_classes, err_msg
-
-  registered_config_classes[class_name] = class_def
-
-
-def get_registered_config_classes():
-  return registered_config_classes
-
-
+# Class which is used to define functions that goes into every config class
 class MasterConfig(ABC):
   def frozen(self, freeze=True):
-    self._frozen = freeze
+    ''' Freeze/unfreeze config '''
+    self.__class__._frozen = freeze
     return self
 
   def get_parameters(self):
-    params = copy.deepcopy(self.__dict__)
-    params.pop('_frozen')
-    return params
+    return copy.deepcopy(self.__dict__)
 
   def __str__(self):
-    str_ = ""
-    params = vars(self)
-    for key, val in params.items():
-      if key == '_frozen':  # Dont print frozen
-        continue
-      if hasattr(val, '__anyfig_print_source__'):
-        cls_str = val.__anyfig_print_source__()
-        s = f"'{key}':\n{cls_str}"
+    ''' Prettyprints the config '''
+    lines = [self.__class__.__name__ + ':']
 
-      # Recursively print anyfig classes
-      elif is_config_class(val):
-        inner_config_string = '\n' + str(val)
-        inner_config_string = inner_config_string.replace('\n', '\n\t')
-        s = f"'{key}':{inner_config_string}"
+    for key, val in self.__dict__.items():
+      val_str = f'{val}'
+      if is_config_class(val):  # Remove class name info
+        val_str = f'{val}'.replace(f'{val.__class__.__name__}:', '')
+      lines += f'{key} ({val.__class__.__name__}): {val_str}'.split('\n')
 
-      else:
-        s = pprint.pformat({key: str(val)})
-        # Prettyprint adds some extra wings that I dont like
-        s = s.lstrip('{').rstrip('}')
-      str_ += s + '\n'
-
-    return str_
+    return '\n    '.join(lines) + '\n'
 
   def __setattr__(self, name, value):
     # Raise error if frozen unless we're trying to unfreeze the config
