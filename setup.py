@@ -8,7 +8,7 @@ setup(
   author='Olof Harrysson',
   author_email='harrysson.olof@gmail.com',
   url='https://github.com/OlofHarrysson/anyfig',
-  download_url='https://github.com/OlofHarrysson/anyfig/archive/0.0.3.tar.gz',
+  download_url='https://github.com/OlofHarrysson/anyfig/archive/v0.0.3.tar.gz',
   keywords=['config', 'command line parsing', 'python classes', 'dynamic'],
   install_requires=['fire'],
   classifiers=[

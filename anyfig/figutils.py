@@ -90,9 +90,9 @@ class MasterConfig(ABC):
     lines = [self.__class__.__name__ + ':']
 
     for key, val in self.__dict__.items():
-      val_str = f'{val}'
+      val_str = str(val)
       if is_config_class(val):  # Remove class name info
-        val_str = f'{val}'.replace(f'{val.__class__.__name__}:', '')
+        val_str = val_str.replace(f'{val.__class__.__name__}:', '')
       lines += f'{key} ({val.__class__.__name__}): {val_str}'.split('\n')
 
     return '\n    '.join(lines) + '\n'

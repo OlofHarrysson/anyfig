@@ -17,7 +17,6 @@ class MainConfig():
   def __init__(self):
     self.foo = Path('my/path')
     self.data = DataConfig()
-    self.yo = 'yo'
     self.help = 'asdas'
     self.class_ = WrongConfig()
     self.ones = np.ones((1, 10))
@@ -28,17 +27,3 @@ class MainConfig():
 class WrongConfig():
   def __init__(self):
     self.foo = 'asd'
-
-
-if __name__ == '__main__':
-  # config = anyfig.setup_config(Path)
-  # config = anyfig.setup_config(default_config=WrongConfig())
-  # config = anyfig.setup_config(default_config=WrongConfig)
-  config = anyfig.setup_config(default_config=MainConfig)
-  # config = anyfig.setup_config(default_config=LocalConfig)
-  # config = anyfig.setup_config(default_config=MainConfig())
-  # config2 = anyfig.cfg()
-  # print(config is config2)
-  # config.frozen(False)
-  # config.foo = 'qwe'
-  print(config)

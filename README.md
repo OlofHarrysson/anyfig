@@ -14,7 +14,10 @@ Since the configs are defined in normal Python code, Anyfig offers freedom and f
 * Save / load configs
 
 
-See [The seed that grew into Anyfig](assets/anyfig_story.md) for a more in depth view of why Anyfig has a place in this world 
+See [The seed that grew into Anyfig](assets/anyfig_story.md) for a more in depth view of why Anyfig has a place in this world
+
+## Requirements
+Python 3.7+
 
 ## Installation
 The Anyfig package is in its infancy. Install it from pip or the github repo
@@ -25,7 +28,11 @@ pip install anyfig
 
 # From github
 pip install git+https://github.com/OlofHarrysson/anyfig/archive/master.zip
+
 ```
+
+Or try the online demo @
+[pyfiddle.io](https://pyfiddle.io/fiddle/4de2f70f-e421-4326-bbb8-b06d5efa547d/?i=true)
 
 ## Usage
 
@@ -46,7 +53,7 @@ class FooConfig():
     self.experiment_note = 'Changed some stuff'
     self.seed = random.randint(0, 80085)
 
-config = anyfig.setup_config(default_config='FooConfig')
+config = anyfig.setup_config(default_config=FooConfig)
 print(config)
 print(config.seed)
 ```
