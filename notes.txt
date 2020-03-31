@@ -6,7 +6,9 @@ do them as uppercase, which is python convention.
 Mark them as strict? @config_class(strict=True). If one tries to overwrite attribute throw error
 
 
-Interface classes? Where the attributes are set to anyfig.placeholder and throws error if its not overwritten?
-Can maybe use __slots__ = ('x', 'y'), see https://blog.usejournal.com/a-quick-dive-into-pythons-slots-72cdc2d334e
-Maybe not, it seems static or something?
+Interface classes? Where the attributes are set to anyfig.placeholder and throws error if its not overwritten? anyfig.required
 
+option to save anyfig as pickle, txt, source
+
+
+Could we fix so that if you name a configclass the same as a class (module.classname), all those parameters becomes defaults for the class. Is this argument-injection?

@@ -5,10 +5,10 @@ Anyfig is a Python library for creating configurations (settings) at runtime. An
 ## Why Anyfig?
 Since the configs are defined in normal Python code, Anyfig offers freedom and flexibility that isn't possible with other solutions.
 
-### Anyfig features in a nutshell
+### Features in a nutshell
 * Work in Python. No parsing of .json or .yaml needed
 * Utilize Python code / packages to define configs at runtime
-* Avoid duplicated config-parameters with the help of inheritance
+* Avoid duplicated config-parameters with the help of inheritance and modularization
 * Override config-parameters via command line
 * Freeze configs for immutability
 * Save / load configs
@@ -59,19 +59,17 @@ print(config.seed)
 ```
 
 #### Under the hood - how Anyfig works
-The 'config_class' decorator adds some functions to the class e.g. 'get_parameters()'. The decorator also registers the class with the Anyfig module so that the 'setup_config()' function can find it.
+The **@anyfig.config_class** decorator registers the class with Anyfig and adds some attributes and methods to the class.
 
-The 'setup_config()' function checks if the class specified in its 'default_config' argument is among the registered config-classes. If it is, a object is instantiated from the class definition and returned.
+The **anyfig.setup_config()** function checks if the class specified in its default_config argument is among the registered config-classes. If it is, a object is instantiated from the class definition and returned.
 
 ### Command line input
 
-It's possible to overwrite existing config values by starting the python script with command line inputs e.g.
+It's possible to overwrite existing config values by starting the python script with command line arguments e.g.
 
 ```bash
 python path/to/file.py --seed=69
 ```
-
-If the input argument doesn't exist in the config class, Anyfig will throw an error.
 
 ```python
 import anyfig
@@ -86,6 +84,8 @@ class FooConfig():
 config = anyfig.setup_config(default_config='FooConfig')
 print(config.seed) # Output: 69. Overwritten from command line
 ```
+If the input argument doesn't exist in the config class, Anyfig will throw an error.
+
 
 ### Multiple configs & class inheritence
 
@@ -94,8 +94,8 @@ It's possible to have multiple config classes defined and select one at runtime.
 To select a config class, specify the config class in the input arguments with the '--config' flag
 
 ```bash
-python path/to/file.py --config=FooConfig
-python path/to/file.py --config=BarConfig
+python path/to/file.py --config=MainConfig
+python path/to/file.py --config=DebugConfig
 ```
 
 ```python
@@ -103,19 +103,19 @@ import anyfig
 import random
 
 @anyfig.config_class
-class FooConfig():
+class MainConfig():
   def __init__(self):
     self.experiment_note = 'Changed some stuff'
     self.seed = random.randint(0, 80085)
 
 @anyfig.config_class
-class BarConfig(FooConfig):
+class DebugConfig(FooConfig):
   def __init__(self):
-    super().__init__() # Inherit all parameters from FooConfig
+    super().__init__() # Inherit all parameters from MainConfig
     self.seed = -1 # Overwrite
-    self.bar = 'Parameter not found in FooConfig'
+    self.new = 'Parameter not found in MainConfig'
 
-config = anyfig.setup_config() # Removed the default class
+config = anyfig.setup_config(default_config=MainConfig)
 print(config) # Different output depending on which config class that was selected via the command line
 ```
 
@@ -128,6 +128,17 @@ config = ...
 anyfig.save_config(config, 'path/to/save.cfg')
 loaded_config = anyfig.load_config('path/to/save.cfg')
 ```
+
+### Large or complex configurations
+Create configs folder
+
+create config files in folder
+
+**__init__.py** imports everything
+
+shadow configs
+
+
 
 ### Complex config attributes
 TODO: Refine section

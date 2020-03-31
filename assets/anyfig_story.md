@@ -53,7 +53,7 @@ Voila! This demonstrates the power of generating a config at runtime. If this is
 
 But are there situtations where argparse isn't enough? Yes there is. One scenario is where there are two *almost* identical modes a script can be ran in, e.g. normal and debug mode.
 
-With argparse, one has to construct duplicated code or a complex control flow structures which can be hard to follow. Look at the example below and imagine if there were five more if else statements, not exactly the nicest code right?
+With argparse, one has to construct duplicated code or a complex control flow structures which can be hard to follow. Look at the example below and imagine if there were five more if-else statements, not exactly the nicest code right?
 
 ```python
 import argparse
