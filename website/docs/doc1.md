@@ -3,12 +3,7 @@ id: doc1
 title: Style Guide
 sidebar_label: Style Guide
 ---
-
-You can write content using [GitHub-flavored Markdown syntax](https://github.github.com/gfm/).
-
-## Markdown Syntax
-
-To serve as an example page when styling markdown based Docusaurus sites.
+# Anyfig
 
 Anyfig is a Python library for creating configurations (settings) at runtime. Anyfig utilizes Python classes which empowers the developer to put anything, from strings to custom objects in the config. Hence the name Any(con)fig.
 
@@ -24,173 +19,189 @@ Since the configs are defined in normal Python code, Anyfig offers freedom and f
 * Save / load configs
 
 
-## Headers
+See [The seed that grew into Anyfig](assets/anyfig_story.md) for a more in depth view of why Anyfig has a place in this world
 
-# H1 - Create the best documentation
+## Requirements
+Python 3.7+
 
-## H2 - Create the best documentation
+## Installation
+The Anyfig package is in its infancy. Install it from pip or the github repo
 
-### H3 - Create the best documentation
+```bash
+# Latest "stable" realease
+pip install anyfig
 
-#### H4 - Create the best documentation
+# From github
+pip install git+https://github.com/OlofHarrysson/anyfig/archive/master.zip
 
-##### H5 - Create the best documentation
+```
 
-###### H6 - Create the best documentation
+Or try the online demo @
+[pyfiddle.io](https://pyfiddle.io/fiddle/4de2f70f-e421-4326-bbb8-b06d5efa547d/?i=true)
 
----
+## Usage
 
-## Emphasis
+### The basics
+1. Decorate a class with '@anyfig.config_class'
+2. Add config-parameters as attributes in the class
+3. Call the 'setup_config' function to instantiate the config object
 
-Emphasis, aka italics, with _asterisks_ or _underscores_.
 
-Strong emphasis, aka bold, with **asterisks** or **underscores**.
+```python
+import anyfig
+import random
 
-Combined emphasis with **asterisks and _underscores_**.
+@anyfig.config_class
+class FooConfig():
+  def __init__(self):
+    # Config-parameters goes as attributes
+    self.experiment_note = 'Changed some stuff'
+    self.seed = random.randint(0, 80085)
 
-Strikethrough uses two tildes. ~~Scratch this.~~
+config = anyfig.setup_config(default_config=FooConfig)
+print(config)
+print(config.seed)
+```
 
----
+#### Under the hood - how Anyfig works
+The **@anyfig.config_class** decorator registers the class with Anyfig and adds some attributes and methods to the class.
 
-## Lists
+The **anyfig.setup_config()** function checks if the class specified in its default_config argument is among the registered config-classes. If it is, a object is instantiated from the class definition and returned.
 
-1. First ordered list item
-1. Another item ⋅⋅\* Unordered sub-list.
-1. Actual numbers don't matter, just that it's a number ⋅⋅1. Ordered sub-list
-1. And another item.
+### Command line input
 
-⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
+It's possible to overwrite existing config values by starting the python script with command line arguments e.g.
 
-⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅ ⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅ ⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
-
-- Unordered list can use asterisks
-
-* Or minuses
-
-- Or pluses
-
----
-
-## Links
-
-[I'm an inline-style link](https://www.google.com)
-
-[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
-
-[I'm a reference-style link][arbitrary case-insensitive reference text]
-
-[I'm a relative reference to a repository file](../blob/master/LICENSE)
-
-[You can use numbers for reference-style link definitions][1]
-
-Or leave it empty and use the [link text itself].
-
-URLs and URLs in angle brackets will automatically get turned into links. http://www.example.com or <http://www.example.com> and sometimes example.com (but not on Github, for example).
-
-Some text to show that the reference links can follow later.
-
-[arbitrary case-insensitive reference text]: https://www.mozilla.org
-[1]: http://slashdot.org
-[link text itself]: http://www.reddit.com
-
----
-
-## Images
-
-Here's our logo (hover to see the title text):
-
-Inline-style: ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png 'Logo Title Text 1')
-
-Reference-style: ![alt text][logo]
-
-[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png 'Logo Title Text 2'
-
----
-
-## Code
-
-```javascript
-var s = 'JavaScript syntax highlighting';
-alert(s);
+```bash
+python path/to/file.py --seed=69
 ```
 
 ```python
-s = "Python syntax highlighting"
-print(s)
+import anyfig
+import random
+
+@anyfig.config_class
+class FooConfig():
+  def __init__(self):
+    self.experiment_note = 'Changed some stuff'
+    self.seed = random.randint(0, 80085)
+
+config = anyfig.setup_config(default_config='FooConfig')
+print(config.seed) # Output: 69. Overwritten from command line
+```
+If the input argument doesn't exist in the config class, Anyfig will throw an error.
+
+
+### Multiple configs & class inheritence
+
+It's possible to have multiple config classes defined and select one at runtime. This could be useful if you e.g. have one default config and one for debugging.
+
+To select a config class, specify the config class in the input arguments with the '--config' flag
+
+```bash
+python path/to/file.py --config=MainConfig
+python path/to/file.py --config=DebugConfig
 ```
 
+```python
+import anyfig
+import random
+
+@anyfig.config_class
+class MainConfig():
+  def __init__(self):
+    self.experiment_note = 'Changed some stuff'
+    self.seed = random.randint(0, 80085)
+
+@anyfig.config_class
+class DebugConfig(FooConfig):
+  def __init__(self):
+    super().__init__() # Inherit all parameters from MainConfig
+    self.seed = -1 # Overwrite
+    self.new = 'Parameter not found in MainConfig'
+
+config = anyfig.setup_config(default_config=MainConfig)
+print(config) # Different output depending on which config class that was selected via the command line
 ```
-No language indicated, so no syntax highlighting.
-But let's throw in a <b>tag</b>.
+
+### Saving and loading configs
+Anyfig offers functions for both saving and loading a config. When saving, anyfig serializes the config object with the pickle module as well as a .txt file.  
+
+```python
+import anyfig
+config = ...
+anyfig.save_config(config, 'path/to/save.cfg')
+loaded_config = anyfig.load_config('path/to/save.cfg')
 ```
 
-```js {2}
-function highlightMe() {
-  console.log('This line can be highlighted!');
-}
+### Large or complex configurations
+Create configs folder
+
+create config files in folder
+
+**__init__.py** imports everything
+
+shadow configs
+
+
+
+### Complex config attributes
+TODO: Refine section
+
+Anyfig lets you put anything within your config object, even complicated objects. Unfortunately, this can be troublesome as objects are often undescriptive when printed or saved. This can be troublesome when one wants to go back to a saved config and see what it contains.
+
+One way to fix this problem would be to add descriptive \__str\__ methods to the classes.
+
+However, if the source code for these complicated objects change, it isn't enough to have its string representation. 
+
+```python
+import anyfig
+
+class Bar():
+  def __init__(self):
+    self.x = 2 + 3
+
+  def __str__(self):
+    return f'{self.__class__.__name__}(x={self.x})'
+
+@anyfig.config_class
+class FooConfig():
+  def __init__(self):
+    self.foo = Bar()
+
+config = anyfig.setup_config(default_config='FooConfig')
+print(config) # 'foo': 'Bar(x=5)'
 ```
 
----
+If the line `self.x = 2 + 3` change to `self.x = 7 - 2` it would look like nothing had changed in the Bar class. Perhaps the developer would like to inspect the source code rather than the value.
 
-## Tables
+Anyfig offers the '@anyfig.print_source' decorator for these situations.
 
-Colons can be used to align columns.
+```python
+import anyfig
 
-| Tables        |      Are      |   Cool |
-| ------------- | :-----------: | -----: |
-| col 3 is      | right-aligned | \$1600 |
-| col 2 is      |   centered    |   \$12 |
-| zebra stripes |   are neat    |    \$1 |
+@anyfig.print_source
+class Bar():
+  def __init__(self):
+    self.x = 2 + 3
 
-There must be at least 3 dashes separating each header cell. The outer pipes (|) are optional, and you don't need to make the raw Markdown line up prettily. You can also use inline Markdown.
+@anyfig.config_class
+class FooConfig():
+  def __init__(self):
+    self.foo = Bar()
 
-| Markdown | Less      | Pretty     |
-| -------- | --------- | ---------- |
-| _Still_  | `renders` | **nicely** |
-| 1        | 2         | 3          |
+config = anyfig.setup_config(default_config='FooConfig')
+print(config.foo) # Output ->
+# class Bar():
+#   def __init__(self):
+#     self.x = 2 + 3
 
----
+  
+```
 
-## Blockquotes
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-> Blockquotes are very handy in email to emulate reply text. This line is part of the same quote.
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
 
-Quote break.
-
-> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can _put_ **Markdown** into a blockquote.
-
----
-
-## Inline HTML
-
-<dl>
-  <dt>Definition list</dt>
-  <dd>Is something people use sometimes.</dd>
-
-  <dt>Markdown in HTML</dt>
-  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
-</dl>
-
----
-
-## Line Breaks
-
-Here's a line for us to start with.
-
-This line is separated from the one above by two newlines, so it will be a _separate paragraph_.
-
-This line is also a separate paragraph, but... This line is only separated by a single newline, so it's a separate line in the _same paragraph_.
-
----
-
-## Admonitions
-
-:::note This is a note :::
-
-:::tip This is a tip :::
-
-:::important This is important :::
-
-:::caution This is a caution :::
-
-:::warning This is a warning :::

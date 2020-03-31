@@ -81,12 +81,12 @@ module.exports = {
       copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
     },
 
-    // algolia: {
-    //   appId: 'app-id',
-    //   apiKey: 'api-key',
-    //   indexName: 'index-name',
-    //   algoliaOptions: {}, // Optional, if provided by Algolia
-    // },
+    algolia: {
+      appId: 'F5AH3JU99B',
+      apiKey: '131e1dd7b7d661f2e68800e8361ab973',
+      indexName: 'index-name',
+      algoliaOptions: {}, // Optional, if provided by Algolia
+    },
   },
   presets: [
     [
