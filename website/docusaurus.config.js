@@ -1,5 +1,5 @@
 module.exports = {
-  themes: ['@docusaurus/theme-search-algolia', '@docusaurus/theme-live-codeblock'],
+  themes: ['@docusaurus/theme-search-algolia'],
   title: 'Anyfig',
   tagline: 'Anything in your configs',
   url: 'https://your-docusaurus-test-site.com',
@@ -11,10 +11,10 @@ module.exports = {
     sidebarCollapsible: false,
 
     // Syntax color theme
-    // prism: {
-    //   // theme: require('prism-react-renderer/themes/oceanicNext'),
-    //   theme: require('prism-react-renderer/themes/vsDark'),
-    // },
+    prism: {
+      // theme: require('prism-react-renderer/themes/oceanicNext'),
+      theme: require('prism-react-renderer/themes/vsDark'),
+    },
     navbar: {
       title: 'Anyfig',
       logo: {

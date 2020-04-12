@@ -1,6 +1,5 @@
-put in section in readme about local/private configs
+input arguments for functions. Could maybe check if old value is function, if so, take the function with the input argument name from the old argument module's namespace
 
-don't allow setup_config to be called twice, input parameters break then.
 
 Mark classes / properties as final? For properties, it would be cool to just
 do them as uppercase, which is python convention.
@@ -16,6 +15,5 @@ Could we fix so that if you name a configclass the same as a class (module.class
 
 Put some info in website about sensitive files. Could be user-settings or files with passwords
 
-Also put in some best practices - like try to keep the config simple and keep main logic in actual program.
 
 anyfig+argparse

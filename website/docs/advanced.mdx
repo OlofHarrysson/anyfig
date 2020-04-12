@@ -4,111 +4,113 @@ title: Advanced Features
 sidebar_label: Advanced
 ---
 
-## Multiple Config Classes
-
-Sometimes it's useful to have multiple config-classes e.g. one for every main script. This is seamless with Anyfig.
-
-```py
-import anyfig
-from pathlib import Path
-import time
-
-@anyfig.config_class  # Registers the class with anyfig
-class MyConfig():
-  def __init__(self):
-    # Config-parameters goes as attributes
-    self.experiment_note = 'Changed stuff'
-    self.save_directory = Path('output')
-    self.start_time = time.time()
-
-@anyfig.config_class
-class SecondConfig():
-  def __init__(self):
-    self.experiment_note = 'Number 2'
-
-# The "deafault_config" argument decides which class is used to create the config
-config = anyfig.setup_config(default_config=SecondConfig)
-
-```
-
 ## Command Line Input
 
-Say you have the following code... &#8595;
+Anyfig offers the functionality to override config values through command line arguments and will throw an error if the user inputs a key that doesn't exist. It's thus only possible to **override argument**, not to define new ones.
 
-
-```py
+```python
 import anyfig
-from pathlib import Path
-import time
 
 @anyfig.config_class
 class MyConfig():
   def __init__(self):
     self.experiment_note = 'Changed stuff'
+
+config = anyfig.setup_config(default_config=MyConfig)
+
+# ~~~ ⬇ Command line ⬇ ~~~  
+# config.experiment_note will contain: A new note
+python path/to/file.py --experiment_note="A new note"
+```
+
+### Argument Types
+Google's [Fire project](https://github.com/google/python-fire) is used to parse command line arguments' types and validity. It support any Python literals (numbers, strings, tuples, lists, dictionaries, sets). Read more about how Fire [handles parsing](https://github.com/google/python-fire/blob/master/docs/guide.md#argument-parsing). 
+
+ A problem arises when one wants to override a non-literal, like a Pathlib Path from the command line. Anyfig solves this by parsing the input to a Python literal and use that to create a new object from the class definition of the old value.
+
+
+```python
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MyConfig():
+  def __init__(self):
     self.save_directory = Path('output')
-    self.start_time = time.time()
+
+config = anyfig.setup_config(default_config=MyConfig)
+
+# ~~~ ⬇ Command line ⬇ ~~~  
+# config.save_directory will be a Path object with value: other_output
+# It's created by wrapping the input string in a Path object: Path("other_output")
+python path/to/file.py --save_directory="other_output"
+```
+
+## Multiple Config Classes
+
+Sometimes it's useful to have multiple config-classes. Perhaps one config for every main script or one config for normal use and one for debugging. The ability to create multiple config-classes is very powerful and essential to Anyfig.
+
+One can choose which config-class to use via the command line. If a config-class is not supplied, it will default to the config-class given in the anyfig.setup_config function. 
+
+
+```python
+import anyfig
+
+@anyfig.config_class
+class MyConfig():
+  def __init__(self):
+    self.experiment_note = 'Changed stuff'
 
 @anyfig.config_class
 class SecondConfig():
   def __init__(self):
     self.experiment_note = 'Number 2'
+    self.anyfig_tip = 'Configs can contain different values from each other'
 
+# The "default_config" argument decides which class is used to create the config
 config = anyfig.setup_config(default_config=MyConfig)
+
+# ~~~ ⬇ Command line ⬇ ~~~
+# config.experiment_note will contain: Changed stuff
+python path/to/file.py
+
+# config.experiment_note will contain: Number 2
+python path/to/file.py --config=SecondConfig
+
+# It's possible to override config-classes and values at the same time
+# config.experiment_note will contain: A new note
+python path/to/file.py --config=SecondConfig --experiment_note="A new note"
 ```
 
-Anyfig offers the functionality to override config values through command line arguments. For example `python path/to/file.py --experiment_note="A new note"`
+### Inheritance
+<details><summary>What's the object oriented way to become wealthy?</summary>
+💰 Inheritance
+</details>
 
+For situations where multiple config-classes are quite similar it often makes sense to take advantage of class inheritance to avoid code duplication.  
 
-```bash title="src/components/HelloCodeTitle.js"
-python path/to/file.py --experiment_note="A new note"
-# config.experiment_note will contain "A new note"
+```python
+import anyfig
+import logging
+
+@anyfig.config_class
+class NormalConfig():
+  def __init__(self):
+    self.logger = logging.getLogger('my-app')
+    # ... More config values
+
+@anyfig.config_class
+class DebugConfig(NormalConfig):
+  def __init__(self):
+    super().__init___()  # Gets all attributes from NormalConfig
+    self.logger.setLevel(logging.DEBUG)
+
+config = anyfig.setup_config(default_config=NormalConfig)
 ```
 
-```jsx:"src/components/HelloCodeTitle.js"
-function HelloCodeTitle(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
-```
+### Modular Configs
+For bigger configs/projects it can help to separate them
 
-```js title="src/pages/hello.js"
-console.log('hogehoge');
-asd
-asdasd
-```
-
-```jsx title="src/components/HelloCodeTitle.js"
-function HelloCodeTitle(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
-```
-
-You can of course override multiple values and if the key is missing, Anyfig will throw an error.
-
-### Objects
-```bash
-python path/to/file.py --save_directory="other_output"
-# config.save_directory will contain "A new note"
-```
-
-
-### Google's Fire Syntax
-Anyfig uses Google's [Fire project](https://github.com/google/python-fire) to interpret command line arguments. Read more about how at 
-
-
-https://github.com/google/python-fire/blob/master/docs/guide.md#argument-parsing
-
-https://github.com/google/python-fire
-
-
-```bash
-python path/to/file.py --experiment_note="A new note"
-# config.experiment_note will contain "A new note"
-```
-asdasd
-
-
-
-If the input argument doesn't exist in the config class, Anyfig will throw an error.
 
 ## Modular Configs
 ### Inheritance

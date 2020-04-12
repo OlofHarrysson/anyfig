@@ -17,14 +17,9 @@ class DataConfig():
 @anyfig.config_class
 class MainConfig():
   def __init__(self):
-    self.foo = Path('my/path')
     self.data = DataConfig()
     self.yo = 'yo'
-    self.help = 'asdas'
-    self.class_ = WrongConfig()
-    self.ones = np.ones((1, 10))
-    self.ll = [1, 2] * 10
-    # self = LocalConfig()
+    self.f = func1
 
 
 class WrongConfig():
@@ -36,6 +31,16 @@ class WrongConfig():
 class SecondConfig():
   def __init__(self):
     self.experiment_note = 'Number 2'
+
+
+def func1():
+  print('im func1')
+  return 'f1'
+
+
+def func2():
+  print('im func2')
+  return 'f2'
 
 
 if __name__ == '__main__':
