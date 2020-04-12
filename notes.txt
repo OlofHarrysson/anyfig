@@ -1,5 +1,6 @@
 put in section in readme about local/private configs
 
+don't allow setup_config to be called twice, input parameters break then.
 
 Mark classes / properties as final? For properties, it would be cool to just
 do them as uppercase, which is python convention.
@@ -12,3 +13,9 @@ option to save anyfig as pickle, txt, source
 
 
 Could we fix so that if you name a configclass the same as a class (module.classname), all those parameters becomes defaults for the class. Is this argument-injection?
+
+Put some info in website about sensitive files. Could be user-settings or files with passwords
+
+Also put in some best practices - like try to keep the config simple and keep main logic in actual program.
+
+anyfig+argparse

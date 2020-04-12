@@ -1,5 +1,5 @@
 module.exports = {
-  themes: ['@docusaurus/theme-search-algolia'],
+  themes: ['@docusaurus/theme-search-algolia', '@docusaurus/theme-live-codeblock'],
   title: 'Anyfig',
   tagline: 'Anything in your configs',
   url: 'https://your-docusaurus-test-site.com',
@@ -8,28 +8,19 @@ module.exports = {
   organizationName: 'OlofHarrysson', // Usually your GitHub org/user name.
   projectName: 'Anyfig', // Usually your repo name.
   themeConfig: {
+    sidebarCollapsible: false,
+
+    // Syntax color theme
+    // prism: {
+    //   // theme: require('prism-react-renderer/themes/oceanicNext'),
+    //   theme: require('prism-react-renderer/themes/vsDark'),
+    // },
     navbar: {
       title: 'Anyfig',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
       },
-      links: [
-        {
-          to: 'docs/doc1',
-          activeBasePath: 'docs',
-          label: 'Docs',
-          position: 'left',
-        },
-        {
-          href: 'https://github.com/OlofHarrysson/anyfig',
-          label: 'GitHub',
-        },
-        {
-          href: 'https://pyfiddle.io/fiddle/4de2f70f-e421-4326-bbb8-b06d5efa547d/?i=true',
-          label: 'Online Playground',
-        },
-      ],
     },
     footer: {
       style: 'dark',
@@ -83,8 +74,8 @@ module.exports = {
 
     algolia: {
       appId: 'F5AH3JU99B',
-      apiKey: '131e1dd7b7d661f2e68800e8361ab973',
-      indexName: 'index-name',
+      apiKey: '2482404787a69df7a47eeb3e31da3212',
+      indexName: 'anyfig',
       algoliaOptions: {}, // Optional, if provided by Algolia
     },
   },
@@ -93,6 +84,7 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
+          routeBasePath: '',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
             'https://github.com/facebook/docusaurus/edit/master/website/',
