@@ -43,17 +43,19 @@ def func2():
   return 'f2'
 
 
+@anyfig.config_class  # Registers the class with anyfig
+class MyConfig():
+  def __init__(self):
+    # Config-parameters goes as attributes
+    self.experiment_note = 'Changed stuff'
+    self.save_directory = Path('output')
+    self.start_time = time.time()
+
+  def hej(self):
+    return self.experiment_note
+
+
 if __name__ == '__main__':
-  # config = anyfig.setup_config(Path)
-  # config = anyfig.setup_config(default_config=WrongConfig())
-  # config = anyfig.setup_config(default_config=WrongConfig)
-  config = anyfig.setup_config(default_config=MainConfig)
-  # config2 = anyfig.setup_config(default_config=SecondConfig)
-  # config = anyfig.setup_config(default_config=LocalConfig)
-  # config = anyfig.setup_config(default_config=MainConfig())
-  # config2 = anyfig.cfg()
-  # print(config is config2)
-  # config.frozen(False)
-  # config.foo = 'qwe'
+  # config = anyfig.setup_config(default_config=MainConfig)
+  config = anyfig.setup_config(default_config=MyConfig)
   print(config)
-  # print(config2)

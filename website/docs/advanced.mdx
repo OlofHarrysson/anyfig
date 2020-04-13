@@ -26,7 +26,7 @@ python path/to/file.py --experiment_note="A new note"
 ### Argument Types
 Google's [Fire project](https://github.com/google/python-fire) is used to parse command line arguments' types and validity. It support any Python literals (numbers, strings, tuples, lists, dictionaries, sets). Read more about how Fire [handles parsing](https://github.com/google/python-fire/blob/master/docs/guide.md#argument-parsing). 
 
- A problem arises when one wants to override a non-literal, like a Pathlib Path from the command line. Anyfig solves this by parsing the input to a Python literal and use that to create a new object from the class definition of the old value.
+ A problem arises when one wants to override a non-literal, like a Pathlib Path, from the command line. Anyfig solves this by parsing the input to a Python literal and use that to create a new object from the class definition of the old value.
 
 
 ```python
@@ -87,7 +87,7 @@ python path/to/file.py --config=SecondConfig --experiment_note="A new note"
 💰 Inheritance
 </details>
 
-For situations where multiple config-classes are quite similar it often makes sense to take advantage of class inheritance to avoid code duplication.  
+For situations where multiple config-classes are quite similar it often makes sense to use inheritance to avoid code duplication. There's not much to it, just plain ol' Python.
 
 ```python
 import anyfig
@@ -109,51 +109,25 @@ config = anyfig.setup_config(default_config=NormalConfig)
 ```
 
 ### Modular Configs
-For bigger configs/projects it can help to separate them
-
-
-## Modular Configs
-### Inheritance
-### Nested
-
-### Multiple configs & class inheritence
-
-It's possible to have multiple config classes defined and select one at runtime. This could be useful if you e.g. have one default config and one for debugging.
-
-To select a config class, specify the config class in the input arguments with the '--config' flag
-
-```bash
-python path/to/file.py --config=MainConfig
-python path/to/file.py --config=DebugConfig
-```
+For projects where the configuration grows large it helps to modularize the config values. Anyfig allows for nested config-classes to both reduce code duplication and increase code readability. 
 
 ```python
 import anyfig
-import random
 
 @anyfig.config_class
 class MainConfig():
   def __init__(self):
-    self.experiment_note = 'Changed some stuff'
-    self.seed = random.randint(0, 80085)
+    self.experiment_note = 'Changed stuff'
+    self.module = ModuleConfig()  # Yo dawg!
 
 @anyfig.config_class
-class DebugConfig(FooConfig):
+class ModuleConfig():
   def __init__(self):
-    super().__init__() # Inherit all parameters from MainConfig
-    self.seed = -1 # Overwrite
-    self.new = 'Parameter not found in MainConfig'
+    self.anyfig_tip = 'Config-classes can be used as parts or wholes'
 
 config = anyfig.setup_config(default_config=MainConfig)
-print(config) # Different output depending on which config class that was selected via the command line
+
+# ~~~ ⬇ Command line ⬇ ~~~
+# It's possible to override nested values
+python path/to/file.py --module.anyfig_tip="A new note"
 ```
-
-## Multiple Configs
-placeholder
-
-## Inheritance
-placeholder
-
-
-## Nested Configs
-placeholder

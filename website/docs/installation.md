@@ -16,5 +16,4 @@ pip install anyfig
 
 # From github
 pip install git+https://github.com/OlofHarrysson/anyfig/archive/master.zip
-
 ```

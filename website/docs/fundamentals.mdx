@@ -1,0 +1,91 @@
+---
+id: fundamentals
+title: Fundamentals
+sidebar_label: Fundamentals
+---
+
+## Config Classes
+
+Anyfig allows you to specify configs in Python code. Instead of defining values in json or yaml, you add them to an Anyfig config-class as attributes. 
+
+```python
+import anyfig
+
+@anyfig.config_class  # Registers the class with anyfig
+class MyConfig():
+  def __init__(self):
+    # Config-values goes as attributes
+    self.experiment_note = 'Changed stuff'
+    # ... More config values
+```
+
+## What Can You Put in a Config Class?
+
+Defining configurations in Python has multiple benefits, one of them being that you can define configs at runtime. **Any Python code** can go into the config. You can for example call a function and put the result into the config, even if the return value is a custom object.
+
+Just because you *can* put anything into the config doesn't mean that you *should*. Keep your configs simple and readable. Complex logic code is better suited for the main program. With that said, it's ultimately up to you... With great power comes great responsibility 🕷️
+
+
+```python
+import anyfig
+from pathlib import Path
+import time
+
+@anyfig.config_class  # Registers the class with anyfig
+class MyConfig():
+  def __init__(self):
+    # Config-values goes as attributes
+    self.experiment_note = 'Changed stuff'
+    self.save_directory = Path('output')
+    self.start_time = time.time()
+```
+
+## Initialize Config
+
+To access the config-values you need to instantiate an object from the config class. This is done via Anyfig's `setup_config` function. The returned object behaves as a normal class, with the exception of some added Anyfig functionality, for example a custom print function.
+
+<!-- contains the config-values specified in the config-class along with anything else you put into along with some extra Anyfig functionality, for example a custom print function. -->
+
+
+```python
+import anyfig
+from pathlib import Path
+import time
+
+@anyfig.config_class  # Registers the class with anyfig
+class MyConfig():
+  def __init__(self):
+    # Config-parameters goes as attributes
+    self.experiment_note = 'Changed stuff'
+    self.save_directory = Path('output')
+    self.start_time = time.time()
+
+# Instantiate config object
+config = anyfig.setup_config(default_config=MyConfig)
+print(config)  # ⬇ Output ⬇
+
+MyConfig:
+    experiment_note (str): Changed stuff
+    save_directory (PosixPath): output
+    start_time (float): 1586769550.863856
+```
+
+## Using the Config
+Once the config object is initialized, the config-values can be accessed via the dot notation. Most people pass the config-object around their code, accessing the config-values at various places to initilize their other components.
+
+### Global Config
+Anyfig offers an alternative to passing the config-object around. The anyfig.setup_config function registers the config-object with Anyfig, allowing it to be accessed from any file with the anyfig.cfg() function. 
+
+ Global objects are often considered bad practice and is thus _not recommended_ but often very practical. One could argue that the problem is allevited with Anyfig as **config-objects are immutable** after initialization by default.
+
+```python title="my_project/another_file.py"
+import anyfig
+
+class SomeClass():
+  def __init__(self):
+    config = anyfig.cfg()  # Returns the config object registered in Anyfig
+    print(config.start_time)  # Access config-values with the dot notation
+    # ... Use config-values to initialize SomeClass
+```
+
+
