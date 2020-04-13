@@ -10,11 +10,20 @@ module.exports = {
   themeConfig: {
     sidebarCollapsible: false,
 
+    // Search
+    algolia: {
+      appId: 'BH4D9OD16A',
+      apiKey: '2482404787a69df7a47eeb3e31da3212',
+      indexName: 'anyfig',
+      algoliaOptions: {}, // Optional, if provided by Algolia
+    },
+
     // Syntax color theme
     prism: {
       // theme: require('prism-react-renderer/themes/oceanicNext'),
       theme: require('prism-react-renderer/themes/vsDark'),
     },
+    
     navbar: {
       title: 'Anyfig',
       logo: {
@@ -72,12 +81,6 @@ module.exports = {
       copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
     },
 
-    algolia: {
-      appId: 'F5AH3JU99B',
-      apiKey: '2482404787a69df7a47eeb3e31da3212',
-      indexName: 'anyfig',
-      algoliaOptions: {}, // Optional, if provided by Algolia
-    },
   },
   presets: [
     [
