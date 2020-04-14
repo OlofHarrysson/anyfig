@@ -1,5 +1,15 @@
 module.exports = {
-  themes: ['@docusaurus/theme-search-algolia'],
+  themes: [
+    '@docusaurus/theme-search-algolia',
+    '@docusaurus/plugin-google-analytics',
+    '@docusaurus/plugin-sitemap',
+      {
+        cacheTime: 600 * 1000, // 600 sec - cache purge period
+        changefreq: 'weekly',
+        priority: 0.5,
+      },
+  ],
+
   title: 'Anyfig',
   tagline: 'Anything in your configs',
   url: 'https://your-docusaurus-test-site.com',
@@ -9,6 +19,12 @@ module.exports = {
   projectName: 'Anyfig', // Usually your repo name.
   themeConfig: {
     sidebarCollapsible: false,
+
+    // Google Analytics
+    googleAnalytics: {
+      trackingID: 'UA-163686450-1',
+      anonymizeIP: true,
+    },
 
     // Search
     algolia: {
@@ -23,7 +39,7 @@ module.exports = {
       // theme: require('prism-react-renderer/themes/oceanicNext'),
       theme: require('prism-react-renderer/themes/vsDark'),
     },
-    
+
     navbar: {
       title: 'Anyfig',
       logo: {

@@ -1,28 +1,21 @@
 module.exports = {
-  // docs: {
-  //   'Getting Started': ['doc1', 'doc2'],
-  //   'Usage': ['doc2'],
-  //   'Advanced Usage': ['doc3'],
-  // },
-
   docs: [
 
     {
       type: 'category',
       label: 'Getting Started',
-      items: ['about', 'installation'],
+      items: ['introduction', 'installation'],
     },
 
     {
       type: 'category',
       label: 'Usage',
-      items: ['fundamentals', 'advanced', 'API'],
+      items: ['fundamentals', 'advanced', 'best-practices'],
     },
 
     {
-      type: 'category',
-      label: 'Common Patterns',
-      items: ['shadow-configs'],
+      type: 'doc',
+      id: 'API',
     },
 
     {
@@ -44,9 +37,6 @@ module.exports = {
 
       ],
     },
-
-
-
  
   ],
 
