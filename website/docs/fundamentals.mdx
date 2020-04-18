@@ -62,8 +62,9 @@ class MyConfig():
 
 # Instantiate config object
 config = anyfig.setup_config(default_config=MyConfig)
-print(config)  # ⬇ Output ⬇
+print(config)
 
+# ~~~ ⬇ Output ⬇ ~~~
 MyConfig:
     experiment_note (str): Changed stuff
     save_directory (PosixPath): output
@@ -71,12 +72,35 @@ MyConfig:
 ```
 
 ## Using the Config
-Once the config object is initialized, the config-values can be accessed via the dot notation. Most people pass the config-object around their code, accessing the config-values at various places to initilize their other components.
+Once the config object is initialized, the config-values can be accessed via the dot notation. 
+
+```python
+import anyfig
+from pathlib import Path
+import time
+from myproject.io import FileWriter
+
+@anyfig.config_class  # Registers the class with anyfig
+class MyConfig():
+  def __init__(self):
+    # Config-parameters goes as attributes
+    self.experiment_note = 'Changed stuff'
+    self.save_directory = Path('output')
+    self.start_time = time.time()
+
+# Instantiate config object
+config = anyfig.setup_config(default_config=MyConfig)
+
+# Use config values
+writer = FileWriter(config.save_directory)
+...
+```
+
 
 ### Global Config
-Anyfig offers an alternative to passing the config-object around. The anyfig.setup_config function registers the config-object with Anyfig, allowing it to be accessed from any file with the anyfig.cfg() function. 
+Most people pass the config-object around their code, accessing the config-values at various places to initilize their other components. Anyfig offers an alternative to this. The anyfig.setup_config function registers the config-object with Anyfig, allowing it to be accessed from any file with the anyfig.cfg() function. 
 
- Global objects are often considered bad practice and is thus _not recommended_ but often very practical. One could argue that the problem is allevited with Anyfig as **config-objects are immutable** after initialization by default.
+ Global objects are often considered bad practice and is thus _not recommended_ but often very practical from small projects or experimentation. The problem is allevited in Anyfig's case as **config-objects are immutable** by default, avoiding confusion if multiple components were to change the same config-values.
 
 ```python title="my_project/another_file.py"
 import anyfig
@@ -85,7 +109,7 @@ class SomeClass():
   def __init__(self):
     config = anyfig.cfg()  # Returns the config object registered in Anyfig
     print(config.start_time)  # Access config-values with the dot notation
-    # ... Use config-values to initialize SomeClass
+    # ... Use config-values in program
 ```
 
 

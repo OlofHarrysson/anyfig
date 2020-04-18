@@ -1,3 +1,6 @@
+Some kind of help string that can be sent to setup_config or places in a config?
+
+
 input arguments for functions. Could maybe check if old value is function, if so, take the function with the input argument name from the old argument module's namespace
 
 
@@ -13,7 +16,26 @@ option to save anyfig as pickle, txt, source
 
 Could we fix so that if you name a configclass the same as a class (module.classname), all those parameters becomes defaults for the class. Is this argument-injection?
 
+
+If a component1 has config options and dependencies on other components, it's hard to create the component1 without putting all its dependencies into the conifg as well. The dependencies don't have config-values so shouldn't be there. Either something like functools.partial. Or a config class that has component1 class definition and available config-values and a way (like anyfig function?) to easily create an object with config-values + non-config values.
+Something like
+
+  dataloder = config.data.dataloader.create(dataset=dataset)
+  dataloder = config.data.dataloader(dataset=dataset)
+
+
+if one wants to use anyfig+argparse combination?
+
+~~~~~~ WEBSITE ~~~~~~
 Put some info in website about sensitive files. Could be user-settings or files with passwords
 
+--help explained
 
-anyfig+argparse
+installation - nightly+stable, conda+pip, etc. Not priority
+
+Some sort of info on the main page.
+- Add some gifs of code being written?
+
+Forums? Not priority
+
+

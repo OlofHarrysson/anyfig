@@ -46,6 +46,23 @@ module.exports = {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
       },
+
+      links: [
+        {
+          to: 'docs/introduction',
+          activeBasePath: 'docs',
+          label: 'Docs',
+          position: 'left',
+        },
+        {
+          href: 'https://github.com/OlofHarrysson/anyfig',
+          label: 'GitHub',
+        },
+        {
+          href: 'https://pyfiddle.io/fiddle/4de2f70f-e421-4326-bbb8-b06d5efa547d/?i=true',
+          label: 'Online Playground',
+        },
+      ],
     },
     footer: {
       style: 'dark',
@@ -103,7 +120,7 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
-          routeBasePath: '',
+          // routeBasePath: '',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
             'https://github.com/facebook/docusaurus/edit/master/website/',

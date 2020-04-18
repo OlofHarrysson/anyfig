@@ -6,7 +6,7 @@ sidebar_label: Advanced
 
 ## Command Line Input
 
-Anyfig offers the functionality to override config values through command line arguments and will throw an error if the user inputs a key that doesn't exist. It's thus only possible to **override argument**, not to define new ones.
+Anyfig offers the functionality to override config values through command line arguments. Anyfig will throw an error if the user inputs a key that doesn't exist making it possible to **override argument**, not to define new ones. By not allowing new keys, Anyfig protects against misspellings that can result in silent errors.
 
 ```python
 import anyfig
@@ -18,15 +18,38 @@ class MyConfig():
 
 config = anyfig.setup_config(default_config=MyConfig)
 
-# ~~~ ⬇ Command line ⬇ ~~~  
+# ~~~ ⬇ Command line ⬇ ~~~
 # config.experiment_note will contain: A new note
 python path/to/file.py --experiment_note="A new note"
+
+# Throws an error
+python path/to/file.py --xperiment_note="A new note"
 ```
 
 ### Argument Types
 Google's [Fire project](https://github.com/google/python-fire) is used to parse command line arguments' types and validity. It support any Python literals (numbers, strings, tuples, lists, dictionaries, sets). Read more about how Fire [handles parsing](https://github.com/google/python-fire/blob/master/docs/guide.md#argument-parsing). 
 
  A problem arises when one wants to override a non-literal, like a Pathlib Path, from the command line. Anyfig solves this by parsing the input to a Python literal and use that to create a new object from the class definition of the old value.
+
+```python
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MyConfig():
+  def __init__(self):
+    self.save_directory = Path('output')
+
+config = anyfig.setup_config(default_config=MyConfig)
+
+# ~~~ ⬇ Command line ⬇ ~~~
+# config.save_directory will be a Path object with value: other_output
+# It's created by wrapping the input string in a Path object: Path("other_output")
+python path/to/file.py --save_directory="other_output"
+```
+
+### Command Line Help
+Help for the config-options are exposed to the command line when the user inputs the --help flag.
 
 
 ```python
@@ -40,11 +63,20 @@ class MyConfig():
 
 config = anyfig.setup_config(default_config=MyConfig)
 
-# ~~~ ⬇ Command line ⬇ ~~~  
-# config.save_directory will be a Path object with value: other_output
-# It's created by wrapping the input string in a Path object: Path("other_output")
-python path/to/file.py --save_directory="other_output"
+# ~~~ ⬇ Command line ⬇ ~~~
+python path/to/file.py --help
+
+# ~~~ ⬇ Output ⬇ ~~~
+Available config classes ['MyConfig']
+Set config with --config=OtherConfigClass
+
+Current config
+MyConfig:
+    save_directory (PosixPath): output
 ```
+
+
+
 
 ## Multiple Config Classes
 
@@ -87,7 +119,7 @@ python path/to/file.py --config=SecondConfig --experiment_note="A new note"
 💰 Inheritance
 </details>
 
-For situations where multiple config-classes are quite similar it often makes sense to use inheritance to avoid code duplication. There's not much to it, just plain ol' Python.
+For situations where multiple config-classes are similar to one another it often makes sense to use inheritance to avoid code duplication. There's not much to it, just plain ol' Python.
 
 ```python
 import anyfig

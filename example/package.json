@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "rehype-truncate": "^1.1.0",
-    "remark-images": "^2.0.0"
-  }
-}
