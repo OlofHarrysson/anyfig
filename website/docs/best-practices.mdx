@@ -14,9 +14,9 @@ For smaller projects without
 
 ## Sensitive Information
 
-Sensitive information such as passwords should most likely not be put into files tracked by Git for security reasons. This creates a dilemma if one wants to track Anyfig config-class files but not the sensitive information within. 
+Sensitive information such as passwords should most likely not be put into files tracked by git for security reasons. This creates a dilemma if one wants to track Anyfig config-class files but not the sensitive information within. 
 
-A workaround would be to put the sensitive information in a file, have Git ignore the file and point to the file from Anyfig.
+A workaround would be to put the sensitive information in a file, have git ignore the file and point to the file from Anyfig.
 
 ```python
 import anyfig
@@ -27,8 +27,8 @@ class MyConfig():
     self.password_file = 'secrets/password.txt'
 
 config = anyfig.setup_config(default_config=MyConfig)
-with open(config.password_file) as f:
-    password = f.read()
+with open(config.password_file) as file:
+    password = file.read()
 ```
 
 It's also possible to create a function to read the password from the file directly in an Anyfig config-class. If you prefer this approach, be careful for if you save the config, the password will be saved as well. 
@@ -37,14 +37,11 @@ It's also possible to create a function to read the password from the file direc
 ```python
 import anyfig
 
-def read_password(path):
-  with open(path) as f:
-      return f.read()
-
 @anyfig.config_class
 class MyConfig():
   def __init__(self):
-    self.password = read_password('secrets/password.txt')
+    with open('secrets/password.txt') as file:
+      self.password = file.read()
 
 config = anyfig.setup_config(default_config=MyConfig)
 ```
