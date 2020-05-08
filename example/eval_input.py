@@ -18,8 +18,27 @@ except:
 @anyfig.config_class
 class DataConfig():
   def __init__(self):
+
+    self.empty = 'kaoskdos'
+    ''' This comment is so goodoasdaosdi ois hdashda sdhaosudh asuhodi asuhod aisuhd asuidh liuasdh alisudh aisud 
+    qwe
+
+    qwethat it gets ever more than one line
+    end of liiiine '''
+    self.asdas = 123
+
+    # Variable ll
     self.ll = [1, 2] * 10
-    self.pp = Path('myppp')
+
+    # Variable hooooo aiuefhauewif aiuwef iwuehiw uefiu hwegfiuo oiwhef oiwhefo idvhasdeföioh  oiwe owieF ÖOiwhfoie HOÖIWHFÖASOKDVHJÖ OIEAHWRFOI HEOÖ
+    self.hoo = 'hooo'
+    """ This comment is so goodoasdaosdi ois hdashda sdhaosudh asuhodi asuhod aisuhd asuidh liuasdh alisudh aisud 
+    qwe
+
+    qwethat it gets ever more than one line
+    end of liiiine
+    """
+    self.multi = 123
 
 
 @anyfig.config_class
@@ -78,7 +97,7 @@ class MultipleConfig():
 
 
 def main():
-  config = anyfig.init_config(default_config=MainConfig)
+  config = anyfig.init_config(default_config=DataConfig)
   print(config)
   # print(config.)
 

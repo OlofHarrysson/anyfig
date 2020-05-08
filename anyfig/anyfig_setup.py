@@ -23,9 +23,10 @@ def init_config(default_config):
     print(f"Available config classes {config_classes}",
           "\nSet config with --config=OtherConfigClass\n")
 
-    print(f"Current config is '{config_str}'")
+    print(f"Current config is '{config_str}'\n")
     # print(config)
-    # Print the variable and the comment above it
+    class_type = figutils.get_registered_config_classes(config_str)
+    class_type.print_help(class_type)
     sys.exit(0)
 
   # Create config

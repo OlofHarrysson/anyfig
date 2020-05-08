@@ -24,7 +24,9 @@ def register_config_class(class_name, class_def):
   registered_config_classes[class_name] = class_def
 
 
-def get_registered_config_classes():
+def get_registered_config_classes(class_name=None):
+  if class_name:
+    return registered_config_classes[class_name]
   return registered_config_classes
 
 
@@ -78,8 +80,84 @@ def save_config(obj, path):
     f.write(str(obj))
 
 
+# def strip_comment_string(code_string):
+#   # code_string = code_string.lstrip()
+
+
+def line_print(code_lines, attribute_row_index):
+  comment_lines = []
+  attribute_line = code_lines[attribute_row_index]
+
+  multiline_commet = False
+  add_comment = lambda row_c: comment_lines.insert(0, row_c.strip(' '))
+
+  for row_index in range(attribute_row_index, 0, -1):
+    row_code = code_lines[row_index]
+
+    # Break at blank line above attribute line
+    if row_code.isspace() and not multiline_commet:
+      break
+
+    # Hashtag # comment
+    if row_code.lstrip().startswith('#'):
+      add_comment(row_code)
+
+    # Starts with ''' or """
+    if multiline_commet and (row_code.lstrip().startswith("'''")
+                             or row_code.lstrip().startswith('"""')):
+      add_comment(row_code)
+      break
+
+    # Line between ''' or """
+    if multiline_commet:
+      add_comment(row_code)
+
+    # Ends with ''' or """
+    if row_code.rstrip().endswith("'''") or row_code.rstrip().endswith('"""'):
+      add_comment(row_code)
+      multiline_commet = True
+
+  comment_string = ''.join(comment_lines)
+  comment_string = comment_string.strip("# \n'\"")
+  return comment_string
+
+
 # Class which is used to define functions that goes into every config class
 class MasterConfig(ABC):
+  @staticmethod
+  def print_help(class_type):
+    # TODO: Should look in parents for comment description
+    # TODO: Should print --name: (tab) help
+    # TODO: Print type
+
+    # TODO: Can't have input argument if using it after setup
+    code_lines, _ = inspect.getsourcelines(class_type)
+    comments = {}
+
+    # Find attribute name and matching comment
+    for row_index, code_line in enumerate(code_lines):
+      if code_line.lstrip().startswith('self.'):
+        # Extract attribute name
+        attribute_name = code_line.split('=')[0]
+        attribute_name = attribute_name.strip().replace('self.', '', 1)
+
+        comment = line_print(code_lines, row_index)
+        comments[attribute_name] = comment
+
+    # Print the config help
+    for attribute_name, comment in comments.items():
+      name_str = f"--{attribute_name}:"
+      width_multiple = 4  # In spaces
+      n_spaces = len(name_str) + width_multiple
+      n_spaces = width_multiple * round(n_spaces / width_multiple)
+
+      # Add extra spacing for short variable names
+      if n_spaces == width_multiple * 2:
+        n_spaces = width_multiple * 3
+
+      comment = (' ' * n_spaces).join(comment.splitlines(True)).rstrip('\n')
+      print(f"{name_str}{' ' * (n_spaces - len(name_str))}{comment}")
+
   def frozen(self, freeze=True):
     ''' Freeze/unfreeze config '''
     self.__class__._frozen = freeze

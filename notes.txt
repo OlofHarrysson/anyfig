@@ -11,13 +11,13 @@ Mark classes / properties as final? For properties, it would be cool to just
 do them as uppercase, which is python convention.
 Mark them as strict? @config_class(strict=True). If one tries to overwrite attribute throw error.
 
-Move to cookiecutter repo to help with pip package
+Move to cookiecutter repo to help with pip package0
 
 
 Help messages - tries to take comment from source code above where the attribute is set. If no comment is found, try parents. What about config class comments?
 
 Interface values.
-- Help message
+- Help message. Could allow that tests are dictionary test=test_msg_string. Could be used for help and possibly error?
 
 option to save anyfig as pickle, txt, source
 
