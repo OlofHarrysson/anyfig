@@ -16,7 +16,7 @@ class MyConfig():
   def __init__(self):
     self.experiment_note = 'Changed stuff'
 
-config = anyfig.setup_config(default_config=MyConfig)
+config = anyfig.init_config(default_config=MyConfig)
 
 # ~~~ ⬇ Command line ⬇ ~~~
 # config.experiment_note will contain: A new note
@@ -40,7 +40,7 @@ class MyConfig():
   def __init__(self):
     self.save_directory = Path('output')
 
-config = anyfig.setup_config(default_config=MyConfig)
+config = anyfig.init_config(default_config=MyConfig)
 
 # ~~~ ⬇ Command line ⬇ ~~~
 # config.save_directory will be a Path object with value: other_output
@@ -61,7 +61,7 @@ class MyConfig():
   def __init__(self):
     self.save_directory = Path('output')
 
-config = anyfig.setup_config(default_config=MyConfig)
+config = anyfig.init_config(default_config=MyConfig)
 
 # ~~~ ⬇ Command line ⬇ ~~~
 python path/to/file.py --help
@@ -82,7 +82,7 @@ MyConfig:
 
 Sometimes it's useful to have multiple config-classes. Perhaps one config for every main script or one config for normal use and one for debugging. The ability to create multiple config-classes is very powerful and essential to Anyfig.
 
-One can choose which config-class to use via the command line. If a config-class is not supplied, it will default to the config-class given in the anyfig.setup_config function. 
+One can choose which config-class to use via the command line. If a config-class is not supplied, it will default to the config-class given in the anyfig.init_config function. 
 
 
 ```python
@@ -100,7 +100,7 @@ class SecondConfig():
     self.anyfig_tip = 'Configs can contain different values from each other'
 
 # The "default_config" argument decides which class is used to create the config
-config = anyfig.setup_config(default_config=MyConfig)
+config = anyfig.init_config(default_config=MyConfig)
 
 # ~~~ ⬇ Command line ⬇ ~~~
 # config.experiment_note will contain: Changed stuff
@@ -137,7 +137,7 @@ class DebugConfig(NormalConfig):
     super().__init___()  # Gets all attributes from NormalConfig
     self.logger.setLevel(logging.DEBUG)
 
-config = anyfig.setup_config(default_config=NormalConfig)
+config = anyfig.init_config(default_config=NormalConfig)
 ```
 
 ### Modular Configs
@@ -157,7 +157,7 @@ class ModuleConfig():
   def __init__(self):
     self.anyfig_tip = 'Config-classes can be used as parts or wholes'
 
-config = anyfig.setup_config(default_config=MainConfig)
+config = anyfig.init_config(default_config=MainConfig)
 
 # ~~~ ⬇ Command line ⬇ ~~~
 # It's possible to override nested values

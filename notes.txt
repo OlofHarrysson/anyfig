@@ -1,4 +1,7 @@
-Some kind of help string that can be sent to setup_config or places in a config?
+Some kind of help string about the program that can be sent to init_config or places in a config?
+
+
+Git collaboration: Copy whole config dir and try except import the shadow config dir?
 
 
 input arguments for functions. Could maybe check if old value is function, if so, take the function with the input argument name from the old argument module's namespace
@@ -6,10 +9,15 @@ input arguments for functions. Could maybe check if old value is function, if so
 
 Mark classes / properties as final? For properties, it would be cool to just
 do them as uppercase, which is python convention.
-Mark them as strict? @config_class(strict=True). If one tries to overwrite attribute throw error
+Mark them as strict? @config_class(strict=True). If one tries to overwrite attribute throw error.
+
+Move to cookiecutter repo to help with pip package
 
 
-Interface classes? Where the attributes are set to anyfig.placeholder and throws error if its not overwritten? anyfig.required
+Help messages - tries to take comment from source code above where the attribute is set. If no comment is found, try parents. What about config class comments?
+
+Interface values.
+- Help message
 
 option to save anyfig as pickle, txt, source
 
@@ -37,5 +45,3 @@ Some sort of info on the main page.
 - Add some gifs of code being written?
 
 Forums? Not priority
-
-

@@ -39,7 +39,7 @@ Or try the online demo @
 ### The basics
 1. Decorate a class with '@anyfig.config_class'
 2. Add config-parameters as attributes in the class
-3. Call the 'setup_config' function to instantiate the config object
+3. Call the 'init_config' function to instantiate the config object
 
 
 ```python
@@ -53,7 +53,7 @@ class FooConfig():
     self.experiment_note = 'Changed some stuff'
     self.seed = random.randint(0, 80085)
 
-config = anyfig.setup_config(default_config=FooConfig)
+config = anyfig.init_config(default_config=FooConfig)
 print(config)
 print(config.seed)
 ```
@@ -61,7 +61,7 @@ print(config.seed)
 #### Under the hood - how Anyfig works
 The **@anyfig.config_class** decorator registers the class with Anyfig and adds some attributes and methods to the class.
 
-The **anyfig.setup_config()** function checks if the class specified in its default_config argument is among the registered config-classes. If it is, a object is instantiated from the class definition and returned.
+The **anyfig.init_config()** function checks if the class specified in its default_config argument is among the registered config-classes. If it is, a object is instantiated from the class definition and returned.
 
 ### Command line input
 
@@ -81,7 +81,7 @@ class FooConfig():
     self.experiment_note = 'Changed some stuff'
     self.seed = random.randint(0, 80085)
 
-config = anyfig.setup_config(default_config='FooConfig')
+config = anyfig.init_config(default_config='FooConfig')
 print(config.seed) # Output: 69. Overwritten from command line
 ```
 If the input argument doesn't exist in the config class, Anyfig will throw an error.
@@ -115,7 +115,7 @@ class DebugConfig(FooConfig):
     self.seed = -1 # Overwrite
     self.new = 'Parameter not found in MainConfig'
 
-config = anyfig.setup_config(default_config=MainConfig)
+config = anyfig.init_config(default_config=MainConfig)
 print(config) # Different output depending on which config class that was selected via the command line
 ```
 
@@ -164,7 +164,7 @@ class FooConfig():
   def __init__(self):
     self.foo = Bar()
 
-config = anyfig.setup_config(default_config='FooConfig')
+config = anyfig.init_config(default_config='FooConfig')
 print(config) # 'foo': 'Bar(x=5)'
 ```
 
@@ -185,7 +185,7 @@ class FooConfig():
   def __init__(self):
     self.foo = Bar()
 
-config = anyfig.setup_config(default_config='FooConfig')
+config = anyfig.init_config(default_config='FooConfig')
 print(config.foo) # Output ->
 # class Bar():
 #   def __init__(self):

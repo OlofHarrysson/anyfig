@@ -36,7 +36,7 @@ class MyConfig():
     self.start_time = time.time()
 
 # Instantiate config object
-config = anyfig.setup_config(default_config=MyConfig)
+config = anyfig.init_config(default_config=MyConfig)
 
 # Access config values with the dot notation
 print(config.start_time)

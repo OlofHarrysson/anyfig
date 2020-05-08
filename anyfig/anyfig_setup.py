@@ -5,32 +5,37 @@ import sys
 from . import figutils
 
 
-def setup_config(default_config):
+def init_config(default_config):
   assert default_config is not None
   err_msg = "Expected default config to be a class definition but most likely got an object. E.g. expected ConfigClass but got ConfigClass() with parentheses."
   assert default_config.__class__ == type.__class__, err_msg
   err_msg = f"Expected default config to be an anyfig config class, was {default_config}"
   assert figutils.is_config_class(default_config), err_msg
 
-  # Parse args and create config
+  # Print config help
   args = parse_args()
   config_str = default_config.__name__
   if 'config' in args:
     config_str = args.pop('config')
-  config = create_config(config_str)
 
-  # Print config help
   if 'help' in args:
     config_classes = list(figutils.get_registered_config_classes())
     print(f"Available config classes {config_classes}",
           "\nSet config with --config=OtherConfigClass\n")
 
-    print("Current config")
-    print(config)
+    print(f"Current config is '{config_str}'")
+    # print(config)
+    # Print the variable and the comment above it
     sys.exit(0)
+
+  # Create config
+  config = create_config(config_str)
 
   # Overwrite parameters via optional input flags
   config = overwrite(config, args)
+
+  # Resolve required values # TODO: Rename
+  figutils.resolve(config)
 
   # Freezes config
   config.frozen(freeze=True)
@@ -57,7 +62,7 @@ def create_config(config_str):
 
   err_msg = ("There aren't any registered config classes. Decorate a class "
              "with '@anyfig.config_class' and make sure that the class is "
-             "imported to the file where the function 'anyfig.setup_config' "
+             "imported to the file where the function 'anyfig.init_config' "
              "is called from")
   registered_configs = figutils.get_registered_config_classes()
   assert len(registered_configs), err_msg
@@ -76,9 +81,7 @@ def create_config(config_str):
 
 
 def overwrite(main_config_obj, args):
-  ''' Overwrites parameters with input flags. Function is needed for the
-  convenience of specifying parameters via a combination of the config classes
-  and input flags. '''
+  ''' Overwrites parameters with input flags '''
 
   config_classes = figutils.get_registered_config_classes()
 
@@ -86,28 +89,30 @@ def overwrite(main_config_obj, args):
     # Seperate nested keys into outer and inner
     outer_keys = argument_key.split('.')
     inner_key = outer_keys.pop(-1)
+    base_err_msg = f"Can't set '{argument_key} = {val}'"
 
-    # Get the innermost config object
+    # Check that the nested config has the attribute and is a config class
     config_obj = main_config_obj
     for key_part in outer_keys:
-      err_msg = f"Error when trying to set '{argument_key}={val}'. '{key_part}' isn't an attribute in '{type(config_obj).__name__}'"
+      err_msg = f"{base_err_msg}. '{key_part}' isn't an attribute in '{type(config_obj).__name__}'"
       assert hasattr(config_obj, key_part), err_msg
+
       config_obj = getattr(config_obj, key_part)
-      err_msg = f"Tried to set '{argument_key}' but '{'.'.join(outer_keys)}' wasn't an anyfig class"
+      err_msg = f"{base_err_msg}. '{'.'.join(outer_keys)}' isn't a registered Anyfig config class"
       assert figutils.is_config_class(config_obj), err_msg
 
     # Error if trying to set unknown attribute key
-    if inner_key not in vars(config_obj):
-      err_msg = (
-        f"The input parameter '{argument_key}' isn't allowed. It's only possible "
-        "to overwrite attributes that exist in the active config class")
-      raise NotImplementedError(err_msg)
+    err_msg = f"{base_err_msg}. '{inner_key}' isn't an attribute in '{type(config_obj).__name__}'"
+    assert inner_key in vars(config_obj), err_msg
 
     # Class definition
     value_class = type(getattr(config_obj, inner_key))
 
     # Create new anyfig class object
     if figutils.is_config_class(value_class):
+      err_msg = f"{base_err_msg}. '{val}' isn't a registered Anyfig config class'"
+      assert val in config_classes, err_msg
+
       value_class = config_classes[val]
       value_obj = value_class()
 
