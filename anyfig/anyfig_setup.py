@@ -12,12 +12,14 @@ def init_config(default_config):
   err_msg = f"Expected default config to be an anyfig config class, was {default_config}"
   assert figutils.is_config_class(default_config), err_msg
 
-  # Print config help
+  # Create config
   args = parse_args()
   config_str = default_config.__name__
+  config = create_config(config_str)
   if 'config' in args:
     config_str = args.pop('config')
 
+  # Print config help
   if 'help' in args:
     config_classes = list(figutils.get_registered_config_classes())
     print(f"Available config classes {config_classes}",
@@ -25,12 +27,11 @@ def init_config(default_config):
 
     print(f"Current config is '{config_str}'\n")
     # print(config)
-    class_type = figutils.get_registered_config_classes(config_str)
-    class_type.print_help(class_type)
+    # class_type = figutils.get_registered_config_classes(config_str)
+    # class_type.print_help(class_type)
+    help_string = config.print_help()
+    print(help_string)
     sys.exit(0)
-
-  # Create config
-  config = create_config(config_str)
 
   # Overwrite parameters via optional input flags
   config = overwrite(config, args)

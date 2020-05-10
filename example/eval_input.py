@@ -20,23 +20,15 @@ class DataConfig():
   def __init__(self):
 
     self.empty = 'kaoskdos'
-    ''' This comment is so goodoasdaosdi ois hdashda sdhaosudh asuhodi asuhod aisuhd asuidh liuasdh alisudh aisud 
-    qwe
 
-    qwethat it gets ever more than one line
-    end of liiiine '''
+    # THE comment promise
     self.asdas = 123
 
     # Variable ll
     self.ll = [1, 2] * 10
+    """ First line is this one
 
-    # Variable hooooo aiuefhauewif aiuwef iwuehiw uefiu hwegfiuo oiwhef oiwhefo idvhasdeföioh  oiwe owieF ÖOiwhfoie HOÖIWHFÖASOKDVHJÖ OIEAHWRFOI HEOÖ
-    self.hoo = 'hooo'
-    """ This comment is so goodoasdaosdi ois hdashda sdhaosudh asuhodi asuhod aisuhd asuidh liuasdh alisudh aisud 
-    qwe
-
-    qwethat it gets ever more than one line
-    end of liiiine
+    Empty above
     """
     self.multi = 123
 
@@ -45,43 +37,30 @@ class DataConfig():
 class MainConfig():
   def __init__(self):
     self.data = DataConfig()
+
+    # YOOYOYOYOO
     self.yo = 0
     self.shiiiet = [1, 2, 3]
 
-    # pattern = typing.List[int]
-    pattern = int
-    test1 = lambda v: v < 10
-    test2 = lambda v: v > 0
+    choices = [Path('main.py'), Path('train.py'), Path('eval_input.py')]
+    file_exists = lambda v: v.exists()
+    file_choices = lambda v: v in choices
+    pattern = Path
+    tests = [file_exists, file_choices]
 
-    # test2 = lambda v: self.yo == 0
-
-    # def test(x):
-    #   return x > 0
-
-    # test = [test1, test2]
-    # test = None
-
-    a = [1, 2, 3]
-    # test = lambda v: v in a
-    test = lambda v: v.exists()
-    # self.interface = anyfig.FigValue(pattern, tests=test, help='asds')
-    self.interface = anyfig.FigValue(tests=test)
-    # self.interface = anyfig.FigValue()
-    # self.interface = anyfig.FigValue(help='asds')
-
-    # self.interface = [1, 2]
-    # self.interface = 'asdasd'
-    # a = [2, 3, 4]
+    # A comment for sho
+    self.interface = anyfig.FigValue(pattern, tests=tests)
     self.interface = Path('main.py')
-    # self.interface = -1
 
 
 @anyfig.config_class
 class Main2(MainConfig):
   def __init__(self):
     super().__init__()
-    # self.interface = 1
-    self.interface = -1
+    # self.interface = 4
+
+    # main2 comment
+    self.interface = Path('eval_input.py')
 
 
 @anyfig.config_class
@@ -97,7 +76,8 @@ class MultipleConfig():
 
 
 def main():
-  config = anyfig.init_config(default_config=DataConfig)
+  # config = anyfig.init_config(default_config=DataConfig)
+  config = anyfig.init_config(default_config=Main2)
   print(config)
   # print(config.)
 

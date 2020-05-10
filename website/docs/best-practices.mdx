@@ -75,11 +75,11 @@ Seamlessly switch between user config and main config by returning before overri
 class UserMainConfig(MainConfig):
   def __init__(self):
     super().__init__()
-    use_main_config = False # Set to True to run the MainConfig
+    use_main_config = False  # Set to True to run the MainConfig
     if use_main_config:
       return
 
-    # Overwritten values...
+    # Overwrite with user values...
 ```
 :::
 
