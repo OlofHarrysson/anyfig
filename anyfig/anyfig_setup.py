@@ -29,7 +29,7 @@ def init_config(default_config):
     # print(config)
     # class_type = figutils.get_registered_config_classes(config_str)
     # class_type.print_help(class_type)
-    help_string = config.print_help()
+    help_string = config.comments_string()
     print(help_string)
     sys.exit(0)
 

@@ -22,7 +22,7 @@ class DataConfig():
     self.empty = 'kaoskdos'
 
     # THE comment promise
-    self.asdas = 123
+    self.verylongvariablenameislong = 123
 
     # Variable ll
     self.ll = [1, 2] * 10
@@ -31,6 +31,9 @@ class DataConfig():
     Empty above
     """
     self.multi = 123
+
+    # this shoulc be last comment
+    self.other = 12
 
 
 @anyfig.config_class

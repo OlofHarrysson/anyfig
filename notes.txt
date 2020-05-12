@@ -1,7 +1,6 @@
 Some kind of help string about the program that can be sent to init_config or places in a config?
 
-
-Git collaboration: Copy whole config dir and try except import the shadow config dir?
+Possibly to hash config class to make sure that other config is exact the same? Loading for example
 
 
 input arguments for functions. Could maybe check if old value is function, if so, take the function with the input argument name from the old argument module's namespace
@@ -13,11 +12,6 @@ Mark them as strict? @config_class(strict=True). If one tries to overwrite attri
 
 Move to cookiecutter repo to help with pip package0
 
-
-Help messages - tries to take comment from source code above where the attribute is set. If no comment is found, try parents. What about config class comments?
-
-Interface values.
-- Help message. Could allow that tests are dictionary test=test_msg_string. Could be used for help and possibly error?
 
 option to save anyfig as pickle, txt, source
 

@@ -7,7 +7,8 @@ from pathlib import Path
 import copy
 from typeguard import check_type
 import typing
-import functools
+
+from . import print_utils
 
 registered_config_classes = {}
 global_configs = {}
@@ -81,133 +82,10 @@ def save_config(obj, path):
     f.write(str(obj))
 
 
-def line_print(code_lines, attribute_row_index):
-  comment_lines = []
-  attribute_line = code_lines[attribute_row_index]
-
-  multiline_commet = False
-  add_comment = lambda row_c: comment_lines.insert(0, row_c)
-
-  for row_index in range(attribute_row_index, 0, -1):
-    row_code = code_lines[row_index]
-    row_code = row_code.strip(' ')
-
-    # Break at blank line above attribute line
-    if row_code.isspace() and not multiline_commet:
-      break
-
-    # Break if we reach another attribute
-    if row_code.startswith('self.') and row_index != attribute_row_index:
-      break
-
-    # Hashtag # comment
-    if row_code.startswith('#'):
-      add_comment(row_code)
-
-    # Starts with ''' or """
-    if multiline_commet and (row_code.startswith("'''")
-                             or row_code.startswith('"""')):
-      add_comment(row_code)
-      break
-
-    # Line between ''' or """
-    if multiline_commet:
-      add_comment(row_code)
-
-    # Ends with ''' or """
-    if row_code.rstrip().endswith("'''") or row_code.rstrip().endswith('"""'):
-      add_comment(row_code)
-      multiline_commet = True
-
-  comment_string = ''.join(comment_lines)
-  comment_string = comment_string.strip("# \n'\"")
-  return comment_string
-
-
-def _print_help(class_type):
-  comments = {}
-  parents = class_type.__bases__
-
-  # Find comments for parents, skip Python built in code
-  for parent in parents:
-    if parent.__module__ == 'builtins':
-      continue
-    parent_comments = _print_help(parent)
-    comments.update(parent_comments)
-
-  # Find attribute name and matching comment
-  code_lines, _ = inspect.getsourcelines(class_type)
-  for row_index, code_line in enumerate(code_lines):
-    if code_line.lstrip().startswith('self.'):
-      # Extract attribute name
-      attribute_name = code_line.split('=')[0]
-      attribute_name = attribute_name.strip().replace('self.', '', 1)
-
-      comment = line_print(code_lines, row_index)
-
-      # Override parent comment
-      if comment or attribute_name not in comments:
-        comments[attribute_name] = comment
-
-  return comments
-
-
 # Class which is used to define functions that goes into every config class
 class MasterConfig(ABC):
-  def print_help(self):
-    # TODO: Should print --data.value for nested config classes
-    comments = self.nested_print_help()
-
-    # Print the config help
-    help_strings = []
-    for attribute_name, comment in comments.items():
-      nested_indent_width = 4
-      nested_level = attribute_name.count('.')
-      nested_indent = ' ' * (nested_indent_width * nested_level)
-      attribute_names = attribute_name.split('.')
-
-      attribute_value = functools.reduce(getattr, attribute_names, self)
-
-      attribute_type = attribute_value.__class__.__name__
-      name_str = f"{nested_indent}--{attribute_name} ({attribute_type}):"
-
-      width_multiple = 4  # In spaces
-      n_spaces = len(name_str) + width_multiple
-      n_spaces = width_multiple * round(n_spaces / width_multiple)
-
-      # Add extra spacing for short variable names
-      comment_indent = width_multiple * 8
-      if n_spaces < comment_indent:
-        n_spaces = comment_indent
-
-      comment = (' ' * n_spaces).join(comment.splitlines(True)).rstrip('\n')
-      hh = f"{name_str}{' ' * (n_spaces - len(name_str))}{comment}"
-      help_strings.append(hh)
-    return '\n'.join(help_strings)
-
-  def nested_print_help(self):
-    # NEEEESTEEEEEEEEEED
-    # NEEEESTEEEEEEEEEED
-    # NEEEESTEEEEEEEEEED
-    # NEEEESTEEEEEEEEEED
-    # NEEEESTEEEEEEEEEED
-    config_class = self.__class__
-    comments = _print_help(config_class)
-    main_nested_comments = {}
-
-    config_classes = get_registered_config_classes().values()
-    for attribute_name, comment in comments.items():
-      main_nested_comments[attribute_name] = comment
-
-      attribute_value = getattr(self, attribute_name)
-      attribute_class = attribute_value.__class__
-      if attribute_class in config_classes:
-        nested_comments = attribute_value.nested_print_help()
-        for inner_attribute_name, inner_comment in nested_comments.items():
-          nested_name = f'{attribute_name}.{inner_attribute_name}'
-          main_nested_comments[nested_name] = inner_comment
-
-    return main_nested_comments
+  def comments_string(self):
+    return print_utils.comments_string(self)
 
   def frozen(self, freeze=True):
     ''' Freeze/unfreeze config '''
