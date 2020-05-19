@@ -10,7 +10,7 @@ def comments_string(config_obj):
   comments = _extract_config_obj_comments(config_obj)
 
   indent_width = 4  # In spaces
-  comment_indents = {}
+  comment_indents = {}  # key = '' for main config class
   formated_comments = []
 
   # Calculate comment indents
@@ -26,18 +26,18 @@ def comments_string(config_obj):
     attr_string = f"{nested_indent}--{attribute_name} ({attribute_type}):"
 
     # Save strings for further formating
-    config_class = '.'.join(attribute_names[:-1])
-    formated_comments.append((config_class, attr_string, comment))
+    attribute_chain = '.'.join(attribute_names[:-1])
+    formated_comments.append((attribute_chain, attr_string, comment))
 
     # Calculate even indention width
     n_spaces = len(attr_string) + indent_width
-    if n_spaces > comment_indents.get(config_class, -1):
-      comment_indents[config_class] = n_spaces
+    if n_spaces > comment_indents.get(attribute_chain, -1):
+      comment_indents[attribute_chain] = n_spaces
 
-  # Adds proper indention to config classes
+  # Adds indention based on which config class
   help_strings = []
-  for config_class, attr_string, comment in formated_comments:
-    n_spaces = comment_indents[config_class]
+  for attribute_chain, attr_string, comment in formated_comments:
+    n_spaces = comment_indents[attribute_chain]
     comment = (' ' * n_spaces).join(comment.splitlines(True)).rstrip('\n')
     help_string = f"{attr_string}{' ' * (n_spaces - len(attr_string))}{comment}"
     help_strings.append(help_string)

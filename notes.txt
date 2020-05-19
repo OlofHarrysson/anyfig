@@ -10,8 +10,9 @@ Mark classes / properties as final? For properties, it would be cool to just
 do them as uppercase, which is python convention.
 Mark them as strict? @config_class(strict=True). If one tries to overwrite attribute throw error.
 
-Move to cookiecutter repo to help with pip package0
+Move to cookiecutter repo to help with pip package
 
+overrite input args to init setup
 
 option to save anyfig as pickle, txt, source
 

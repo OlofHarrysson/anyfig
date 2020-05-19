@@ -8,6 +8,7 @@ from io import StringIO
 import fire
 import typing
 import pytypes
+import argparse
 
 try:
   import time
@@ -79,16 +80,42 @@ class MultipleConfig():
 
 
 def main():
+  p = argparse.ArgumentParser()
+  # p.add_argument(
+  #   "--square",
+  #   type=int,
+  #   required=True,
+  #   help="display a square of a given number",
+  # )
+  p.add_argument(
+    "--poop",
+    type=int,
+    help="display a square of a given number",
+  )
+  p.add_argument(
+    "--poo2p",
+    type=int,
+    default=12,
+    help="display a square of a given number",
+  )
+
+  args, unknown = p.parse_known_args(
+  )  # Parses input args and checks for errors
+  print(args)
+  print(unknown)
+  print(type(args))
+  print(vars(args))
+  # config = anyfig.init_config(default_config=MultipleConfig)
   # config = anyfig.init_config(default_config=DataConfig)
-  config = anyfig.init_config(default_config=Main2)
+  config = anyfig.init_config(default_config=DataConfig, cli_args={})
+  # config = anyfig.init_config(default_config=DataConfig, cli_args=vars(args))
+  # config = anyfig.init_config(default_config=DataConfig, cli_args=[1, 2, 3])
+  # config = anyfig.init_config(default_config=Main2)
   print(config)
   # print(config.)
 
 
 if __name__ == '__main__':
-  # config = anyfig.init_config(default_config=MainConfig)
-  # print(config)
-
   main()
 
 # Before main program / init_config is ran.

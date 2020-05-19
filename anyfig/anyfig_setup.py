@@ -3,38 +3,41 @@ import fire
 import inspect
 import sys
 from . import figutils
+from collections import Mapping
 
 
-def init_config(default_config):
+def init_config(default_config, cli_args=None):
   assert default_config is not None
-  err_msg = "Expected default config to be a class definition but most likely got an object. E.g. expected ConfigClass but got ConfigClass() with parentheses."
+  err_msg = "Expected 'default_config' to be a class definition but most likely got an object. E.g. expected ConfigClass but got ConfigClass() with parentheses."
   assert default_config.__class__ == type.__class__, err_msg
-  err_msg = f"Expected default config to be an anyfig config class, was {default_config}"
+  err_msg = f"Expected 'default_config' to be an anyfig config class, was {default_config}"
   assert figutils.is_config_class(default_config), err_msg
+  err_msg = f"Expected 'cli_args' to be a dict like object, was {type(cli_args)}"
+  assert isinstance(cli_args, Mapping), err_msg
+
+  # Parse command line arguments
+  if cli_args is None:
+    cli_args = parse_cli_args()
 
   # Create config
-  args = parse_args()
   config_str = default_config.__name__
   config = create_config(config_str)
-  if 'config' in args:
-    config_str = args.pop('config')
+  if 'config' in cli_args:
+    config_str = cli_args.pop('config')
 
   # Print config help
-  if 'help' in args:
+  if 'help' in cli_args:
     config_classes = list(figutils.get_registered_config_classes())
     print(f"Available config classes {config_classes}",
-          "\nSet config with --config=OtherConfigClass\n")
+          f"\nCurrent config is '{config_str}'.",
+          "Set config with --config=OtherConfigClass\n")
 
-    print(f"Current config is '{config_str}'\n")
-    # print(config)
-    # class_type = figutils.get_registered_config_classes(config_str)
-    # class_type.print_help(class_type)
     help_string = config.comments_string()
     print(help_string)
     sys.exit(0)
 
   # Overwrite parameters via optional input flags
-  config = overwrite(config, args)
+  config = overwrite(config, cli_args)
 
   # Resolve required values # TODO: Rename
   figutils.resolve(config)
@@ -47,7 +50,7 @@ def init_config(default_config):
   return config
 
 
-def parse_args():
+def parse_cli_args():
   ''' Parses input arguments '''
   class NullIO(StringIO):
     def write(self, txt):
