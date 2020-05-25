@@ -5,17 +5,16 @@ from . import figutils
 
 
 def comments_string(config_obj):
-  ''' Returns a string for the config object help. Ty.. pass '''
-  # TODO: Clean up variable names etc in print help functions
+  ''' Returns a "help" string for the config object that contain attributes and any matching comments '''
   comments = _extract_config_obj_comments(config_obj)
 
   indent_width = 4  # In spaces
-  comment_indents = {}  # key = '' for main config class
+  comment_indents = {}  # attribute-name=indent. key = '' for main config class
   formated_comments = []
 
   # Calculate comment indents
   for attribute_name, comment in comments.items():
-    # Performs deep get -> config.attribute.value
+    # Access nested value -> config.attribute.value
     attribute_names = attribute_name.split('.')
     attribute_value = functools.reduce(getattr, attribute_names, config_obj)
 

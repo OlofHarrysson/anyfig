@@ -1,14 +1,13 @@
 from abc import ABC
-from collections import Iterable
 import inspect
 from dataclasses import FrozenInstanceError
 import pickle
 from pathlib import Path
 import copy
-from typeguard import check_type
 import typing
 
 from . import print_utils
+from .interfacefield import InterfaceField
 
 registered_config_classes = {}
 global_configs = {}
@@ -82,6 +81,19 @@ def save_config(obj, path):
     f.write(str(obj))
 
 
+def resolve_fields(config):
+  # TODO: Better name and doc. Resolve the inteface values
+  for key, val in vars(config).items():
+    if isinstance(val, InterfaceField):
+      config_class = type(config).__name__
+      value = val.finish_wrapping_phase(key, config_class)
+      setattr(config, key, value)
+
+    # Resolve nested configs
+    if is_config_class(val):
+      resolve_fields(val)
+
+
 # Class which is used to define functions that goes into every config class
 class MasterConfig(ABC):
   def comments_string(self):
@@ -96,7 +108,20 @@ class MasterConfig(ABC):
     return copy.deepcopy(vars(self))
 
   def __str__(self):
-    ''' Prettyprints the config '''
+    return self.pretty()
+
+    # lines = [self.__class__.__name__ + ':']
+
+    # for key, val in vars(self).items():
+    #   val_str = str(val)
+    #   if is_config_class(val):  # Remove class name info
+    #     val_str = val_str.replace(f'{val.__class__.__name__}:', '')
+    #   lines += f'{key} ({val.__class__.__name__}): {val_str}'.split('\n')
+
+    # return '\n    '.join(lines) + '\n'
+
+  def pretty(self):
+    ''' Pretty string representation of the config '''
     lines = [self.__class__.__name__ + ':']
 
     for key, val in vars(self).items():
@@ -112,7 +137,7 @@ class MasterConfig(ABC):
 
     # Handle interface values
     old_value = getattr(self, name, None)
-    if isinstance(old_value, FigValue):
+    if isinstance(old_value, InterfaceField):
       value = old_value.update_value(name, value, config_class)
 
     # Raise error if frozen unless we're trying to unfreeze the config
@@ -128,73 +153,3 @@ class MasterConfig(ABC):
       assert name != method[0], name_taken_msg
 
     object.__setattr__(self, name, value)
-
-
-class FigValue():
-  # Used to bind type information (and other?) to data
-  # TODO: Write proper doc
-  def __init__(self, type_pattern=typing.Any, tests=None):
-    err_msg = f"Expected 'type_pattern' to be a type or a typing pattern but got {type(type_pattern)}"
-    assert issubclass(type(type_pattern), type.__class__) or issubclass(
-      type(type_pattern), typing._Final), err_msg
-
-    self.type_pattern = type_pattern
-    self.wrapping_phase = True
-
-    if not isinstance(tests, Iterable):
-      self.tests = [tests]
-    else:
-      self.tests = tests
-
-  def update_value(self, name, value, config_class):
-    # Updates value and return wrapped value or value if setup is finished
-    if self.type_pattern:
-      check_type(name, value, self.type_pattern)
-
-    for test in self.tests:
-      if test != None:
-        self._check_test(test, name, value, config_class)
-
-    self.value = value
-    if self.wrapping_phase:
-      return self
-    return value
-
-  def finish_wrapping_phase(self, name, config_class):
-    # Validates value and finishes setup
-    err_msg = f"Attribute '{name}' in '{config_class}' is required to be overridden"
-    assert hasattr(self, 'value'), err_msg
-
-    self.wrapping_phase = False
-    return self.value
-
-  def _check_test(self, test, name, value, config_class):
-    # Raises error if test fails
-    test_file = Path(inspect.getsourcefile(test)).absolute()
-    line_number = inspect.getsourcelines(test)[-1]
-
-    base_err_msg = f"Can't set '{name} = {value}' for config '{config_class}'. Its test defined in '{test_file}' at line {line_number}"
-    try:
-      test_passed = test(value)
-    except Exception as e:
-      test_passed = False
-
-      # Create same exception as was raised
-      exception_class = type(e)
-      err_msg = f"{base_err_msg} raised the exception: \n{str(e)}"
-      raise exception_class(err_msg) from None
-
-    assert test(value), f"{base_err_msg} didn't pass"
-
-
-def resolve(config):
-  # TODO: Better name and doc. Resolve the inteface values
-  for key, val in vars(config).items():
-    if isinstance(val, FigValue):
-      config_class = type(config).__name__
-      value = val.finish_wrapping_phase(key, config_class)
-      setattr(config, key, value)
-
-    # Resolve nested configs
-    if is_config_class(val):
-      resolve(val)

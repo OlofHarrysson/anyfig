@@ -1,3 +1,10 @@
+
+
+
+What was the problem with dataclasses again?
+
+
+
 Some kind of help string about the program that can be sent to init_config or places in a config?
 
 Possibly to hash config class to make sure that other config is exact the same? Loading for example
@@ -12,10 +19,7 @@ Mark them as strict? @config_class(strict=True). If one tries to overwrite attri
 
 Move to cookiecutter repo to help with pip package
 
-overrite input args to init setup
-
 option to save anyfig as pickle, txt, source
-
 
 Could we fix so that if you name a configclass the same as a class (module.classname), all those parameters becomes defaults for the class. Is this argument-injection?
 
@@ -27,16 +31,16 @@ Something like
   dataloder = config.data.dataloader(dataset=dataset)
 
 
-if one wants to use anyfig+argparse combination?
 
 ~~~~~~ WEBSITE ~~~~~~
-Put some info in website about sensitive files. Could be user-settings or files with passwords
-
---help explained
-
 installation - nightly+stable, conda+pip, etc. Not priority
 
 Some sort of info on the main page.
 - Add some gifs of code being written?
 
 Forums? Not priority
+
+
+~~~~~~ Release 0.4 ~~~~~~
+dict cli-arguments readme
+tests, overwrite, types readme

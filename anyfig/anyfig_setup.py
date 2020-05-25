@@ -12,8 +12,9 @@ def init_config(default_config, cli_args=None):
   assert default_config.__class__ == type.__class__, err_msg
   err_msg = f"Expected 'default_config' to be an anyfig config class, was {default_config}"
   assert figutils.is_config_class(default_config), err_msg
-  err_msg = f"Expected 'cli_args' to be a dict like object, was {type(cli_args)}"
-  assert isinstance(cli_args, Mapping), err_msg
+  if cli_args is not None:
+    err_msg = f"Expected 'cli_args' to be a dict like object, was {type(cli_args)}"
+    assert isinstance(cli_args, Mapping), err_msg
 
   # Parse command line arguments
   if cli_args is None:
@@ -40,7 +41,7 @@ def init_config(default_config, cli_args=None):
   config = overwrite(config, cli_args)
 
   # Resolve required values # TODO: Rename
-  figutils.resolve(config)
+  figutils.resolve_fields(config)
 
   # Freezes config
   config.frozen(freeze=True)
@@ -124,10 +125,14 @@ def overwrite(main_config_obj, args):
     # Create new object of previous value type with new value
     else:
       try:
-        value_obj = value_class(val)
-      except Exception:
-        err_msg = f"Input argument '{argument_key}' with value {val} can't create an object of the expected type {value_class}"
-        raise RuntimeError(err_msg)
+        if isinstance(val, dict):  # Keyword specified cli-arguments
+          value_obj = value_class(**val)
+        else:
+          value_obj = value_class(val)
+
+      except Exception as e:
+        err_msg = f"Input argument '{argument_key}' with value {val} can't create an object of the expected type {value_class}. {e}"
+        raise RuntimeError(err_msg) from None
 
     # Overwrite old value
     setattr(config_obj, inner_key, value_obj)

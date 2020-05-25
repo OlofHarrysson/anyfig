@@ -42,7 +42,7 @@ class MyConfig():
 
 ## Initialize Config
 
-To access the config-values you need to instantiate an object from the config class. This is done via Anyfig's `init_config` function. The returned object behaves as a normal class, with the exception of some added Anyfig functionality, for example a custom print function.
+To access the config-values you need to instantiate an object from the config class. This is done via Anyfig's `init_config` function. The returned object behaves as a normal class, with the exception of some added Anyfig functionality, for example a custom `__str__` function.
 
 <!-- contains the config-values specified in the config-class along with anything else you put into along with some extra Anyfig functionality, for example a custom print function. -->
 
@@ -111,5 +111,3 @@ class SomeClass():
     print(config.start_time)  # Access config-values with the dot notation
     # ... Use config-values in program
 ```
-
-

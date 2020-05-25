@@ -3,11 +3,11 @@ module.exports = {
     '@docusaurus/theme-search-algolia',
     '@docusaurus/plugin-google-analytics',
     '@docusaurus/plugin-sitemap',
-      {
-        cacheTime: 600 * 1000, // 600 sec - cache purge period
-        changefreq: 'weekly',
-        priority: 0.5,
-      },
+    {
+      cacheTime: 600 * 1000, // 600 sec - cache purge period
+      changefreq: 'weekly',
+      priority: 0.5,
+    },
   ],
 
   title: 'Anyfig',
@@ -47,69 +47,64 @@ module.exports = {
         src: 'img/logo.svg',
       },
 
-      links: [
-        {
-          to: 'docs/introduction',
-          activeBasePath: 'docs',
-          label: 'Docs',
-          position: 'left',
-        },
-        {
-          href: 'https://github.com/OlofHarrysson/anyfig',
-          label: 'GitHub',
-        },
-        {
-          href: 'https://pyfiddle.io/fiddle/4de2f70f-e421-4326-bbb8-b06d5efa547d/?i=true',
-          label: 'Online Playground',
-        },
+      links: [{
+        to: 'docs/introduction',
+        activeBasePath: 'docs',
+        label: 'Docs',
+        position: 'left',
+      },
+      {
+        href: 'https://github.com/OlofHarrysson/anyfig',
+        label: 'GitHub',
+      },
+      {
+        href: 'https://pyfiddle.io/fiddle/4de2f70f-e421-4326-bbb8-b06d5efa547d/?i=true',
+        label: 'Online Playground',
+      },
       ],
     },
     footer: {
       style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Style Guide',
-              to: 'docs/doc1',
-            },
-            {
-              label: 'Second Doc',
-              to: 'docs/doc2',
-            },
-          ],
+      links: [{
+        title: 'Docs',
+        items: [{
+          label: 'Style Guide',
+          to: 'docs/doc1',
         },
         {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-          ],
+          label: 'Second Doc',
+          to: 'docs/doc2',
+        },
+        ],
+      },
+      {
+        title: 'Community',
+        items: [{
+          label: 'Stack Overflow',
+          href: 'https://stackoverflow.com/questions/tagged/docusaurus',
         },
         {
-          title: 'Social',
-          items: [
-            {
-              label: 'Blog',
-              to: 'blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
+          label: 'Discord',
+          href: 'https://discordapp.com/invite/docusaurus',
         },
+        ],
+      },
+      {
+        title: 'Social',
+        items: [{
+          label: 'Blog',
+          to: 'blog',
+        },
+        {
+          label: 'GitHub',
+          href: 'https://github.com/facebook/docusaurus',
+        },
+        {
+          label: 'Twitter',
+          href: 'https://twitter.com/docusaurus',
+        },
+        ],
+      },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
     },
@@ -122,8 +117,7 @@ module.exports = {
         docs: {
           // routeBasePath: '',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+          editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

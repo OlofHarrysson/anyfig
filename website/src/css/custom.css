@@ -1,9 +1,14 @@
-/* stylelint-disable docusaurus/copyright-header */
+/* stylelint-disable docusaurus/copyright-header
 /**
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
  */
+
+.navbar__logo {
+  height: 150%;
+  transform: scaleX(-1);
+}
 
 /* You can override the default Infima variables here. */
 :root {
@@ -22,22 +27,4 @@
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
-}
-
-details {
-    padding: .5em .5em 0;
-}
-
-summary {
-    font-weight: bold;
-    margin: -.5em -.5em 0;
-    padding: .5em;
-}
-
-details[open] {
-    padding: .5em;
-}
-
-details[open] summary {
-    margin-bottom: .5em;
 }

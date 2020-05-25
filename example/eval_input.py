@@ -9,6 +9,8 @@ import fire
 import typing
 import pytypes
 import argparse
+from collections import namedtuple
+from dataclasses import dataclass
 
 try:
   import time
@@ -19,7 +21,6 @@ except:
 @anyfig.config_class
 class DataConfig():
   def __init__(self):
-
     self.empty = 'kaoskdos'
 
     # THE comment promise
@@ -48,75 +49,23 @@ class MainConfig():
 
     choices = [Path('main.py'), Path('train.py'), Path('eval_input.py')]
     file_exists = lambda v: v.exists()
+    # file_exists = lambda v: v / v
+    # file_exists = lambda v: 1 / 0
     file_choices = lambda v: v in choices
     pattern = Path
     tests = [file_exists, file_choices]
 
     # A comment for sho
-    self.interface = anyfig.FigValue(pattern, tests=tests)
-    self.interface = Path('main.py')
-
-
-@anyfig.config_class
-class Main2(MainConfig):
-  def __init__(self):
-    super().__init__()
-    # self.interface = 4
-
-    # main2 comment
-    self.interface = Path('eval_input.py')
-
-
-@anyfig.config_class
-class MultipleConfig():
-  def __init__(self):
-    self.configs = []
-
-    c = MainConfig()
-    self.configs.append(c)
-
-    c = DataConfig()
-    self.configs.append(c)
+    self.interface = anyfig.field(pattern, tests=tests)
+    # self.interface = Path('main.p2y')
+    # self.interface = Path('main.py')
 
 
 def main():
-  p = argparse.ArgumentParser()
-  # p.add_argument(
-  #   "--square",
-  #   type=int,
-  #   required=True,
-  #   help="display a square of a given number",
-  # )
-  p.add_argument(
-    "--poop",
-    type=int,
-    help="display a square of a given number",
-  )
-  p.add_argument(
-    "--poo2p",
-    type=int,
-    default=12,
-    help="display a square of a given number",
-  )
-
-  args, unknown = p.parse_known_args(
-  )  # Parses input args and checks for errors
-  print(args)
-  print(unknown)
-  print(type(args))
-  print(vars(args))
-  # config = anyfig.init_config(default_config=MultipleConfig)
-  # config = anyfig.init_config(default_config=DataConfig)
-  config = anyfig.init_config(default_config=DataConfig, cli_args={})
-  # config = anyfig.init_config(default_config=DataConfig, cli_args=vars(args))
-  # config = anyfig.init_config(default_config=DataConfig, cli_args=[1, 2, 3])
-  # config = anyfig.init_config(default_config=Main2)
+  config = anyfig.init_config(default_config=MainConfig)
   print(config)
-  # print(config.)
+  hej = 1
 
 
 if __name__ == '__main__':
   main()
-
-# Before main program / init_config is ran.
-# Create another config class that help to run multiple main() runs with different configs

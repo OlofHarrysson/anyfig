@@ -20,10 +20,10 @@ config = anyfig.init_config(default_config=MyConfig)
 
 # ~~~ ⬇ Command line ⬇ ~~~
 # config.experiment_note will contain: A new note
-python path/to/file.py --experiment_note="A new note"
+python path/to/file.py --experiment_note='A new note'
 
-# Throws an error
-python path/to/file.py --xperiment_note="A new note"
+# Throws an error due to missing key
+python path/to/file.py --xperiment_note='A new note'
 ```
 
 ### Argument Types
@@ -44,8 +44,8 @@ config = anyfig.init_config(default_config=MyConfig)
 
 # ~~~ ⬇ Command line ⬇ ~~~
 # config.save_directory will be a Path object with value: other_output
-# It's created by wrapping the input string in a Path object: Path("other_output")
-python path/to/file.py --save_directory="other_output"
+# It's created by wrapping the input string in a Path object: Path('other_output')
+python path/to/file.py --save_directory='other_output'
 ```
 
 ### Command Line Help
@@ -59,24 +59,30 @@ from pathlib import Path
 @anyfig.config_class
 class MyConfig():
   def __init__(self):
+
+    # Describes the thought behind the experiment
+    self.experiment_note = 'Changed stuff'
+
+    ''' Supports
+    multiline
+    comments '''
     self.save_directory = Path('output')
 
-config = anyfig.init_config(default_config=MyConfig)
+    self.some_values_need_no_comment = 1
 
 # ~~~ ⬇ Command line ⬇ ~~~
 python path/to/file.py --help
 
 # ~~~ ⬇ Output ⬇ ~~~
 Available config classes ['MyConfig']
-Set config with --config=OtherConfigClass
+Current config is 'MyConfig'. Set config with --config=OtherConfigClass
 
-Current config
-MyConfig:
-    save_directory (PosixPath): output
+--experiment_note (str):                Describes the thought behind the experiment
+--save_directory (PosixPath):           Supports
+                                        multiline
+                                        comments
+--some_values_need_no_comment (int):
 ```
-
-
-
 
 ## Multiple Config Classes
 
@@ -119,7 +125,7 @@ python path/to/file.py --config=SecondConfig --experiment_note="A new note"
 💰 Inheritance
 </details>
 
-For situations where multiple config-classes are similar to one another it often makes sense to use inheritance to avoid code duplication. There's not much to it, just plain ol' Python.
+For situations where multiple config-classes are similar to one another it often makes sense to use inheritance to avoid code duplication.
 
 ```python
 import anyfig
