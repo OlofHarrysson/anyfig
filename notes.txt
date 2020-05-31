@@ -1,27 +1,31 @@
+Could do anyfig.config_class(MyClass) to convey that the configs is for that class def - could then create the object at anyfig.init, but maybe thats bad because you lose the configs? Maybe some build function that takes all attributes and creates object from class_def?
+- build function should be **kwargs by default and take all attributes+kwargs to create object from class_def. This sort of solves the config-objects that are depenent on non-config objects.
 
 
+Order of command line argument parsing. We want the outer configs parsed first so that any inner arguments within those will override the new outer ones.
 
 What was the problem with dataclasses again?
 
 
-
 Some kind of help string about the program that can be sent to init_config or places in a config?
+
+
 
 Possibly to hash config class to make sure that other config is exact the same? Loading for example
 
+A way to control which arguments that can be overwritten by cli/visible by the --help. I don't see a good way to do this that doesn't require lots of maintainence. Better to do an opt-in system than an opt-out, so whitelist the ones you want exposed
 
 input arguments for functions. Could maybe check if old value is function, if so, take the function with the input argument name from the old argument module's namespace
 
 
-Mark classes / properties as final? For properties, it would be cool to just
-do them as uppercase, which is python convention.
-Mark them as strict? @config_class(strict=True). If one tries to overwrite attribute throw error.
-
 Move to cookiecutter repo to help with pip package
 
-option to save anyfig as pickle, txt, source
 
-Could we fix so that if you name a configclass the same as a class (module.classname), all those parameters becomes defaults for the class. Is this argument-injection?
+Save and load
+option to save anyfig as pickle, source
+Option to save as json - how to deal with non-json classes? Have anyfig.config_class(json_compatible=True) which forces the config to only keep json compatible fields e.g. python literals
+
+
 
 
 If a component1 has config options and dependencies on other components, it's hard to create the component1 without putting all its dependencies into the conifg as well. The dependencies don't have config-values so shouldn't be there. Either something like functools.partial. Or a config class that has component1 class definition and available config-values and a way (like anyfig function?) to easily create an object with config-values + non-config values.
@@ -33,14 +37,16 @@ Something like
 
 
 ~~~~~~ WEBSITE ~~~~~~
-installation - nightly+stable, conda+pip, etc. Not priority
+installation - conda
+different styling on sidebar 'titles'
 
 Some sort of info on the main page.
 - Add some gifs of code being written?
 
-Forums? Not priority
+Forums?
 
 
 ~~~~~~ Release 0.4 ~~~~~~
 dict cli-arguments readme
-tests, overwrite, types readme
+InterfaceField readme
+    - constant readme

@@ -10,7 +10,7 @@ setup(
   url='https://github.com/OlofHarrysson/anyfig',
   download_url='https://github.com/OlofHarrysson/anyfig/archive/v0.0.3.tar.gz',
   keywords=['config', 'command line parsing', 'python classes', 'dynamic'],
-  install_requires=['fire'],
+  install_requires=['fire', 'typeguard'],
   classifiers=[
     'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',

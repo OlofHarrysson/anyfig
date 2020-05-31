@@ -6,7 +6,7 @@ sidebar_label: Advanced
 
 ## Command Line Input
 
-Anyfig offers the functionality to override config values through command line arguments. Anyfig will throw an error if the user inputs a key that doesn't exist making it possible to **override argument**, not to define new ones. By not allowing new keys, Anyfig protects against misspellings that can result in silent errors.
+Anyfig offers the functionality to override config-values through command line arguments. Anyfig will throw an error if the user inputs a key that doesn't exist making it possible to **override argument**, not to define new ones. By not allowing new keys, Anyfig protects against misspellings that can result in silent errors.
 
 ```python
 import anyfig
@@ -50,7 +50,6 @@ python path/to/file.py --save_directory='other_output'
 
 ### Command Line Help
 Help for the config-options are exposed to the command line when the user inputs the --help flag.
-
 
 ```python
 import anyfig
@@ -147,7 +146,7 @@ config = anyfig.init_config(default_config=NormalConfig)
 ```
 
 ### Modular Configs
-For projects where the configuration grows large it helps to modularize the config values. Anyfig allows for nested config-classes to both reduce code duplication and increase code readability. 
+For projects where the configuration grows large it helps to modularize the config-values. Anyfig allows for nested config-classes to both reduce code duplication and increase code readability. 
 
 ```python
 import anyfig
@@ -169,3 +168,88 @@ config = anyfig.init_config(default_config=MainConfig)
 # It's possible to override nested values
 python path/to/file.py --module.anyfig_tip="A new note"
 ```
+
+## Constraining Config-Values
+To avoid unintended behaviours its good practice to validate the config. Checking that config-values are of correct type and contain allowed values are typical examples of validation. Anyfig offers this functionality though the field function.
+
+### Types
+Anyfig assures that a config-value has the correct type if the type is declared via the `anyfig.field` function. The field serves as an interface that defines the allowed type for that particular config-value. That config-value is required to be overridden which allows the developer to e.g. enforce that certain config-values are defined through the command line input. 
+
+```python
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MainConfig():
+  def __init__(self):
+    # Define allowed values
+    self.save_directory = anyfig.field(Path)
+
+    # Set value directly, in subclass or from command line input
+    self.save_directory = Path('output')  # OK
+    self.save_directory = 'output'  # Error. Value is not correct type
+```
+
+More complex types are supported through a mix of Python's built-in [typing module](https://docs.python.org/3/library/typing.html) in combination with the [typeguard package](https://github.com/agronholm/typeguard). It's thus possible to specify that a config-value should be a list of ints, written as `typing.List[int]`, or other non-trivial schemas.
+
+```python
+import anyfig
+from pathlib import Path
+import typing
+
+@anyfig.config_class
+class MainConfig():
+  def __init__(self):
+    # Define allowed values
+    self.save_directory = anyfig.field(typing.Union[Path, str])  # Path or String
+
+    # Set value directly, in subclass or from command line input
+    self.save_directory = Path('output')  # OK
+    self.save_directory = 'output'  # OK
+```
+
+### Values
+Validating the type for config-values is a great start but can't protect against unallowed values of that type. For example, if a config-value controls the number of pizzas to order, a negative number could pass the type test whilst still being nonsensical.
+
+By allowing developers to define their own tests for the config-values within Anyfig, config-errors are caught in the setup phase with a clear error message instead of creating bugs downsteam.
+
+It also clearly communicates the allowed values in contrast to a json config-file where one has to also read any validation code to understand which options are allowed.
+
+```python title="this_file.py"
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MainConfig():
+  def __init__(self):
+    # Define tests
+    file_exists = lambda new_value: new_value.exists()
+    self.python_file = anyfig.field(tests=file_exists)
+
+    # Set value directly, in subclass or from command line input
+    self.python_file = Path('this_file.py')  # OK
+    self.python_file = Path('other_file.py')  # Error. File doesn't exist
+```
+
+```python title="this_file.py"
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MainConfig():
+  def __init__(self):
+    # Define tests
+    file_exists = lambda new_value: new_value.exists()
+    allowed_files = [Path('this_file.py'), Path('other_file.py')]
+    file_allowed = lambda new_value: new_value in allowed_files
+    file_tests = [file_exists, file_allowed]
+    self.python_file = anyfig.field(tests=file_tests)
+
+    # Set value directly, in subclass or from command line input
+    self.python_file = Path('this_file.py')  # OK
+    self.python_file = Path('other_file.py')  # Error. File doesn't exist
+    self.python_file = Path('anyfig.txt')  # Error. File exist but isn't allowed
+```
+
+### Constant Values
+Coming soon...

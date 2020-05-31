@@ -30,6 +30,7 @@
   margin: 0 auto;
   max-width: 1100px;
   display: flex; 
+  flex-wrap: wrap-reverse;
 }
 
 .heroLeft {
@@ -68,6 +69,10 @@
 
 .heroProjectKeywords {
   color: var(--ifm-color-primary);
+}
+
+.heroProjectKeywordsAlt {
+  color: var(--ifm-color-primary-alt);
 }
 
 @keyframes jackInTheBox {
@@ -126,6 +131,7 @@
   .hero {
     padding-left: 20px;
     padding-right: 20px;
+    text-align: center;
   }
 
   .heroInner {
@@ -133,8 +139,7 @@
   }
 
   .heroProjectTagline {
-    font-size: 36px;
-    text-align: center;
+    font-size: 30px;
   }
 
   .heroLogo {
@@ -144,10 +149,13 @@
   }
 
   .indexCtas {
+    flex-direction: column;
     justify-content: center;
   }
 
-  .indexCtasGitHubButton {
-    display: none;
+  .indexCtasGitHubButtonWrapper {
+    display: flex;
+    padding: 10px;
   }
+
 }

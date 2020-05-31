@@ -9,7 +9,7 @@ module.exports = {
 
     {
       type: 'category',
-      label: 'Usage',
+      label: 'Guides',
       items: ['fundamentals', 'advanced', 'best-practices'],
     },
 
@@ -22,7 +22,7 @@ module.exports = {
       type: 'category',
       label: 'Resources',
       items: [
-      
+
         {
           type: 'link',
           label: 'GitHub',
@@ -37,7 +37,7 @@ module.exports = {
 
       ],
     },
- 
+
   ],
 
 };

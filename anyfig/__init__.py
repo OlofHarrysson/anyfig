@@ -1,3 +1,10 @@
+import sys
 from anyfig.figutils import *
 from anyfig.anyfig_setup import *
-from anyfig.interfacefield import *
+
+# Some features are only supported in Python 3.7+
+python_v = sys.version_info
+if python_v.major >= 3 and python_v.minor >= 7:
+  from anyfig.interfacefield import *
+else:
+  from anyfig.dummyinterfacefield import *

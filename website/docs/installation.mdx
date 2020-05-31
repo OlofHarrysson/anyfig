@@ -1,0 +1,49 @@
+---
+id: installation
+title: Installing Anyfig
+sidebar_label: Installation
+---
+
+## Requirements
+Python 3.6+ but 3.8+ is recommended for all features
+
+## Installation
+The Anyfig package is in its infancy. Install it from pip or the github repo
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs
+  defaultValue="python37"
+  values={[
+    { label: 'Python 3.6', value: 'python36', },
+    { label: 'Python 3.7+', value: 'python37', },
+    { label: 'Nightly', value: 'nightly', },
+  ]
+}>
+<TabItem value="python36">
+
+```bash
+pip install anyfig dataclasses
+
+# dataclasses is a backport of the built-in dataclasses in Python 3.7
+# More info at https://github.com/ericvsmith/dataclasses
+```
+
+</TabItem>
+<TabItem value="python37">
+
+```bash
+pip install anyfig
+```
+
+</TabItem>
+<TabItem value="nightly">
+
+```bash
+# From GitHub master branch
+pip install git+https://github.com/OlofHarrysson/anyfig/archive/master.zip
+```
+
+</TabItem>
+</Tabs>

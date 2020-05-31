@@ -3,7 +3,10 @@ setup.cfg
 setup.py
 anyfig/__init__.py
 anyfig/anyfig_setup.py
+anyfig/dummyinterfacefield.py
 anyfig/figutils.py
+anyfig/interfacefield.py
+anyfig/print_utils.py
 anyfig.egg-info/PKG-INFO
 anyfig.egg-info/SOURCES.txt
 anyfig.egg-info/dependency_links.txt

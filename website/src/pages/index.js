@@ -32,7 +32,7 @@ function Home() {
                   and{' '}
                   <span className={styles.heroProjectKeywords}>scaleable</span>{' '}
                   configurations for any Python project at{' '}
-                  <span className={styles.heroProjectKeywords}>runtime</span>
+                  <span className={styles.heroProjectKeywordsAlt}>runtime</span>
                 </h1>
 
                 {/* Get Started Button */}
@@ -48,7 +48,7 @@ function Home() {
                     <iframe
                       className={styles.indexCtasGitHubButton}
                       src="https://ghbtns.com/github-btn.html?user=olofharrysson&amp;repo=anyfig&amp;type=star&amp;count=true&amp;size=large"
-                      width={160}
+                      width={140}
                       height={30}
                       title="GitHub Stars"
                     />

@@ -13,6 +13,10 @@ registered_config_classes = {}
 global_configs = {}
 
 
+def get_website():
+  return 'https://anyfig.now.sh/'
+
+
 def register_config_class(class_name, class_def):
   ''' Saves the config class name and definition '''
   err_msg = (
@@ -109,16 +113,6 @@ class MasterConfig(ABC):
 
   def __str__(self):
     return self.pretty()
-
-    # lines = [self.__class__.__name__ + ':']
-
-    # for key, val in vars(self).items():
-    #   val_str = str(val)
-    #   if is_config_class(val):  # Remove class name info
-    #     val_str = val_str.replace(f'{val.__class__.__name__}:', '')
-    #   lines += f'{key} ({val.__class__.__name__}): {val_str}'.split('\n')
-
-    # return '\n    '.join(lines) + '\n'
 
   def pretty(self):
     ''' Pretty string representation of the config '''

@@ -10,6 +10,11 @@ def field(*args, **kwargs):
   return InterfaceField(*args, **kwargs)
 
 
+def constant(value, strict=False):
+  ''' Returns a ConstantField '''
+  return ConstantField(value, strict)
+
+
 class InterfaceField():
   ''' Used to define allowed values for a config-attribute '''
   def __init__(self, type_pattern=typing.Any, tests=None):
@@ -19,7 +24,6 @@ class InterfaceField():
 
     self.type_pattern = type_pattern
     self.wrapping_phase = True
-    self.value = None
     tests = [] if tests is None else tests
     self.tests = tests if isinstance(tests, Iterable) else [tests]
 
@@ -59,3 +63,18 @@ class InterfaceField():
       raise exception_class(err_msg) from None
 
     assert test_result, f"{base_err_msg} didn't pass"
+
+
+class ConstantField(InterfaceField):
+  ''' Used to define config-attribute that can't be overriden '''
+  def __init__(self, value, strict):
+    if strict:
+      super().__init__(tests=lambda v: v is value)
+    else:
+      super().__init__(tests=lambda v: v == value)
+    self.value = value
+
+  def _check_test(self, test, name, value, config_class):
+    ''' Calls the test with the new attribute value. Raises error if test doesn't pass '''
+    err_msg = f"Can't override constant '{name}' with value '{value}' in config '{config_class}'"
+    assert test(value), err_msg

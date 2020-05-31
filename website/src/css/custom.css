@@ -6,13 +6,16 @@
  */
 
 .navbar__logo {
-  height: 150%;
-  transform: scaleX(-1);
+  height: 140%;
+  /* transform: scaleX(-1); */
 }
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #25c2a0;
+  /* --ifm-color-primary: #25c2a0; */
+  --ifm-color-primary: #00b838;
+  --ifm-color-primary-alt: #ff0074;
+  /* --ifm-color-secondary: #ad0ba0; */
   --ifm-color-primary-dark: rgb(33, 175, 144);
   --ifm-color-primary-darker: rgb(31, 165, 136);
   --ifm-color-primary-darkest: rgb(26, 136, 112);
@@ -28,3 +31,17 @@
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
 }
+
+/* Sidebar menu container */
+/* TODO: Make containing list items stand out - but not encourage click since they lead nowhere */
+.menu__link {
+    border-radius: 0.25rem;
+    color: var(--ifm-menu-color);
+    cursor: pointer;
+    display: flex;
+    line-height: 20px;
+    justify-content: space-between;
+    margin: 0;
+    padding: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal);
+    /* color: hotpink; */
+  }
