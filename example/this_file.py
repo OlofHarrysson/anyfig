@@ -12,32 +12,27 @@ from collections import namedtuple
 from dataclasses import dataclass
 
 
+def heej():
+  return 1
+
+
 @anyfig.config_class
+class Hej():
+  def __init__(self, x, y, z, asd=1123, qwe=123):
+    self.x = x
+    self.y = y
+
+
+# @anyfig.config_class
+# @anyfig.config_class()
+# @anyfig.config_class(Hej)
+@anyfig.config_class(target=Hej)
+# @anyfig.config_class(target=heej)
 class DataConfig():
   def __init__(self):
-    self.empty = 'kaoskdos'
-
-    # THE comment promise
-    self.verylongvariablenameislong = 123
-
-    # Variable ll
-    self.ll = [1, 2] * 10
-    """ First line is this one
-
-    Empty above
-    """
-    self.multi = 123
-
-    # this shoulc be last comment
-    self.other = 12
-
-
-class Hej():
-  def __init__(self):
-    self.x = 'hej'
-
-  # def __call__(self):
-  #   print(self.x)
+    self.x = 1
+    self.y = 2
+    self.hej = Hej(1, 2, 3)
 
 
 @anyfig.config_class
@@ -59,7 +54,10 @@ class MainConfig():
     # self.save_directory = anyfig.field(str)
     # self.save_directory = anyfig.field(Path)
     self.save_directory = anyfig.field(typing.List)
-    # self.save_directory = Path('e')
+    self.save_directory = [1, 2]
+
+    self.data = DataConfig()
+    self.x = 123
 
 
 @anyfig.config_class
@@ -102,7 +100,15 @@ class InnerConfig(MainConfig):
 def main():
   config = anyfig.init_config(default_config=MainConfig)
   print(config)
-  hej = 1
+  # print("frozen", config._frozen)
+  # print("target", config._target)
+  # param = dict(x=10, z=3, asd=123, y=1123123)
+  # param = dict()
+  # param = dict(qweee=123)
+  # param = dict(z=3)
+  # param = dict(z=3, asd=123)
+  # target = config.build(param)
+  # print(target)
 
 
 if __name__ == '__main__':

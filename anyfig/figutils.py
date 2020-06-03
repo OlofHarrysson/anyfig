@@ -147,3 +147,24 @@ class MasterConfig(ABC):
       assert name != method[0], name_taken_msg
 
     object.__setattr__(self, name, value)
+
+  def build(self, external_args):
+    ''' Instantiates target object connected to config class '''
+    config_attrs = vars(self)
+    common_keys = set(config_attrs).intersection(set(external_args))
+    err_msg = f"Arguments '{', '.join(common_keys)}' aren't allowed as they are already defined in the config class"
+    assert common_keys == set(), err_msg
+    assert self._build_target is not None, f"Config class '{type(self).__name__}' isn't connected to a target"
+
+    class_args = inspect.getfullargspec(self._build_target)
+    expected_args = class_args.args[1:]  # Remove self arg
+    build_args = {**external_args, **config_attrs}
+    err_msg_base = f'when instantiating {self._build_target}'
+
+    err_msg = f"Unexpected arguments {set(build_args) - set(expected_args)} {err_msg_base}"
+    assert set(build_args) <= set(expected_args), err_msg
+    required_args = expected_args[:-len(class_args.defaults)]
+
+    err_msg = f"Missing required arguments {set(required_args) - set(build_args)} {err_msg_base}"
+    assert set(required_args) <= set(build_args), err_msg
+    return self._build_target(**build_args)

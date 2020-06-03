@@ -91,6 +91,8 @@ def overwrite(main_config_obj, args):
 
   config_classes = figutils.get_registered_config_classes()
 
+  # Sort on nested level to override shallow items first
+  args = sorted(args, key=lambda item: item.count('.'))
   for argument_key, val in args.items():
     # Seperate nested keys into outer and inner
     outer_keys = argument_key.split('.')
@@ -140,26 +142,38 @@ def overwrite(main_config_obj, args):
   return main_config_obj
 
 
-def config_class(class_def):
-  class_name = class_def.__name__
+def config_class(cls=None, *, target=None):
+  def wrap(cls):
+    class_name = cls.__name__
 
-  # Makes sure that nothing fishy is going on...
-  err_msg = (f"Can't decorate '{class_name}' of type {type(class_def)}. "
-             "Can only be used for classes")
-  assert inspect.isclass(class_def), err_msg
+    # Makes sure that nothing fishy is going on...
+    err_msg = (f"Can't decorate '{class_name}' of type {type(cls)}. "
+               "Can only be used for classes")
+    assert inspect.isclass(cls), err_msg
+    if target is not None:
+      err_msg = (f"Expected target to be a class, was {type(target)}")
+      assert inspect.isclass(target), err_msg
 
-  # Config class functions
-  functions = inspect.getmembers(class_def, inspect.isfunction)
-  functions = {name: function for name, function in functions}
+    # Config class functions
+    functions = inspect.getmembers(cls, inspect.isfunction)
+    functions = {name: function for name, function in functions}
 
-  # Transfers functions from MasterConfig to config class
-  for name, function in inspect.getmembers(figutils.MasterConfig,
-                                           inspect.isfunction):
-    if name not in functions:  # Only transfer not implemented functions
-      setattr(class_def, name, function)
+    # Transfers functions from MasterConfig to config class
+    for name, function in inspect.getmembers(figutils.MasterConfig,
+                                             inspect.isfunction):
+      if name not in functions:  # Only transfer not implemented functions
+        setattr(cls, name, function)
 
-  # Manually add attributes to config class
-  setattr(class_def, '_frozen', False)
+    # Manually add attributes to config class
+    setattr(cls, '_frozen', False)
+    setattr(cls, '_build_target', target)
 
-  figutils.register_config_class(class_name, class_def)
-  return class_def
+    figutils.register_config_class(class_name, cls)
+    return cls
+
+  # Called as @config_class() or @config_class(target=...).
+  if cls is None or target is not None:
+    return wrap
+
+  # Called as @config_class without parentheses
+  return wrap(cls)

@@ -1,9 +1,3 @@
-Could do anyfig.config_class(MyClass) to convey that the configs is for that class def - could then create the object at anyfig.init, but maybe thats bad because you lose the configs? Maybe some build function that takes all attributes and creates object from class_def?
-- build function should be **kwargs by default and take all attributes+kwargs to create object from class_def. This sort of solves the config-objects that are depenent on non-config objects.
-
-
-Order of command line argument parsing. We want the outer configs parsed first so that any inner arguments within those will override the new outer ones.
-
 What was the problem with dataclasses again?
 
 
@@ -24,16 +18,6 @@ Move to cookiecutter repo to help with pip package
 Save and load
 option to save anyfig as pickle, source
 Option to save as json - how to deal with non-json classes? Have anyfig.config_class(json_compatible=True) which forces the config to only keep json compatible fields e.g. python literals
-
-
-
-
-If a component1 has config options and dependencies on other components, it's hard to create the component1 without putting all its dependencies into the conifg as well. The dependencies don't have config-values so shouldn't be there. Either something like functools.partial. Or a config class that has component1 class definition and available config-values and a way (like anyfig function?) to easily create an object with config-values + non-config values.
-Something like
-
-  dataloder = config.data.dataloader.create(dataset=dataset)
-  dataloder = config.data.dataloader(dataset=dataset)
-
 
 
 ~~~~~~ WEBSITE ~~~~~~
