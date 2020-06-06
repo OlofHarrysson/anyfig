@@ -1,19 +1,16 @@
-What was the problem with dataclasses again?
+Throw desciptive error if config_class with arguments are created from cli.
 
+Implement accessing config values with square brackets/get(name, default_value)? __get_item__
 
 Some kind of help string about the program that can be sent to init_config or places in a config?
 
-
-
 Possibly to hash config class to make sure that other config is exact the same? Loading for example
 
-A way to control which arguments that can be overwritten by cli/visible by the --help. I don't see a good way to do this that doesn't require lots of maintainence. Better to do an opt-in system than an opt-out, so whitelist the ones you want exposed
+A way to control which arguments that can be overwritten by cli/visible by the --help. I don't see a good way to do this that doesn't require lots of maintainence for the user. Better to do an opt-in system than an opt-out, so whitelist the ones you want exposed
 
 input arguments for functions. Could maybe check if old value is function, if so, take the function with the input argument name from the old argument module's namespace
 
-
 Move to cookiecutter repo to help with pip package
-
 
 Save and load
 option to save anyfig as pickle, source
@@ -34,3 +31,4 @@ Forums?
 dict cli-arguments readme
 InterfaceField readme
     - constant readme
+Target classes readme

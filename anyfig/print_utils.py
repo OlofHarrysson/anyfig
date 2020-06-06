@@ -46,7 +46,7 @@ def comments_string(config_obj):
 
 def _extract_config_obj_comments(config_obj):
   ''' Extracts comments for a config object and any config-class children objects '''
-  config_classes = figutils.get_registered_config_classes().values()
+  config_classes = figutils.get_config_classes().values()
   config_class = config_obj.__class__
   comments = _extract_comments(config_class)
 

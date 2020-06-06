@@ -1,0 +1,28 @@
+Issues with dataclasses
+
+1. Confusing to users new to dataclasses
+
+@dataclass
+class InnerConfig(MainConfig):
+  yoyo = 2 # Local variable
+  yo: int = yoyo * 2 # Need type hint for it to be an attribute
+
+Answer https://realpython.com/python-data-classes/:
+Type Hints
+So far, we have not made a big fuss of the fact that data classes support typing out of the box. You have probably noticed that we defined the fields with a type hint: name: str says that name should be a text string (str type).
+
+In fact, adding some kind of type hint is mandatory when defining the fields in your data class. Without a type hint, the field will not be a part of the data class. However, if you do not want to add explicit types to your data class, use typing.Any:
+
+
+2. Doesn't call parent init unless parent is also dataclass (without overriden __init__). Doesn't work if parent isnt dataclass
+
+@anyfig.config_class
+class MainConfig():
+  def __init__(self):
+    self.save_directory = [1, 2]
+
+@anyfig.config_class
+class InnerConfig(MainConfig):
+  yo: int = 1
+
+config = InnerConfig() # Never calls super to MainConfig

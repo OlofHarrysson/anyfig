@@ -4,6 +4,8 @@ from typeguard import check_type
 from collections import Iterable
 from pathlib import Path
 
+from .figutils import is_config_class
+
 
 def field(*args, **kwargs):
   ''' Returns an InterfaceField '''
@@ -13,6 +15,19 @@ def field(*args, **kwargs):
 def constant(value, strict=False):
   ''' Returns a ConstantField '''
   return ConstantField(value, strict)
+
+
+def resolve_fields(config):
+  ''' Removes wrapping for InterfaceFields '''
+  for key, val in vars(config).items():
+    if isinstance(val, InterfaceField):
+      config_class = type(config).__name__
+      value = val.finish_wrapping_phase(key, config_class)
+      setattr(config, key, value)
+
+    # Resolve nested configs
+    if is_config_class(val):
+      resolve_fields(val)
 
 
 class InterfaceField():
@@ -50,7 +65,9 @@ class InterfaceField():
     ''' Calls the test with the new attribute value. Raises error if test doesn't pass '''
     test_file = Path(inspect.getsourcefile(test)).absolute()
     line_number = inspect.getsourcelines(test)[-1]
-    base_err_msg = f"Can't set '{name} = {value}' for config '{config_class}'. Its test defined in '{test_file}' at line {line_number}"
+    base_err_msg = (
+      f"Can't set '{name} = {value}' for config '{config_class}'. Its test defined in '{test_file}' "
+      f"at line {line_number}")
 
     try:
       test_result = test(value)

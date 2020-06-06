@@ -1,13 +1,6 @@
-from abc import ABC
 import inspect
-from dataclasses import FrozenInstanceError
 import pickle
 from pathlib import Path
-import copy
-import typing
-
-from . import print_utils
-from .interfacefield import InterfaceField
 
 registered_config_classes = {}
 global_configs = {}
@@ -20,19 +13,25 @@ def get_website():
 def register_config_class(class_name, class_def):
   ''' Saves the config class name and definition '''
   err_msg = (
-    f"The config class '{class_name}' has already been registered. "
-    "Duplicated names aren't allowed. Either change the name or avoid "
-    "importing the duplicated classes at the same time. "
+    f"The config class '{class_name}' has already been registered. Duplicated names aren't allowed. "
+    "Either change the name or avoid importing the duplicated classes at the same time. "
     f"The registered classes are '{registered_config_classes}'")
   assert class_name not in registered_config_classes, err_msg
 
   registered_config_classes[class_name] = class_def
 
 
-def get_registered_config_classes(class_name=None):
+def get_config_classes(class_name=None):
   if class_name:
     return registered_config_classes[class_name]
   return registered_config_classes
+
+
+def is_config_class(obj):
+  ''' Returns True if the config class definition is registered with anyfig '''
+  if obj.__class__ != type.__class__:
+    obj = type(obj)
+  return inspect.isclass(obj) and obj.__name__ in registered_config_classes
 
 
 def register_globally(config):
@@ -58,13 +57,6 @@ def cfg():
   )
 
 
-def is_config_class(obj):
-  ''' Returns True if config class definition registered with anyfig '''
-  if obj.__class__ != type.__class__:
-    obj = type(obj)
-  return inspect.isclass(obj) and obj.__name__ in registered_config_classes
-
-
 def load_config(path):
   path = Path(path)
   with open(path, 'rb') as f:
@@ -83,88 +75,3 @@ def save_config(obj, path):
 
   with open(path.with_suffix('.txt'), 'w') as f:
     f.write(str(obj))
-
-
-def resolve_fields(config):
-  # TODO: Better name and doc. Resolve the inteface values
-  for key, val in vars(config).items():
-    if isinstance(val, InterfaceField):
-      config_class = type(config).__name__
-      value = val.finish_wrapping_phase(key, config_class)
-      setattr(config, key, value)
-
-    # Resolve nested configs
-    if is_config_class(val):
-      resolve_fields(val)
-
-
-# Class which is used to define functions that goes into every config class
-class MasterConfig(ABC):
-  def comments_string(self):
-    return print_utils.comments_string(self)
-
-  def frozen(self, freeze=True):
-    ''' Freeze/unfreeze config '''
-    self.__class__._frozen = freeze
-    return self
-
-  def get_parameters(self):
-    return copy.deepcopy(vars(self))
-
-  def __str__(self):
-    return self.pretty()
-
-  def pretty(self):
-    ''' Pretty string representation of the config '''
-    lines = [self.__class__.__name__ + ':']
-
-    for key, val in vars(self).items():
-      val_str = str(val)
-      if is_config_class(val):  # Remove class name info
-        val_str = val_str.replace(f'{val.__class__.__name__}:', '')
-      lines += f'{key} ({val.__class__.__name__}): {val_str}'.split('\n')
-
-    return '\n    '.join(lines) + '\n'
-
-  def __setattr__(self, name, value):
-    config_class = type(self).__name__
-
-    # Handle interface values
-    old_value = getattr(self, name, None)
-    if isinstance(old_value, InterfaceField):
-      value = old_value.update_value(name, value, config_class)
-
-    # Raise error if frozen unless we're trying to unfreeze the config
-    if self._frozen and name != '_frozen':
-      err_msg = (f"Cannot set attribute '{name}'. Config object is frozen. "
-                 "Unfreeze the config for a mutable config object")
-      raise FrozenInstanceError(err_msg)
-
-    # Check for reserved names
-    name_taken_msg = f"The attribute '{name}' can't be assigned to config '{config_class}' since it already has a method by that name"
-    methods = inspect.getmembers(self, predicate=inspect.ismethod)
-    for method in methods:
-      assert name != method[0], name_taken_msg
-
-    object.__setattr__(self, name, value)
-
-  def build(self, external_args):
-    ''' Instantiates target object connected to config class '''
-    config_attrs = vars(self)
-    common_keys = set(config_attrs).intersection(set(external_args))
-    err_msg = f"Arguments '{', '.join(common_keys)}' aren't allowed as they are already defined in the config class"
-    assert common_keys == set(), err_msg
-    assert self._build_target is not None, f"Config class '{type(self).__name__}' isn't connected to a target"
-
-    class_args = inspect.getfullargspec(self._build_target)
-    expected_args = class_args.args[1:]  # Remove self arg
-    build_args = {**external_args, **config_attrs}
-    err_msg_base = f'when instantiating {self._build_target}'
-
-    err_msg = f"Unexpected arguments {set(build_args) - set(expected_args)} {err_msg_base}"
-    assert set(build_args) <= set(expected_args), err_msg
-    required_args = expected_args[:-len(class_args.defaults)]
-
-    err_msg = f"Missing required arguments {set(required_args) - set(build_args)} {err_msg_base}"
-    assert set(required_args) <= set(build_args), err_msg
-    return self._build_target(**build_args)
