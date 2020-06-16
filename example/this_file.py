@@ -11,151 +11,66 @@ import argparse
 from collections import namedtuple
 from dataclasses import dataclass
 import inspect
+import jsonpickle
+import json
 
-
-def heej():
-  return 1
-
-
-@anyfig.config_class
-class Hej():
-  def __init__(self, x, y, z, asd=1123, qwe=123):
-    self.x = x
-    self.y = y
-
-  def bla(self):
-    return 1
-
-
-# @anyfig.config_class
-# @anyfig.config_class()
-# @anyfig.config_class(Hej)
-@anyfig.config_class(target=Hej)
-# @anyfig.config_class(target=heej)
-class DataConfig():
-  def __init__(self):
-    self.x = 1
-    self.y = 2
-    self.hej = Hej(1, 2, 3)
-
-
-# @anyfig.config_class
-# class MainConfig():
-#   def __init__(self):
-#     # Define tests
-#     # file_exists = lambda new_value: new_value.exists()
-#     # allowed_files = [Path('this_file.py'), Path('other_file.py')]
-#     # file_allowed = lambda new_value: new_value in allowed_files
-#     # file_tests = [file_exists, file_allowed]
-#     # self.python_file = anyfig.field(tests=file_tests)
-
-#     # # Set value directly, in subclass or from command line input
-#     # self.python_file = Path('this_file.py')  # OK
-#     # self.python_file = Path('other_file.py')  # Error. File doesn't exist
-#     # self.python_file = Path(
-#     #   'anyfig.txt')  # Error. File exist but isn't allowed
-
-#     # self.save_directory = anyfig.field(str)
-#     # self.save_directory = anyfig.field(Path)
-#     self.save_directory = anyfig.field(typing.List)
-#     self.save_directory = [1, 2]
-
-#     # self.data = DataConfig()
+import anyfig
+from pathlib import Path
 
 
 @anyfig.config_class
 class MainConfig2():
   def __init__(self):
-    self.data = DataConfig()
+    # Define tests
+    file_exists = lambda new_value: new_value.exists()
+    self.python_file = anyfig.field(tests=file_exists)
 
-    # YOOYOYOYOO
-    self.yo = 0
-    self.shiiiet = [1, 2, 3]
-
-    choices = [Path('main.py'), Path('train.py'), Path('eval_input.py')]
-    file_exists = lambda v: v.exists()
-    # file_exists = lambda v: v / v
-    # file_exists = lambda v: 1 / 0
-    file_choices = lambda v: v in choices
-    pattern = Path
-    tests = [file_exists, file_choices]
-
-    # A comment for sho
-    self.interface = anyfig.field(pattern, tests=tests)
-    # self.interface = Path('main.p2y')
-    self.interface = Path('main.py')
-
-    constant = Path('main.py')
-    # self.HATS = anyfig.field(tests=lambda x: x is constant)
-    self.HATS = anyfig.constant(Path('main.py'), strict=False)
-
-    self.HATS = Path('main.py')
-
-    # self.HATS = Path('main.py')
+    # Set value directly, in subclass or from command line input
+    self.python_file = Path('this_file.py')  # OK
+    # self.python_file = Path('other_file.py')  # Error. File doesn't exist
+    self.python_file = 'Strings have no exists()'  # Descriptive error
 
 
 @anyfig.config_class
 class MainConfig():
-  # save_directory: int = 9090
-
   def __init__(self):
-    # self.save_directory = 9090
-    self.save_directory = 123
+    self.python_file = anyfig.constant(Path('this_file.py'), strict=True)
 
-
-@anyfig.config_class
-class CConfig:
-  x: str = 'c'
-
-
-@anyfig.config_class
-class DConfig:
-  # x: str = 'd'
-  # y: str = 1
-
-  def __init__(self):
-    self.x = 1
-    self.c = CConfig()
-
-
-@anyfig.config_class
-class InnerConfig(MainConfig):
-  b: int = DConfig()
-  yo: int = 123
-  yo1: int = 123
-
-  # def __init__(self):
-  #   self.yo = 1
-  #   self.b = [1, 2, 3]
-
-  # self.d = DConfig()
-
-
-# d = DConfig()
-# print(d)
-# print("WOWOWO12312")
-# qwe
+    # Set value directly, in subclass or from command line input
+    self.python_file = Path('this_file.py')  # Ok. Compares with == by default
+    # self.python_file = Path('other_file.py')  # Error
 
 
 def main():
-  config = anyfig.init_config(default_config=MainConfig2)
-  # config = anyfig.init_config(default_config=DConfig)
-  # config = anyfig.init_config(default_config=InnerConfig)
-  # print(dir(config))
-  # config = InnerConfig()
-  # config.b.append(4)
+  config = anyfig.init_config(default_config=MainConfig)
   print(config)
-  # asd
+  sad
+
+  config_path = 'config.json'
+  frozen = jsonpickle.encode(config)
+  thawed = jsonpickle.decode(frozen)
+  print(thawed)
+  print(config == thawed)
+
+  frozen = json.dumps(json.loads(frozen), indent=4)
+  with open(config_path, 'w') as f:
+    f.write(frozen)
+
+  read_json_config(config_path)
+  qwe
+
   # print(repr(config))
   # config.frozen(freeze=False)
   # config.yo = 123
 
-  config2 = InnerConfig()
-  # config2 = anyfig.init_config(default_config=InnerConfig)
-  print(config2)
 
-  print(config == config2)
-  print(id(config), id(config2))
+def read_json_config(file_path):
+  import json
+  with open(file_path) as infile:
+    json_data = infile.read()
+
+  thawed = jsonpickle.decode(json_data)
+  print(thawed)
 
 
 if __name__ == '__main__':

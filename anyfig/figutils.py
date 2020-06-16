@@ -75,3 +75,16 @@ def save_config(obj, path):
 
   with open(path.with_suffix('.txt'), 'w') as f:
     f.write(str(obj))
+
+
+def find_arguments(callable_):
+  ''' Returns the arguments and required arguments for a function/class'''
+  parameters = dict(inspect.signature(callable_).parameters)
+  # Remove self argument
+  parameters.pop('self', None)
+
+  required_args = [
+    name for name, param in parameters.items()
+    if param.default == inspect.Parameter.empty
+  ]
+  return list(parameters), required_args

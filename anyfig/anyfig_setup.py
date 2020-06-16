@@ -80,10 +80,7 @@ def create_config(config_str):
     raise KeyError(err_msg)
 
   class_def = registered_configs[config_str]
-
-  class_args = inspect.getfullargspec(inspect.unwrap(class_def.__init__))
-  n_defaults = 0 if class_args.defaults is None else len(class_args.defaults)
-  required_args = class_args.args[1:len(class_args.args) - n_defaults]
+  _, required_args = figutils.find_arguments(class_def.__init__)
 
   # Required arguments aren't allowed
   err_msg = (
@@ -157,8 +154,11 @@ def config_class(cls=None, *, target=None):
     err_msg = f"Can't decorate '{class_name}' of type {type(cls)}. Can only be used for classes"
     assert inspect.isclass(cls), err_msg
     if target is not None:
-      err_msg = f"Expected target to be a class, was {type(target)}"
-      assert inspect.isclass(target), err_msg
+      err_msg = f"Expected target to be callable, was {type(target)}"
+      assert callable(target), err_msg
+
+      # err_msg = f"Expected target to be a class, was {type(target)}"
+      # assert inspect.isclass(target), err_msg
 
     # Config class methods
     functions = inspect.getmembers(cls, inspect.isfunction)

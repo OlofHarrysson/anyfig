@@ -43,9 +43,9 @@ class MyConfig():
 config = anyfig.init_config(default_config=MyConfig)
 
 # ~~~ ⬇ Command line ⬇ ~~~
+python path/to/file.py --save_directory='other_output'
 # config.save_directory will be a Path object with value: other_output
 # It's created by wrapping the input string in a Path object: Path('other_output')
-python path/to/file.py --save_directory='other_output'
 ```
 
 ### Command Line Help
@@ -139,14 +139,14 @@ class NormalConfig():
 @anyfig.config_class
 class DebugConfig(NormalConfig):
   def __init__(self):
-    super().__init___()  # Gets all attributes from NormalConfig
+    super().__init___()  # Inherits all attributes from NormalConfig
     self.logger.setLevel(logging.DEBUG)
 
 config = anyfig.init_config(default_config=NormalConfig)
 ```
 
 ### Modular Configs
-For projects where the configuration grows large it helps to modularize the config-values. Anyfig allows for nested config-classes to both reduce code duplication and increase code readability. 
+For projects where the configuration grows large it helps to modularize the config-values. Anyfig allows for nested config-classes to reduce code duplication and increase code readability. 
 
 ```python
 import anyfig
@@ -166,14 +166,14 @@ config = anyfig.init_config(default_config=MainConfig)
 
 # ~~~ ⬇ Command line ⬇ ~~~
 # It's possible to override nested values
-python path/to/file.py --module.anyfig_tip="A new note"
+python path/to/file.py --module.anyfig_tip="A new tip"
 ```
 
 ## Constraining Config-Values
-To avoid unintended behaviours its good practice to validate the config. Checking that config-values are of correct type and contain allowed values are typical examples of validation. Anyfig offers this functionality though the field function.
+To avoid unintended behaviours its good practice to validate the config. Checking that the config-values consist of the correct types and values are typical examples of validation. Anyfig offers this functionality though the field function.
 
 ### Types
-Anyfig assures that a config-value has the correct type if the type is declared via the `anyfig.field` function. The field serves as an interface that defines the allowed type for that particular config-value. That config-value is required to be overridden which allows the developer to e.g. enforce that certain config-values are defined through the command line input. 
+Anyfig assures that a config-value has the correct type if the type is declared via the `anyfig.field` function. The field serves as an interface that defines the allowed type for that particular config-value. That config-value is required to be overridden which allows the developer to e.g. enforce that certain config-values are supplied through the command line input. 
 
 ```python
 import anyfig
@@ -190,7 +190,8 @@ class MainConfig():
     self.save_directory = 'output'  # Error. Value is not correct type
 ```
 
-More complex types are supported through a mix of Python's built-in [typing module](https://docs.python.org/3/library/typing.html) in combination with the [typeguard package](https://github.com/agronholm/typeguard). It's thus possible to specify that a config-value should be a list of ints, written as `typing.List[int]`, or other non-trivial schemas.
+More complex types are supported through Python's [typing module](https://docs.python.org/3/library/typing.html). This makes it possible to specify that a config-value should be a list of ints, written as `typing.List[int]` or any other schema supported by the [typeguard package](https://github.com/agronholm/typeguard) that performs the type checking.
+
 
 ```python
 import anyfig
@@ -209,7 +210,7 @@ class MainConfig():
 ```
 
 ### Values
-Validating the type for config-values is a great start but can't protect against unallowed values of that type. For example, if a config-value controls the number of pizzas to order, a negative number could pass the type test whilst still being nonsensical.
+Validating the type for config-values is a great start but can't protect against unallowed values of that type. For example, if a config-value controls the age of a person, a negative number could pass the type test whilst still being nonsensical.
 
 By allowing developers to define their own tests for the config-values within Anyfig, config-errors are caught in the setup phase with a clear error message instead of creating bugs downsteam.
 
@@ -252,7 +253,36 @@ class MainConfig():
 ```
 
 ### Constants
-Coming soon...
+It's possible to mark attributes as constants to avoid that they are overridden in a subclass or from command line input. Anyfig handles constants as a special case of `anyfig.field(tests=mytest)` where the mytest compares object equality via `==` or the `is` operator.
+
+```python title="this_file.py"
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MainConfig():
+  def __init__(self):
+    self.PYTHON_FILE = anyfig.constant(Path('this_file.py'))
+
+    # Set value directly, in subclass or from command line input
+    self.PYTHON_FILE = Path('this_file.py')  # Ok. Compares with == by default
+    self.PYTHON_FILE = Path('other_file.py')  # Error
+
+@anyfig.config_class
+class StrictConfig():
+  def __init__(self):
+    self.PYTHON_FILE = anyfig.constant(Path('this_file.py'), strict=True)
+
+    # Set value directly, in subclass or from command line input
+    self.PYTHON_FILE = Path('this_file.py')  # Error. Compares with 'is'
+    self.PYTHON_FILE = Path('other_file.py')  # Error
+```
+
 
 ## Target Classes
 Coming soon...
+A problem arises when one wants to save config values which in turn depend on non-config values.
+
+A problematic situation emerges when one wants to save config-objects which have dependencies on objects that aren't initialized until after the config has been created.
+
+Configuring parts of an object.
