@@ -47,6 +47,6 @@ setup(
   test_suite='tests',
   tests_require=test_requirements,
   url='https://github.com/OlofHarrysson/anyfig',
-  version='0.0.4',
+  version='0.1.0',
   zip_safe=False,
 )
