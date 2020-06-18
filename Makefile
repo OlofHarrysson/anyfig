@@ -65,3 +65,8 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+# Other commands
+
+# bump2version major/minor/patch
+# More info https://github.com/c4urself/bump2version
