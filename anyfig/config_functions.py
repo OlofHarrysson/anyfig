@@ -11,6 +11,9 @@ from . import figutils
 
 # Class which is used to define functions that goes into every config class
 class MasterConfig(ABC):
+  def __init__(self):
+    pass  # Add empty init if config doesn't have one
+
   def comments_string(self):
     ''' Returns string for config class's attributes and comments '''
     return print_utils.comments_string(self)

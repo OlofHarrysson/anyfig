@@ -1,5 +1,3 @@
-Change target to check for class and change to callable? Not that the object is callable but the definition?
-
 Implement accessing config values with square brackets/get(name, default_value)? __get_item__
 
 name wrangling with double underscore? __build_target

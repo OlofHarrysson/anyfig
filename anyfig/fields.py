@@ -1,7 +1,7 @@
 import inspect
 import typing
 from typeguard import check_type
-from collections import Iterable
+from collections.abc import Iterable
 from pathlib import Path
 
 from .figutils import is_config_class

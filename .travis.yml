@@ -1,0 +1,22 @@
+language: python
+python:
+- 3.8
+- 3.7
+- 3.6
+
+install:
+- pip install -r requirements_dev.txt
+
+script:
+- make test
+
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: smuurfisar
+  password:
+    secure: INEs73G2RBdXpZLAKF5jL6oZVC4aVZjsdfJeWz2oAiFhFu/dTEtOZLmrQN6Lvn/UyLil9bBBhT+8GoYGNeGYqsegGws5BqHImw71+tb/vMmK0yKFf/XiG60cOATABlYwji+tZzqCJuyMio+PQ33N9tFmUZbTK7F3FZtTeqCzZJPd4rGv5D9x0UG05wrElJ5u4OIyuWm88PC56lvWUIgUDUJ9TDvHOEzKMaMtMEq76E/H5QKZ4Skug6+u6+QzGdloGOsuy6pvnrDldE4t0CZ4Otk8pzVzYacr228RdicG4i+uS7pL2p77kfnecneXdKpg8LFiCGJY1G05E6oD2MbsRf9F1WShghYIyZjntcS8uA3zBRFgrV7N8zv8+ekHLRapR+zvIJf+GIkGUdabLAGy2YXijKfPmOITw8pVNiD/+RQhU7k50XV7/ZGYtBbp+zU7CLJXdb736fopYpiqybKgqL1s5+fPSsPSyPQgaZcUUQsFWaFeqgbo2W9OkQGBcqQdBgiBmD8V8SpnABxJG8iDawxqS73SE42CorfAmEtV690RYV14RP7n00acq23RAqCfQ2rKBKx5/o5YXzXGtLO7XEgEKn6LdsYnKJx6ZKeWLvWTCkM5uoOOQRp9OhHLNPLwOgOBvLCDnhRglsMa3qIHYRSNiXzwbWmLmE5QvNh+a5Y=
+  on:
+    tags: true
+    repo: OlofHarrysson/anyfig
+    python: 3.8

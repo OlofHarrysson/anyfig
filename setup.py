@@ -1,23 +1,52 @@
-from distutils.core import setup
+#!/usr/bin/env python
+""" Setup script for pip """
+
+from setuptools import setup, find_packages
+
+with open('README.rst') as readme_file:
+  readme = readme_file.read()
+
+requirements = ['fire', 'typeguard']
+
+setup_requirements = [
+  'pytest-runner',
+]
+
+test_requirements = [
+  'pytest>=3',
+]
+
 setup(
-  name='anyfig',
-  packages=['anyfig'],
-  version='0.0.3',
-  license='MIT',
-  description='Config parameters in Python code. Anything is possible ;)',
-  author='Olof Harrysson',
+  author="Olof Harrysson",
   author_email='harrysson.olof@gmail.com',
-  url='https://github.com/OlofHarrysson/anyfig',
-  download_url='https://github.com/OlofHarrysson/anyfig/archive/v0.0.3.tar.gz',
-  keywords=['config', 'command line parsing', 'python classes', 'dynamic'],
-  install_requires=['fire', 'typeguard'],
+  python_requires='>=3.6',
   classifiers=[
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Build Tools',
     'License :: OSI Approved :: MIT License',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
   ],
+  description="Create modular and scaleable configurations at runtime",
+  install_requires=requirements,
+  license="MIT license",
+  long_description=readme,
+  include_package_data=True,
+  keywords=[
+    'config', 'configurations', 'configuration-management',
+    'argparse-alternative', 'settings', 'command line parsing',
+    'python classes', 'dynamic', 'runtime'
+  ],
+  name='anyfig',
+  packages=find_packages(include=['anyfig', 'anyfig.*']),
+  setup_requires=setup_requirements,
+  test_suite='tests',
+  tests_require=test_requirements,
+  url='https://github.com/OlofHarrysson/anyfig',
+  version='0.0.4',
+  zip_safe=False,
 )

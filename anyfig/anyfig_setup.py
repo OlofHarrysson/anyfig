@@ -2,7 +2,7 @@ from io import StringIO
 import fire
 import inspect
 import sys
-from collections import Mapping
+from collections.abc import Mapping
 from dataclasses import dataclass
 from functools import wraps
 
@@ -157,9 +157,6 @@ def config_class(cls=None, *, target=None):
       err_msg = f"Expected target to be callable, was {type(target)}"
       assert callable(target), err_msg
 
-      # err_msg = f"Expected target to be a class, was {type(target)}"
-      # assert inspect.isclass(target), err_msg
-
     # Config class methods
     functions = inspect.getmembers(cls, inspect.isfunction)
     functions = {name: function for name, function in functions}
@@ -180,7 +177,7 @@ def config_class(cls=None, *, target=None):
 
       return wrapper
 
-    cls.__init__ = init_wrapper(functions['__init__'])
+    cls.__init__ = init_wrapper(cls.__init__)
 
     figutils.register_config_class(class_name, cls)
     return dataclass(cls)

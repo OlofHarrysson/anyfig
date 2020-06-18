@@ -1,3 +1,7 @@
+__author__ = """Olof Harrysson"""
+__email__ = 'harrysson.olof@gmail.com'
+__version__ = '0.0.4'
+
 import sys
 from anyfig.figutils import *
 from anyfig.anyfig_setup import *

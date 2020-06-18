@@ -1,6 +1,5 @@
 import anyfig
 from pathlib import Path
-import numpy as np
 from datetime import datetime
 
 
@@ -20,9 +19,10 @@ class MyDatetime:
     self.day = day
 
 
-# class MyDatetime:
-#   def __init__(self, **kwargs):
-#     self.year = 1
+@anyfig.config_class(target=datetime)
+class Empty:
+  def hej(self):
+    return 'hej'
 
 
 # @anyfig.config_class(target=mydatetime)
@@ -45,12 +45,13 @@ def main():
 
   # qew
 
-  config = anyfig.init_config(default_config=MainConfig)
-  # print(config)
+  config = anyfig.init_config(default_config=Empty)
+  print(config)
   # dtime = datetime(2020, 1, 1)
-  # param = dict(day=3)
+  param = dict(year=3)
+  param = dict(day=1, month=2, year=3)
   # param = dict(asdas=3)
-  param = dict(day=3, month=12)
+  # param = dict(day=3, month=12)
   # param = dict()
   dtime = config.build(param)
   # dtime = datetime(year=1, month=2, day=3)

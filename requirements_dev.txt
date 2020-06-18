@@ -1,0 +1,7 @@
+bump2version
+wheel
+coverage
+twine
+pytest
+pytest-runner
+--editable .
