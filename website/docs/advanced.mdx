@@ -170,10 +170,14 @@ python path/to/file.py --module.anyfig_tip="A new tip"
 ```
 
 ## Constraining Config-Values
-To avoid unintended behaviours its good practice to validate the config. Checking that the config-values consist of the correct types and values are typical examples of validation. Anyfig offers this functionality though the field function.
+To avoid unintended behaviours its good practice to validate the config. This can be done by checking that the config-values are the correct types and within a subset of allowed values. Anyfig offers this functionality though the field function.
 
 ### Types
-Anyfig assures that a config-value has the correct type if the type is declared via the `anyfig.field` function. The field serves as an interface that defines the allowed type for that particular config-value. That config-value is required to be overridden which allows the developer to e.g. enforce that certain config-values are supplied through the command line input. 
+Anyfig assures that a config-value will have the correct type if it's declared via the `anyfig.field` function.
+
+The field serves as an interface that defines the allowed type for that particular config-value.
+
+That config-value is required to be overridden which allows the developer to e.g. enforce that certain config-values are supplied through the command line input. 
 
 ```python
 import anyfig

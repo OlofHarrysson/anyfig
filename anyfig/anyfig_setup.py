@@ -16,7 +16,7 @@ def init_config(default_config, cli_args=None):
   err_msg = (
     "Expected 'default_config' to be a class definition but most likely got an object. E.g. expected ConfigClass but "
     "got ConfigClass() with parentheses.")
-  assert default_config.__class__ == type.__class__, err_msg
+  assert type(default_config) == type(type), err_msg
   err_msg = f"Expected 'default_config' to be an anyfig config class, was {default_config}"
   assert figutils.is_config_class(default_config), err_msg
   if cli_args is not None:
@@ -36,8 +36,7 @@ def init_config(default_config, cli_args=None):
     config_classes = list(figutils.get_config_classes())
     print(
       f"Available config classes {config_classes}. Set config with --config=OtherConfigClass\n",
-      f"\nCurrent config is '{config_str}'. The available input arguments are",
-    )
+      f"\nCurrent config is '{config_str}'. The available input arguments are")
 
     help_string = config.comments_string()
     print(help_string)
@@ -106,24 +105,40 @@ def overwrite(main_config_obj, args):
 
     # Check that the nested config has the attribute and is a config class
     config_obj = main_config_obj
+    config_class = type(config_obj).__name__
+
     for key_part in outer_keys:
-      err_msg = f"{base_err_msg}. '{key_part}' isn't an attribute in '{type(config_obj).__name__}'"
+      err_msg = f"{base_err_msg}. '{key_part}' isn't an attribute in '{config_class}'"
       assert hasattr(config_obj, key_part), err_msg
 
       config_obj = getattr(config_obj, key_part)
+      config_class = type(config_obj).__name__
       err_msg = f"{base_err_msg}. '{'.'.join(outer_keys)}' isn't a registered Anyfig config class"
       assert figutils.is_config_class(config_obj), err_msg
 
     # Error if trying to set unknown attribute key
-    err_msg = f"{base_err_msg}. '{inner_key}' isn't an attribute in '{type(config_obj).__name__}'"
+    err_msg = f"{base_err_msg}. '{inner_key}' isn't an attribute in '{config_class}'"
     assert inner_key in vars(config_obj), err_msg
 
     # Class definition
     value_class = type(getattr(config_obj, inner_key))
+    base_err_msg = f"Input argument '{argument_key}' with value {val} can't create an object of the expected type"
 
     # Create new anyfig class object
     if figutils.is_config_class(value_class):
       value_obj = create_config(val)
+
+    # Create new object that follows the InterfaceField's rules
+    elif issubclass(value_class, fields.InterfaceField):
+      field = getattr(config_obj, inner_key)
+      try:
+        # TODO: Naive solution. Doesn't handle e.g. typing.Union[Path, str]
+        val = field.type_pattern(val)
+      except Exception as e:
+        err_msg = f"{base_err_msg} {field.type_pattern}. {e}"
+        raise RuntimeError(err_msg) from None
+      field = field.update_value(inner_key, val, config_class)
+      value_obj = field.finish_wrapping_phase(inner_key, config_class)
 
     # Create new object of previous value type with new value
     else:
@@ -134,9 +149,7 @@ def overwrite(main_config_obj, args):
           value_obj = value_class(val)
 
       except Exception as e:
-        err_msg = (
-          f"Input argument '{argument_key}' with value {val} can't create an object of the expected type "
-          f"{value_class}. {e}")
+        err_msg = f"{base_err_msg} {value_class}. {e}"
         raise RuntimeError(err_msg) from None
 
     # Overwrite old value

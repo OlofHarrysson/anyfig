@@ -1,5 +1,6 @@
 import inspect
-import pickle
+import dill
+
 from pathlib import Path
 
 registered_config_classes = {}
@@ -14,11 +15,22 @@ def register_config_class(class_name, class_def):
   ''' Saves the config class name and definition '''
   err_msg = (
     f"The config class '{class_name}' has already been registered. Duplicated names aren't allowed. "
-    "Either change the name or avoid importing the duplicated classes at the same time. "
     f"The registered classes are '{registered_config_classes}'")
   assert class_name not in registered_config_classes, err_msg
 
   registered_config_classes[class_name] = class_def
+
+
+def unregister_config_classes():
+  ''' Unregisteres config classes with anyfig '''
+  registered_config_classes.clear()
+  global_configs.clear()
+
+
+def register_globally(config):
+  ''' Registers the config with anyfig to be accessible anywhere '''
+  assert is_config_class(config), "Can only register anyfig config object"
+  global_configs[type(config).__name__] = config
 
 
 def get_config_classes(class_name=None):
@@ -29,15 +41,9 @@ def get_config_classes(class_name=None):
 
 def is_config_class(obj):
   ''' Returns True if the config class definition is registered with anyfig '''
-  if obj.__class__ != type.__class__:
+  if type(obj) != type(type):
     obj = type(obj)
   return inspect.isclass(obj) and obj.__name__ in registered_config_classes
-
-
-def register_globally(config):
-  ''' Registers the config with anyfig to be accessible anywhere '''
-  assert is_config_class(config), "Can only register anyfig config object"
-  global_configs[type(config).__name__] = config
 
 
 def cfg():
@@ -57,31 +63,54 @@ def cfg():
   )
 
 
+def save_config(config, path, save_readable=True):
+  ''' Serialize and saves the config. If save_readable is True, a *path*.txt is also created '''
+  path = Path(path)
+  err_msg = f"Can only save anyfig config objects, not {type(config)}"
+  assert is_config_class(config), err_msg
+  with open(path, 'wb') as f:
+    dill.dump(config, f, dill.HIGHEST_PROTOCOL)
+
+  if save_readable:
+    source_codes = list(_get_source(config).values())
+    with open(path.with_suffix('.txt'), 'w') as f:
+      f.write(str(config))
+      f.write('\n\n\n')
+      f.write('\n'.join(source_codes))
+
+  return config
+
+
+def _get_source(config, source_codes=None):
+  ''' Retrieves source code for a config object including nested configs '''
+  if source_codes is None:
+    source_codes = dict()
+
+  config_class = type(config)
+  source_codes[config_class.__name__] = inspect.getsource(config_class)
+
+  for _, value in config.get_parameters(copy=False).items():
+    if is_config_class(value):
+      source_codes = _get_source(value, source_codes)
+
+  return source_codes
+
+
 def load_config(path):
+  ''' Loads the config from file '''
   path = Path(path)
   with open(path, 'rb') as f:
-    obj = pickle.load(f)
+    config = dill.load(f)
 
-  assert is_config_class(type(obj)), 'Can only load anyfig config objects'
-  return obj
-
-
-def save_config(obj, path):
-  path = Path(path)
-  err_msg = f"Can only save anyfig config objects, not {type(obj)}"
-  assert is_config_class(type(obj)), err_msg
-  with open(path, 'wb') as f:
-    pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
-
-  with open(path.with_suffix('.txt'), 'w') as f:
-    f.write(str(obj))
+  err_msg = f"'{type(config)}' isn't a registered config class. Import the config class's file to register it"
+  assert is_config_class(type(config)), err_msg
+  return config
 
 
 def find_arguments(callable_):
   ''' Returns the arguments and required arguments for a function/class'''
   parameters = dict(inspect.signature(callable_).parameters)
-  # Remove self argument
-  parameters.pop('self', None)
+  parameters.pop('self', None)  # Remove self argument
 
   required_args = [
     name for name, param in parameters.items()

@@ -34,7 +34,7 @@ class InterfaceField():
   ''' Used to define allowed values for a config-attribute '''
   def __init__(self, type_pattern=typing.Any, tests=None):
     err_msg = f"Expected 'type_pattern' to be a type or a typing pattern but got {type(type_pattern)}"
-    assert issubclass(type(type_pattern), type.__class__) or issubclass(
+    assert issubclass(type(type_pattern), type(type)) or issubclass(
       type(type_pattern), typing._Final), err_msg
 
     self.type_pattern = type_pattern

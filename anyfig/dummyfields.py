@@ -4,7 +4,7 @@ from . import figutils
 
 
 def raise_error():
-  err_msg = f"This feature isn't supported in Python {sys.version}. See our website '{figutils.get_website()}' for more information "
+  err_msg = f"This feature isn't supported in Python {sys.version}. See our website '{figutils.get_website()}' for more information"
   raise RuntimeError(err_msg)
 
 

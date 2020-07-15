@@ -1,5 +1,5 @@
-from abc import ABC
 import inspect
+from abc import ABC
 from dataclasses import FrozenInstanceError
 from copy import deepcopy
 from collections.abc import Mapping
@@ -20,7 +20,7 @@ class MasterConfig(ABC):
 
   def frozen(self, freeze=True):
     ''' Freeze/unfreeze config '''
-    self.__class__._frozen = freeze
+    self.__class__._frozen = freeze  # TODO: .__class__ needed? type(self) instead?
     return self
 
   def get_parameters(self, copy=True):
@@ -36,13 +36,13 @@ class MasterConfig(ABC):
 
   def pretty(self):
     ''' Pretty string representation of the config '''
-    lines = [f'{self.__class__.__name__}:']
+    lines = [f'{type(self).__name__}:']
 
     for key, val in self.get_parameters(copy=False).items():
       val_str = str(val)
       if figutils.is_config_class(val):  # Remove class name info
-        val_str = val_str.replace(f'{val.__class__.__name__}:', '')
-      lines += f'{key} ({val.__class__.__name__}): {val_str}'.split('\n')
+        val_str = val_str.replace(f'{type(val).__name__}:', '')
+      lines += f'{key} ({type(val).__name__}): {val_str}'.split('\n')
 
     return '\n    '.join(lines)
 

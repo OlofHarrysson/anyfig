@@ -7,21 +7,19 @@
 
 .navbar__logo {
   height: 140%;
-  /* transform: scaleX(-1); */
 }
 
 /* You can override the default Infima variables here. */
 :root {
-  /* --ifm-color-primary: #25c2a0; */
   --ifm-color-primary: #00b838;
   --ifm-color-primary-alt: #ff0074;
   /* --ifm-color-secondary: #ad0ba0; */
-  --ifm-color-primary-dark: rgb(33, 175, 144);
-  --ifm-color-primary-darker: rgb(31, 165, 136);
-  --ifm-color-primary-darkest: rgb(26, 136, 112);
-  --ifm-color-primary-light: rgb(70, 203, 174);
-  --ifm-color-primary-lighter: rgb(102, 212, 189);
-  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-color-primary-dark: #00a632;
+  --ifm-color-primary-darker: #009c30;
+  --ifm-color-primary-darkest: #008127;
+  --ifm-color-primary-light: #00ca3e;
+  --ifm-color-primary-lighter: #00d440;
+  --ifm-color-primary-lightest: #00ef49;
   --ifm-code-font-size: 95%;
 }
 
@@ -31,17 +29,3 @@
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
 }
-
-/* Sidebar menu container */
-/* TODO: Make containing list items stand out - but not encourage click since they lead nowhere */
-.menu__link {
-    border-radius: 0.25rem;
-    color: var(--ifm-menu-color);
-    cursor: pointer;
-    display: flex;
-    line-height: 20px;
-    justify-content: space-between;
-    margin: 0;
-    padding: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal);
-    /* color: hotpink; */
-  }
