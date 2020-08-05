@@ -19,7 +19,7 @@ def comments_string(config_obj):
     attribute_value = functools.reduce(getattr, attribute_names, config_obj)
 
     # Formats the attribute string
-    attribute_type = attribute_value.__class__.__name__
+    attribute_type = type(attribute_value).__name__
     nested_level = attribute_name.count('.')
     nested_indent = ' ' * (indent_width * nested_level)
     attr_string = f"{nested_indent}--{attribute_name} ({attribute_type}):"
@@ -47,8 +47,7 @@ def comments_string(config_obj):
 def _extract_config_obj_comments(config_obj):
   ''' Extracts comments for a config object and any config-class children objects '''
   config_classes = figutils.get_config_classes().values()
-  config_class = config_obj.__class__
-  comments = _extract_comments(config_class)
+  comments = _extract_comments(type(config_obj))
 
   flat_comments = {}
   for attribute_name, comment in comments.items():
@@ -56,7 +55,7 @@ def _extract_config_obj_comments(config_obj):
 
     # Check if config class has config-class children
     attribute_value = getattr(config_obj, attribute_name)
-    if attribute_value.__class__ in config_classes:
+    if type(attribute_value) in config_classes:
       child_comments = _extract_config_obj_comments(attribute_value)
 
       # Add child comments

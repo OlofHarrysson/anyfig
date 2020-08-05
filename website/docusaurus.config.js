@@ -1,25 +1,31 @@
 module.exports = {
-  themes: [
-    '@docusaurus/theme-search-algolia',
-    '@docusaurus/plugin-google-analytics',
-    '@docusaurus/plugin-sitemap',
-    {
-      cacheTime: 600 * 1000, // 600 sec - cache purge period
-      changefreq: 'weekly',
-      priority: 0.5,
-    },
+  plugins: [
+    // Basic usage.
+    // '@docusaurus/plugin-google-analytics',
+
+    // With options object (babel style)
+    // [
+    //   '@docusaurus/plugin-sitemap',
+    //   {
+    //     cacheTime: 600 * 1000, // 600 sec - cache purge period
+    //     changefreq: 'weekly',
+    //     priority: 0.5,
+    //   },
+    // ],
   ],
+
+  // themes: ['@docusaurus/theme-classic'],
 
   title: 'Anyfig',
   url: 'https://anyfig.now.sh/',
   baseUrl: '/',
   favicon: 'img/logo.svg',
-  // favicon: 'img/favicon.ico',
   organizationName: 'OlofHarrysson', // Usually your GitHub org/user name.
   projectName: 'Anyfig', // Usually your repo name.
   themeConfig: {
-    sidebarCollapsible: false,
-    defaultDarkMode: true,
+    colorMode: {
+      defaultMode: 'dark',
+    },
 
     // Google Analytics
     googleAnalytics: {
@@ -29,10 +35,9 @@ module.exports = {
 
     // Search
     algolia: {
-      appId: 'BH4D9OD16A',
       apiKey: '2482404787a69df7a47eeb3e31da3212',
       indexName: 'anyfig',
-      algoliaOptions: {}, // Optional, if provided by Algolia
+      searchParameters: {}, // Optional, if provided by Algolia
     },
 
     // Syntax color theme
@@ -48,12 +53,24 @@ module.exports = {
         src: 'img/logo.svg',
       },
 
-      links: [{
-        to: 'docs/introduction',
-        activeBasePath: 'docs',
-        label: 'Docs',
-        position: 'left',
-      },
+      items: [{
+          to: 'docs/introduction',
+          activeBasePath: 'docs',
+          label: 'Docs',
+          position: 'left',
+        },
+
+        {
+          to: 'https://github.com/OlofHarrysson/anyfig',
+          label: 'Github',
+          position: 'left',
+        },
+
+        {
+          to: 'https://pyfiddle.io/fiddle/4de2f70f-e421-4326-bbb8-b06d5efa547d/?i=true',
+          label: 'Online Demo',
+          position: 'left',
+        },
       ],
     },
     footer: {
