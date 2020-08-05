@@ -6,7 +6,9 @@ from setuptools import setup, find_packages
 with open('README.md') as readme_file:
   readme = readme_file.read()
 
-requirements = ['fire', 'typeguard', "dataclasses;python_version=='3.6'"]
+requirements = [
+  'fire', 'typeguard', 'dill', "dataclasses;python_version=='3.6'"
+]
 
 setup_requirements = [
   'pytest-runner',

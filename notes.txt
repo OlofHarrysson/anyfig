@@ -1,32 +1,41 @@
+Save and load
+Save as pickle and .txt (source and pretty()).
+
+Support json - Have it work out of the box for configs that are pure json-types. Offer ability to extend.
+
+Possibly to hash config class to make sure that other config is exact the same? Loading for example
+
+Versioning support - I'd like to create a way to keep track of / load old configs. Something like a versioning system. Perhaps save this information alongside the config, or create a config-component that has the versioning elements and can be added into a mainconfig. Could add git information via gitpython (or show users how to do it). I like a built in versioning config-class that can save version number, creation time, git commit, maybe the entrypoint script filename
+
+
+
 Implement accessing config values with square brackets/get(name, default_value)? __get_item__
 
 name wrangling with double underscore? __build_target
 
-Possibly to hash config class to make sure that other config is exact the same? Loading for example
 
-Some kind of help string about the program that can be sent to init_config or places in a config?
+Notebook online demo
+- Colab? Some other free service without login?
 
-A way to control which arguments that can be overwritten by cli/visible by the --help. I don't see a good way to do this that doesn't require lots of maintainence for the user. Better to do an opt-in system than an opt-out, so whitelist the ones you want exposed
+Can I use the "with" statement to maybe say with Anyfig.OnlyOverwrite(self) or something to make sure that people don't add new attributes in configs instead of overwritting existing attributes?
+Or something like with Anyfig.JsonCompatible() that checks that all attributes are json-compatible / have saving+loading functions?
+
+Some kind of help string about the program that can be sent to init_config or place in a config? for --help output
+
+A way to control which arguments that can be overwritten by cli/visible by the --help. I don't see a good way to do this that doesn't require lots of maintainence for the user. Better to do an opt-in system than an opt-out, so whitelist the ones you want exposed.
+Should also be able to say if the flag should be ignored by Anyfig or raise an error.
 
 input arguments for functions. Could maybe check if old value is function, if so, take the function with the input argument name from the old argument module's namespace
 
-Move to cookiecutter repo to help with pip package
 
-Save and load
-option to save anyfig as pickle, source
-Option to save as json - how to deal with non-json classes? Have anyfig.config_class(json_compatible=True) which forces the config to only keep json compatible fields e.g. python literals
 
 
 ~~~~~~ WEBSITE ~~~~~~
-installation - conda
-different styling on sidebar 'titles'
+Style external links
 
 Some sort of info on the main page.
 - Add some gifs of code being written?
 
-Forums?
-
 
 ~~~~~~ Release 0.4 ~~~~~~
 dict cli-arguments readme
-Target classes readme

@@ -170,7 +170,9 @@ python path/to/file.py --module.anyfig_tip="A new tip"
 ```
 
 ## Constraining Config-Values
-To avoid unintended behaviours its good practice to validate the config. This can be done by checking that the config-values are the correct types and within a subset of allowed values. Anyfig offers this functionality though the field function.
+To avoid unintended behaviours its good practice to validate the config. This can be done by checking that the config-values are the correct types and within a subset of allowed values.
+
+<!-- Anyfig offers this functionality though the field function. -->
 
 ### Types
 Anyfig assures that a config-value will have the correct type if it's declared via the `anyfig.field` function.
@@ -184,7 +186,7 @@ import anyfig
 from pathlib import Path
 
 @anyfig.config_class
-class MainConfig():
+class MyConfig():
   def __init__(self):
     # Define allowed values
     self.save_directory = anyfig.field(Path)
@@ -203,7 +205,7 @@ from pathlib import Path
 import typing
 
 @anyfig.config_class
-class MainConfig():
+class MyConfig():
   def __init__(self):
     # Define allowed values
     self.save_directory = anyfig.field(typing.Union[Path, str])  # Path or String
@@ -225,7 +227,7 @@ import anyfig
 from pathlib import Path
 
 @anyfig.config_class
-class MainConfig():
+class MyConfig():
   def __init__(self):
     # Define tests
     file_exists = lambda new_value: new_value.exists()
@@ -241,7 +243,7 @@ import anyfig
 from pathlib import Path
 
 @anyfig.config_class
-class MainConfig():
+class MyConfig():
   def __init__(self):
     # Define tests
     file_exists = lambda new_value: new_value.exists()
@@ -264,7 +266,7 @@ import anyfig
 from pathlib import Path
 
 @anyfig.config_class
-class MainConfig():
+class MyConfig():
   def __init__(self):
     self.PYTHON_FILE = anyfig.constant(Path('this_file.py'))
 
@@ -284,4 +286,41 @@ class StrictConfig():
 
 
 ## Target Classes
-Coming soon...
+Config-classes also support configuring objects with dependencies that are not available at config initialization. Connect the config-class to any callable via the "target" argument.
+
+```python
+import anyfig
+from datetime import datetime
+
+@anyfig.config_class(target=datetime)
+class MyConfig():
+  def __init__(self):
+    self.year = 1996  # Specify the values that should be configurable
+    self.month = 12
+
+config = anyfig.init_config(default_config=MyConfig)
+build_args = dict(day=13)  # Dict of non-configurable values 
+date = config.build(build_args)  # Calls the target with both config-values and build_args
+print(date)  # 1996-12-13 00:00:00
+```
+
+```python
+import anyfig
+
+class DataProcesser:
+  def __init__(self, algorithm, data):
+    self.algorithm = algorithm
+    self.data = data
+
+  # ... Algorithm methods
+
+@anyfig.config_class(target=DataProcesser)
+class MyConfig():
+  def __init__(self):
+    self.algorithm = lambda x: x+1
+
+config = anyfig.init_config(default_config=MyConfig)
+data = ...  # Some complex data that can't be put into the config
+build_args = dict(data=data)
+data_processor = config.build(build_args)
+```

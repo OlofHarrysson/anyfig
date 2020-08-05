@@ -2,29 +2,31 @@
 """Tests for `anyfig` package."""
 
 import pytest
-
 import anyfig
+from datetime import datetime
+
+# import configs
+
+# from configs import MainConfig
+from configs import main_config
 
 
-@pytest.fixture
-def response():
-  """Sample pytest fixture.
-
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
-  # import requests
-  # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
+def test_types(main_config):
+  config = anyfig.init_config(default_config=main_config, cli_args={})
+  assert type(config.int_var) == int
+  assert type(config.float_var) == float
+  assert type(config.string_var) == str
 
 
-def test_content(response):
-  """Sample pytest test function with the pytest fixture as an argument."""
-  # from bs4 import BeautifulSoup
-  # assert 'GitHub' in BeautifulSoup(response.content).title.string
+def test_duplicate_name(main_config):
+  with pytest.raises(AssertionError):
+
+    @anyfig.config_class()
+    class MainConfig:
+      pass
 
 
-def inc(x):
-  return x + 1
-
-
-def test_answer():
-  assert inc(3) == 4
+# @pytest.mark.parametrize('tester_arg', [datetime, datetime])
+# def test_build_args(target_config):
+#   config = anyfig.init_config(default_config=main_config, cli_args={})
+#   print(config)

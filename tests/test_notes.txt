@@ -1,0 +1,19 @@
+~~~~ Things to test ~~~~
+
+Target classes
+  - All parameters in class
+  - No parameters in class
+  - Half Half
+  - Default parameters
+  - Built in types
+
+Input arguments
+  - types
+  - nested configs
+  - nested configs + attributes in the nested config.
+
+
+Fields
+  - Constants, strict not strict
+  - Types, simple & moderately complex
+  - Values

@@ -11,7 +11,7 @@ import argparse
 from collections import namedtuple
 from dataclasses import dataclass
 import inspect
-import jsonpickle
+# import jsonpickle
 import json
 
 import anyfig
@@ -21,6 +21,7 @@ from pathlib import Path
 @anyfig.config_class
 class MainConfig2():
   def __init__(self):
+
     # Define tests
     file_exists = lambda new_value: new_value.exists()
     self.python_file = anyfig.field(tests=file_exists)
@@ -41,36 +42,24 @@ class MainConfig():
     # self.python_file = Path('other_file.py')  # Error
 
 
+@anyfig.config_class
+class MainConfig3():
+  def __init__(self):
+    # Define allowed values
+    # self.save_directory = anyfig.field(Path)
+    # self.save_directory = anyfig.field(Path, lambda x: x.exists())
+    # self.save_directory = anyfig.field(str)
+    self.save_directory = anyfig.field(int)
+    # self.save_directory = anyfig.field(typing.Union[Path, str])
+
+    # Set value directly, in subclass or from command line input
+    # self.save_directory = Path('output')  # OK
+    # self.save_directory = 'output'  # Error. Value is not correct type
+
+
 def main():
-  config = anyfig.init_config(default_config=MainConfig)
+  config = anyfig.init_config(default_config=MainConfig3)
   print(config)
-  sad
-
-  config_path = 'config.json'
-  frozen = jsonpickle.encode(config)
-  thawed = jsonpickle.decode(frozen)
-  print(thawed)
-  print(config == thawed)
-
-  frozen = json.dumps(json.loads(frozen), indent=4)
-  with open(config_path, 'w') as f:
-    f.write(frozen)
-
-  read_json_config(config_path)
-  qwe
-
-  # print(repr(config))
-  # config.frozen(freeze=False)
-  # config.yo = 123
-
-
-def read_json_config(file_path):
-  import json
-  with open(file_path) as infile:
-    json_data = infile.read()
-
-  thawed = jsonpickle.decode(json_data)
-  print(thawed)
 
 
 if __name__ == '__main__':
