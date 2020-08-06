@@ -7,12 +7,14 @@ Possibly to hash config class to make sure that other config is exact the same? 
 
 Versioning support - I'd like to create a way to keep track of / load old configs. Something like a versioning system. Perhaps save this information alongside the config, or create a config-component that has the versioning elements and can be added into a mainconfig. Could add git information via gitpython (or show users how to do it). I like a built in versioning config-class that can save version number, creation time, git commit, maybe the entrypoint script filename
 
-
+Citation for research - anyfig
 
 Implement accessing config values with square brackets/get(name, default_value)? __get_item__
 
 name wrangling with double underscore? __build_target
 
+
+Post init to help constructions objects from input arguments? To put e.g. objects of lists into the config they can't take input arguments.
 
 Notebook online demo
 - Colab? Some other free service without login?
@@ -27,8 +29,8 @@ Should also be able to say if the flag should be ignored by Anyfig or raise an e
 
 input arguments for functions. Could maybe check if old value is function, if so, take the function with the input argument name from the old argument module's namespace
 
-
-
+https://github.com/OlofHarrysson/anyfig
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OlofHarrysson/anyfig/master)
 
 ~~~~~~ WEBSITE ~~~~~~
 Style external links
