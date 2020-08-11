@@ -67,7 +67,7 @@ module.exports = {
         },
 
         {
-          to: 'https://pyfiddle.io/fiddle/4de2f70f-e421-4326-bbb8-b06d5efa547d/?i=true',
+          to: 'https://mybinder.org/v2/gh/OlofHarrysson/anyfig/master?filepath=examples/online_demo.ipynb',
           label: 'Online Demo',
           position: 'left',
         },

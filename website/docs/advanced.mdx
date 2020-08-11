@@ -312,15 +312,17 @@ class DataProcesser:
     self.algorithm = algorithm
     self.data = data
 
-  # ... Algorithm methods
+  def solve(self):
+    # Use algorithm & data
+    pass
 
 @anyfig.config_class(target=DataProcesser)
 class MyConfig():
   def __init__(self):
-    self.algorithm = lambda x: x+1
+    self.algorithm = lambda x: x + 1
 
 config = anyfig.init_config(default_config=MyConfig)
-data = ...  # Some complex data that can't be put into the config
+data = [1, 2, 3]  # Some complex data that can't be put into the config
 build_args = dict(data=data)
 data_processor = config.build(build_args)
 ```
