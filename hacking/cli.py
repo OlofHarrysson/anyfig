@@ -1,29 +1,43 @@
 import anyfig
 from pathlib import Path
-import jsonpickle
+import time
+import argparse
 
 
-@anyfig.config_class
-class MainConfig():
+@anyfig.config_class  # Registers the class with anyfig
+class MyConfig():
   def __init__(self):
-    # YOOYOYOYOO
-    self.yo = 0
-    # asdasd
-    self.yo = 123
+    # Config-parameters goes as attributes
+    self.experiment_note = 'Changed stuff'
+    self.save_directory = Path('output')
+    self.start_time = time.time()
 
-    self.shiiiet = [1, 2, 3]
+    # self.inner_config = InnerConfig()
 
 
 @anyfig.config_class
 class InnerConfig():
   def __init__(self):
-    self.save_directory = 12
+    self.inner_text = "Yo Dawg"
 
 
-def main():
-  config = anyfig.init_config(default_config=MainConfig)
-  print(config)
+# parser = argparse.ArgumentParser()
 
+# parser.add_argument("--start_time",
+#                     type=int,
+#                     help="display a square of a given number")
+# dict_args = vars(parser.parse_args())
+# print('known', dict_args)
+# print('unknown', unknown)
+# args = dict(args)
+# print(args)
 
-if __name__ == '__main__':
-  main()
+import sys
+dict_args = sys.argv[1:]
+print(dict_args)
+dict_args = anyfig.parse_cli_args(dict_args)
+print(dict_args)
+dict_args.pop('start_time', None)
+
+config = anyfig.init_config(default_config=MyConfig, cli_args=dict_args)
+print(config)

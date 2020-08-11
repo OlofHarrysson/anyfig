@@ -13,12 +13,15 @@ from . import fields
 
 def init_config(default_config, cli_args=None):
   assert default_config is not None
+
   err_msg = (
     "Expected 'default_config' to be a class definition but most likely got an object. E.g. expected ConfigClass but "
     "got ConfigClass() with parentheses.")
   assert type(default_config) == type(type), err_msg
+
   err_msg = f"Expected 'default_config' to be an anyfig config class, was {default_config}"
   assert figutils.is_config_class(default_config), err_msg
+
   if cli_args is not None:
     err_msg = f"Expected 'cli_args' to be a dict like object, was {type(cli_args)}"
     assert isinstance(cli_args, Mapping), err_msg
@@ -56,14 +59,14 @@ def init_config(default_config, cli_args=None):
   return config
 
 
-def parse_cli_args():
-  ''' Parses input arguments '''
+def parse_cli_args(raw_args=None):
+  ''' Parses command line input arguments. If raw_args is None, sys.argv is parsed '''
   class NullIO(StringIO):
     def write(self, txt):
       pass
 
   sys.stdout = NullIO()
-  args = fire.Fire(lambda **kwargs: kwargs)
+  args = fire.Fire(lambda **kwargs: kwargs, command=raw_args)
   sys.stdout = sys.__stdout__
   return args
 
