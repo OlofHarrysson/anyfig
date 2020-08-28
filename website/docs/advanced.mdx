@@ -12,7 +12,7 @@ Anyfig offers the functionality to override config-values through command line a
 import anyfig
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
     self.experiment_note = 'Changed stuff'
 
@@ -36,7 +36,7 @@ import anyfig
 from pathlib import Path
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
     self.save_directory = Path('output')
 
@@ -56,7 +56,7 @@ import anyfig
 from pathlib import Path
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
 
     # Describes the thought behind the experiment
@@ -94,12 +94,12 @@ One can choose which config-class to use via the command line. If a config-class
 import anyfig
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
     self.experiment_note = 'Changed stuff'
 
 @anyfig.config_class
-class SecondConfig():
+class SecondConfig:
   def __init__(self):
     self.experiment_note = 'Number 2'
     self.anyfig_tip = 'Configs can contain different values from each other'
@@ -131,7 +131,7 @@ import anyfig
 import logging
 
 @anyfig.config_class
-class NormalConfig():
+class NormalConfig:
   def __init__(self):
     self.logger = logging.getLogger('my-app')
     # ... More config values
@@ -152,13 +152,13 @@ For projects where the configuration grows large it helps to modularize the conf
 import anyfig
 
 @anyfig.config_class
-class MainConfig():
+class MainConfig:
   def __init__(self):
     self.experiment_note = 'Changed stuff'
     self.module = ModuleConfig()  # Yo dawg!
 
 @anyfig.config_class
-class ModuleConfig():
+class ModuleConfig:
   def __init__(self):
     self.anyfig_tip = 'Config-classes can be used as parts or wholes'
 
@@ -186,7 +186,7 @@ import anyfig
 from pathlib import Path
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Define allowed values
     self.save_directory = anyfig.field(Path)
@@ -205,7 +205,7 @@ from pathlib import Path
 import typing
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Define allowed values
     self.save_directory = anyfig.field(typing.Union[Path, str])  # Path or String
@@ -227,7 +227,7 @@ import anyfig
 from pathlib import Path
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Define tests
     file_exists = lambda new_value: new_value.exists()
@@ -243,7 +243,7 @@ import anyfig
 from pathlib import Path
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Define tests
     file_exists = lambda new_value: new_value.exists()
@@ -266,7 +266,7 @@ import anyfig
 from pathlib import Path
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
     self.PYTHON_FILE = anyfig.constant(Path('this_file.py'))
 
@@ -275,7 +275,7 @@ class MyConfig():
     self.PYTHON_FILE = Path('other_file.py')  # Error
 
 @anyfig.config_class
-class StrictConfig():
+class StrictConfig:
   def __init__(self):
     self.PYTHON_FILE = anyfig.constant(Path('this_file.py'), strict=True)
 
@@ -293,7 +293,7 @@ import anyfig
 from datetime import datetime
 
 @anyfig.config_class(target=datetime)
-class MyConfig():
+class MyConfig:
   def __init__(self):
     self.year = 1996  # Specify the values that should be configurable
     self.month = 12
@@ -317,7 +317,7 @@ class DataProcesser:
     pass
 
 @anyfig.config_class(target=DataProcesser)
-class MyConfig():
+class MyConfig:
   def __init__(self):
     self.algorithm = lambda x: x + 1
 

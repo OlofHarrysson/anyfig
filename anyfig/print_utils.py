@@ -49,6 +49,10 @@ def _extract_config_obj_comments(config_obj):
   config_classes = figutils.get_config_classes().values()
   comments = _extract_comments(type(config_obj))
 
+  # Remove the keys that aren't allowed from command line input
+  allowed_cli_args = config_obj._allowed_cli_args()
+  comments = {k: v for k, v in comments.items() if k in allowed_cli_args}
+
   flat_comments = {}
   for attribute_name, comment in comments.items():
     flat_comments[attribute_name] = comment

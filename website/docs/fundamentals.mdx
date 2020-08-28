@@ -12,7 +12,7 @@ Anyfig allows you to specify configs in Python code. Instead of defining values 
 import anyfig
 
 @anyfig.config_class  # Registers the class with anyfig
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Config-values goes as attributes
     self.experiment_note = 'Changed stuff'
@@ -32,7 +32,7 @@ from pathlib import Path
 import time
 
 @anyfig.config_class  # Registers the class with anyfig
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Config-values goes as attributes
     self.experiment_note = 'Changed stuff'
@@ -53,7 +53,7 @@ from pathlib import Path
 import time
 
 @anyfig.config_class  # Registers the class with anyfig
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Config-parameters goes as attributes
     self.experiment_note = 'Changed stuff'
@@ -81,7 +81,7 @@ import time
 from myproject.io import FileWriter
 
 @anyfig.config_class  # Registers the class with anyfig
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Config-parameters goes as attributes
     self.experiment_note = 'Changed stuff'
@@ -105,7 +105,7 @@ Most people pass the config-object around their code, accessing the config-value
 ```python title="my_project/another_file.py"
 import anyfig
 
-class SomeClass():
+class SomeClass:
   def __init__(self):
     config = anyfig.cfg()  # Returns the config object registered in Anyfig
     print(config.start_time)  # Access config-values with the dot notation

@@ -123,6 +123,12 @@ def overwrite(main_config_obj, args):
     err_msg = f"{base_err_msg}. '{inner_key}' isn't an attribute in '{config_class}'"
     assert inner_key in vars(config_obj), err_msg
 
+    # Check if argument is allowed
+    allowed_args = config_obj._allowed_cli_args()
+    if inner_key not in allowed_args:
+      err_msg = f"Input argument '{argument_key}' is not allowed to be overwritten. See --help for more info"
+      raise ValueError(err_msg)
+
     # Class definition
     value_class = type(getattr(config_obj, inner_key))
     base_err_msg = f"Input argument '{argument_key}' with value {val} can't create an object of the expected type"

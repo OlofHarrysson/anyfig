@@ -98,7 +98,7 @@ A workaround would be to put the sensitive information in a file, have git ignor
 import anyfig
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
     self.password_file = 'secrets/password.txt'
 
@@ -114,7 +114,7 @@ It's also possible to create a function to read the password from the file direc
 import anyfig
 
 @anyfig.config_class
-class MyConfig():
+class MyConfig:
   def __init__(self):
     with open('secrets/password.txt') as file:
       self.password = file.read()

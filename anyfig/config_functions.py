@@ -14,6 +14,22 @@ class MasterConfig(ABC):
   def __init__(self):
     pass  # Add empty init if config doesn't have one
 
+  def allowed_cli_args(self):
+    ''' Returns the attribute names that can be be overwritten from command line input '''
+    return self.get_parameters()
+
+  def _allowed_cli_args(self):
+    ''' Returns the attribute names that can be be overwritten from command line input '''
+    allowed = self.allowed_cli_args()
+    attr = self.get_parameters()
+    for item in allowed:
+      if item not in attr:
+        err_msg = (
+          f"'{item}' was marked as an allowed cli argument but doesn't exist in {type(self).__name__}'s attributes"
+        )
+        raise KeyError(err_msg)
+    return allowed
+
   def comments_string(self):
     ''' Returns string for config class's attributes and comments '''
     return print_utils.comments_string(self)

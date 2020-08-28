@@ -46,7 +46,7 @@ def is_config_class(obj):
   return inspect.isclass(obj) and obj.__name__ in registered_config_classes
 
 
-def cfg():
+def cfg():  # TODO: Change name and import it as cfg instead
   ''' Returns the config object that is registed with anyfig '''
 
   # Normal case
