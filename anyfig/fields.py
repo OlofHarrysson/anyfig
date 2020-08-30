@@ -17,20 +17,27 @@ def constant(value, strict=False):
   return ConstantField(value, strict)
 
 
-def resolve_fields(config):
+def cli_input(type_pattern):
+  # TODO: Check for any combination of primitive types
+  assert type_pattern in [str, int, list]
+  return InputField(type_pattern)
+
+
+def resolve_fields(config, cli_name=''):
   ''' Removes wrapping for InterfaceFields '''
   for key, val in vars(config).items():
     if isinstance(val, InterfaceField):
+      cli_name = '.'.join([cli_name, key]).lstrip('.')
       config_class = type(config).__name__
-      value = val.finish_wrapping_phase(key, config_class)
+      value = val.finish_wrapping_phase(cli_name, config_class)
       setattr(config, key, value)
 
     # Resolve nested configs
     if is_config_class(val):
-      resolve_fields(val)
+      resolve_fields(val, cli_name=key)
 
 
-class InterfaceField():
+class InterfaceField:
   ''' Used to define allowed values for a config-attribute '''
   def __init__(self, type_pattern=typing.Any, tests=None):
     err_msg = f"Expected 'type_pattern' to be a type or a typing pattern but got {type(type_pattern)}"
@@ -44,7 +51,7 @@ class InterfaceField():
 
   def update_value(self, name, value, config_class):
     # Updates value and return wrapped value or value if setup is finished
-    if self.type_pattern:
+    if self.type_pattern:  # TODO: Remove if check?
       check_type(name, value, self.type_pattern)
 
     for test in self.tests:
@@ -55,7 +62,8 @@ class InterfaceField():
 
   def finish_wrapping_phase(self, name, config_class):
     # Verifies that attribute is overridden and finishes setup
-    err_msg = f"Attribute '{name}' in '{config_class}' is required to be overridden"
+    inner_key = name.split('.')[-1]
+    err_msg = f"The field '{inner_key}' in '{config_class}' is required to be overridden"
     assert hasattr(self, 'value'), err_msg
 
     self.wrapping_phase = False
@@ -81,6 +89,11 @@ class InterfaceField():
 
     assert test_result, f"{base_err_msg} didn't pass"
 
+  def __str__(self):
+    if issubclass(type(self.type_pattern), type(type)):
+      return self.type_pattern.__name__
+    return str(self.type_pattern)
+
 
 class ConstantField(InterfaceField):
   ''' Used to define config-attribute that can't be overriden '''
@@ -95,3 +108,17 @@ class ConstantField(InterfaceField):
     ''' Calls the test with the new attribute value. Raises error if test doesn't pass '''
     err_msg = f"Can't override constant '{name}' with value '{value}' in config '{config_class}'"
     assert test(value), err_msg
+
+
+class InputField(InterfaceField):
+  ''' Used to define required config-attribute from command line input '''
+  def __init__(self, type_pattern):
+    super().__init__(type_pattern=type_pattern)
+
+  def finish_wrapping_phase(self, name, config_class):
+    # Verifies that attribute is overridden and finishes setup
+    err_msg = f"Missing required input argument --{name}. See --help for more info"
+    assert hasattr(self, 'value'), err_msg
+
+    self.wrapping_phase = False
+    return self.value

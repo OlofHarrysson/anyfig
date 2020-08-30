@@ -12,3 +12,10 @@ if python_v.major >= 3 and python_v.minor >= 7:
   from anyfig.fields import *
 else:
   from anyfig.dummyfields import *
+
+
+def __getattr__(name):
+  if name == 'global_cfg':
+    # Returns the already initilized config object by figutils.global_config()
+    return global_config()
+  raise AttributeError(f"module '{__name__}' has no attribute '{name}'")

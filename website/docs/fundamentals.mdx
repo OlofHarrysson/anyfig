@@ -98,16 +98,16 @@ writer = FileWriter(config.save_directory)
 
 
 ### Global Config
-Most people pass the config-object around their code, accessing the config-values at various places to initilize their other components. Anyfig offers an alternative to this. The anyfig.init_config function registers the config-object with Anyfig, allowing it to be accessed from any file with the anyfig.cfg() function. 
+Most people pass the config-object around their code, accessing the config-values at various places to initilize their other components. Anyfig offers an alternative to this. The `anyfig.init_config` function registers the config-object with Anyfig, allowing it to be accessed from any file through `anyfig.global_cfg`. 
 
- Global objects are often considered bad practice and is thus _not recommended_ but often very practical from small projects or experimentation. The problem is allevited in Anyfig's case as **config-objects are immutable** by default, avoiding confusion if multiple components were to change the same config-values.
+ Global objects are often considered bad practice because multiple components can change the same object which complicates understandability and debugging. We _don't recommended_ global object for this reason but it can often be very practical for small projects or experimentation. Anyfig's config-objects are **immutable by default** to reduce the risk of the undesirable effects of global configs.
 
 ```python title="my_project/another_file.py"
 import anyfig
 
 class SomeClass:
   def __init__(self):
-    config = anyfig.cfg()  # Returns the config object registered in Anyfig
+    config = anyfig.global_cfg  # Returns the config object registered in Anyfig
     print(config.start_time)  # Access config-values with the dot notation
     # ... Use config-values in program
 ```

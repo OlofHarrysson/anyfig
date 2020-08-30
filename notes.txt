@@ -3,22 +3,12 @@ Support json - Have it work out of the box for configs that are pure json-types.
 Versioning support - I'd like to create a way to keep track of / load old configs. Something like a versioning system. Perhaps save this information alongside the config, or create a config-component that has the versioning elements and can be added into a mainconfig. Could add git information via gitpython (or show users how to do it). I like a built in versioning config-class that can save version number, creation time, git commit, maybe the entrypoint script filename
 
 
-Implement accessing config values with square brackets/get(name, default_value)? __get_item__
+Post init to help constructions objects from input arguments? To put e.g. objects of lists into the config they can't take input arguments. Could also unfreeze the config and have people manually call the function.
 
-name wrangling with double underscore? __build_target
-
-
-Post init to help constructions objects from input arguments? To put e.g. objects of lists into the config they can't take input arguments.
 
 Can I use the "with" statement to maybe say with Anyfig.OnlyOverwrite(self) or something to make sure that people don't add new attributes in configs instead of overwritting existing attributes?
-Or something like with Anyfig.JsonCompatible() that checks that all attributes are json-compatible / have saving+loading functions?
-Or marks a config as allowed/dissallowed from cli
-Or used for the helpstring?
 
 Some kind of help string about the program that can be sent to init_config or place in a config? for --help output
-
-A way to control which arguments that can be overwritten by cli/visible by the --help. I don't see a good way to do this that doesn't require lots of maintainence for the user. Better to do an opt-in system than an opt-out, so whitelist the ones you want exposed.
-Should also be able to say if the flag should be ignored by Anyfig or raise an error.
 
 
 ~~~~~~ WEBSITE ~~~~~~

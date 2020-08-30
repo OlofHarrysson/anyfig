@@ -46,7 +46,7 @@ def is_config_class(obj):
   return inspect.isclass(obj) and obj.__name__ in registered_config_classes
 
 
-def cfg():  # TODO: Change name and import it as cfg instead
+def global_config():
   ''' Returns the config object that is registed with anyfig '''
 
   # Normal case
@@ -117,3 +117,25 @@ def find_arguments(callable_):
     if param.default == inspect.Parameter.empty
   ]
   return list(parameters), required_args
+
+
+def allowed_input_argument(config_obj, name, deep_name):
+  ''' Raises error if the input argument isn't marked as "allowed" '''
+  allowed_args = check_allowed_cli_args(config_obj)
+  if name not in allowed_args:
+    err_msg = f"Input argument '{deep_name}' is not allowed to be overwritten. See --help for more info"
+    raise ValueError(err_msg)
+
+
+def check_allowed_cli_args(config_obj):
+  ''' Returns the attribute names that can be be overwritten from command line input.
+    Raises AttributeError if an attribute doesn't exist '''
+  allowed_items = config_obj.allowed_cli_args()
+  attr = config_obj.get_parameters()
+  for item in allowed_items:
+    if item not in attr:
+      err_msg = (
+        f"'{type(config_obj).__name__}' has no attribute '{item}' and should not be marked as an allowed command line "
+        "input argument")
+      raise AttributeError(err_msg)
+  return allowed_items
