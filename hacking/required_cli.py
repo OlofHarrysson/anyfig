@@ -14,20 +14,35 @@ class MyConfig:
     self.start_time = time.time()
 
     # The inner config obj
-    self.innerfig = InnerConfig()
+    # self.innerfig = InnerConfig()
 
     # self.save = anyfig.field(int, lambda x: x > 10)
+
+    # TEST1
     # self.save = anyfig.field(typing.Union[Path, str])
 
+    # self.save = anyfig.constant(12312)
+
     # self.save = anyfig.field(str)
+    # self.save = anyfig.field(str)
+    # self.save = 'bajs'
 
-    self.save = anyfig.cli_input(str)
+    # self.save = anyfig.cli_input(str)
+    # self.save = anyfig.cli_input(int)
+    # self.save = anyfig.cli_input(list)
+    # self.save = anyfig.cli_input(dict)
+    # self.save = anyfig.cli_input(typing.List[int])
 
-    self.save = 'hej'
+    # self.save = 'hej'
 
-  def allowed_cli_args(self):
-    return ['save', 'asdasd']
-    # return ['save', 'innerfig']
+    # self.post_init = 'asdas'
+
+  # def allowed_cli_args(self):
+  # return ['save', 'asdasd']
+  # return ['save', 'innerfig']
+
+  def post_init(self):
+    print("POST INIIIIIT")
 
 
 @anyfig.config_class
@@ -41,9 +56,12 @@ class InnerConfig:
     # An integer between the values of 1 and 10 because the world has never seen such apples
     self.inner = 'innner'
 
-  def allowed_cli_args(self):
-    return ['inner']
-    # return []
+    # HEHE
+    self.innerasdasdasdasdasd = 'iasdasdasdasdnnner'
+
+  # def allowed_cli_args(self):
+  # return ['inner']
+  # return []
 
 
 @anyfig.config_class
@@ -60,7 +78,7 @@ class InnerConfig2:
 config = anyfig.init_config(default_config=MyConfig)
 print(config)
 
-config.frozen(False)
-config.frozen(True)
-config.save = 'asda'
-print(config)
+# import argparse
+# parser = argparse.ArgumentParser()
+# parser.add_argument('s', help='hahahah')
+# parser.parse_args()

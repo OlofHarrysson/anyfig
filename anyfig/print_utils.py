@@ -2,7 +2,7 @@ import inspect
 import functools
 
 from . import figutils
-from .fields import InputField
+from .fields import InputField, InterfaceField
 
 
 def comments_string(config_obj):
@@ -21,8 +21,10 @@ def comments_string(config_obj):
 
     # Formats the attribute string
     attribute_type = type(attribute_value).__name__
-    if issubclass(type(attribute_value), InputField):
-      attribute_type = str(attribute_value)
+    if isinstance(attribute_value, InputField):
+      attribute_type = str(attribute_value.type_pattern.__name__)
+    elif isinstance(attribute_value, InterfaceField):
+      attribute_type = type(attribute_value.value).__name__
 
     nested_level = attribute_name.count('.')
     nested_indent = ' ' * (indent_width * nested_level)

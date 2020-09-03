@@ -3,6 +3,7 @@ __email__ = 'harrysson.olof@gmail.com'
 __version__ = '0.1.0'
 
 import sys
+from functools import wraps
 from anyfig.figutils import *
 from anyfig.anyfig_setup import *
 
@@ -14,8 +15,28 @@ else:
   from anyfig.dummyfields import *
 
 
-def __getattr__(name):
-  if name == 'global_cfg':
-    # Returns the already initilized config object by figutils.global_config()
-    return global_config()
-  raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
+def get_global_cfg(func):
+  ''' Decorator for GlobalConfig methods. Saves the config if it's not already saved '''
+  @wraps(func)
+  def wrapper(*args, **kwargs):
+    self = args[0]
+    if self.global_cfg is None:
+      self.global_cfg = get_config()
+    return func(*args, **kwargs)
+
+  return wrapper
+
+
+class GlobalConfig:
+  global_cfg = None
+
+  @get_global_cfg
+  def __getattr__(self, name):
+    return getattr(self.global_cfg, name)
+
+  @get_global_cfg
+  def __str__(self):
+    return str(self.global_cfg)
+
+
+global_cfg = GlobalConfig()

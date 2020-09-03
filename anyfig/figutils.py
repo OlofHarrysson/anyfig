@@ -46,8 +46,8 @@ def is_config_class(obj):
   return inspect.isclass(obj) and obj.__name__ in registered_config_classes
 
 
-def global_config():
-  ''' Returns the config object that is registed with anyfig '''
+def get_config():
+  ''' Returns the config object that is registered with anyfig '''
 
   # Normal case
   if len(global_configs) == 1:
@@ -55,7 +55,7 @@ def global_config():
 
   # init_config function adds one so this should never happen
   elif len(global_configs) == 0:
-    raise RuntimeError("No global config has been registered")
+    raise RuntimeError("No config object has been registered")
 
   # If multiple config objects has been marked as global
   raise RuntimeError(

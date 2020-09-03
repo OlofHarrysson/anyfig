@@ -4,7 +4,7 @@ from . import figutils
 
 
 def raise_error():
-  err_msg = f"This feature isn't supported in Python {sys.version}. See our website '{figutils.get_website()}' for more information"
+  err_msg = f"This feature isn't supported in Python {sys.version_info.major}.{sys.version_info.minor}. See our website '{figutils.get_website()}' for more information"
   raise RuntimeError(err_msg)
 
 
@@ -13,4 +13,8 @@ def field(*args, **kwargs):
 
 
 def constant(value, strict=False):
+  raise_error()
+
+
+def cli_input(type_pattern):
   raise_error()

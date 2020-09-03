@@ -33,6 +33,7 @@ def init_config(default_config, cli_args=None):
   # Create config
   config_str = cli_args.pop('config', default_config.__name__)
   config = create_config(config_str)
+  fields.validate_fields(config)
 
   # Print config help
   if 'help' in cli_args:
@@ -41,14 +42,17 @@ def init_config(default_config, cli_args=None):
       f"Available config classes {config_classes}. Set config with --config=OtherConfigClass\n",
       f"\nCurrent config is '{config_str}'. The available input arguments are")
 
-    help_string = config.comments_string()
-    print(help_string)
+    print(config.comments_string())
     sys.exit(0)
 
   # Overwrite parameters via optional input flags
   config = overwrite(config, cli_args)
 
-  # Resolve required values
+  # Perform post init after input flags
+  if hasattr(config, 'post_init') and inspect.ismethod(config.post_init):
+    config.post_init()
+
+  # Unwrap the field values
   fields.resolve_fields(config)
 
   # Freezes config
@@ -134,9 +138,14 @@ def overwrite(main_config_obj, args):
     # Create new object that follows the InterfaceField's rules
     elif issubclass(value_class, fields.InterfaceField):
       field = getattr(config_obj, inner_key)
-      # TODO: Naive solution. Doesn't handle e.g. typing.Union[Path, str]. Make check so that it's only a primitive type. Same check as in cli_arg
+
+      if isinstance(value_class, fields.InputField):
+        value_class = field.type_pattern
+      else:
+        value_class = type(field.value)
+
       try:
-        val = field.type_pattern(val)
+        val = value_class(val)
       except Exception as e:
         err_msg = f"{base_err_msg} {field.type_pattern}. {e}"
         raise RuntimeError(err_msg) from None

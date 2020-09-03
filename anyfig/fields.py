@@ -7,9 +7,9 @@ from pathlib import Path
 from .figutils import is_config_class
 
 
-def field(*args, **kwargs):
+def field(type_pattern=typing.Any, tests=None):
   ''' Returns an InterfaceField '''
-  return InterfaceField(*args, **kwargs)
+  return InterfaceField(type_pattern, tests)
 
 
 def constant(value, strict=False):
@@ -18,9 +18,24 @@ def constant(value, strict=False):
 
 
 def cli_input(type_pattern):
-  # TODO: Check for any combination of primitive types
-  assert type_pattern in [str, int, list]
+  ''' Returns an InputField '''
+  assert type_pattern in [str, int, tuple, list, dict]
   return InputField(type_pattern)
+
+
+def validate_fields(config):
+  ''' Validates that fields has a value '''
+  for key, val in vars(config).items():
+    if type(val) is InterfaceField:  # Don't check InputField or ConstantField
+      err_msg = (
+        f"Missing value for the 'anyfig.field' named '{key}' in config '{type(config).__name__}'. "
+        "Set a value or use 'anyfig.cli_input' for input arguments without default values"
+      )
+      assert hasattr(val, 'value'), err_msg
+
+    # Resolve nested configs
+    if is_config_class(val):
+      validate_fields(val)
 
 
 def resolve_fields(config, cli_name=''):
@@ -51,8 +66,7 @@ class InterfaceField:
 
   def update_value(self, name, value, config_class):
     # Updates value and return wrapped value or value if setup is finished
-    if self.type_pattern:  # TODO: Remove if check?
-      check_type(name, value, self.type_pattern)
+    check_type(name, value, self.type_pattern)
 
     for test in self.tests:
       self._check_test(test, name, value, config_class)
@@ -88,11 +102,6 @@ class InterfaceField:
       raise exception_class(err_msg) from None
 
     assert test_result, f"{base_err_msg} didn't pass"
-
-  def __str__(self):
-    if issubclass(type(self.type_pattern), type(type)):
-      return self.type_pattern.__name__
-    return str(self.type_pattern)
 
 
 class ConstantField(InterfaceField):

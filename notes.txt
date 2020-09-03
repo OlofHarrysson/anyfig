@@ -3,13 +3,14 @@ Support json - Have it work out of the box for configs that are pure json-types.
 Versioning support - I'd like to create a way to keep track of / load old configs. Something like a versioning system. Perhaps save this information alongside the config, or create a config-component that has the versioning elements and can be added into a mainconfig. Could add git information via gitpython (or show users how to do it). I like a built in versioning config-class that can save version number, creation time, git commit, maybe the entrypoint script filename
 
 
-Post init to help constructions objects from input arguments? To put e.g. objects of lists into the config they can't take input arguments. Could also unfreeze the config and have people manually call the function.
-
-
 Can I use the "with" statement to maybe say with Anyfig.OnlyOverwrite(self) or something to make sure that people don't add new attributes in configs instead of overwritting existing attributes?
 
-Some kind of help string about the program that can be sent to init_config or place in a config? for --help output
 
+
+
+Post init to help constructions objects from input arguments? To put e.g. objects of lists into the config they can't take input arguments. Could also unfreeze the config and have people manually call the function.
+Better to decorate a method as anyfig.post_init and have that function called in setup
+Can I communicate that post_init and allowed_cli are affected by anyfig? Now they look like normal functions but it's not clear when they are called
 
 ~~~~~~ WEBSITE ~~~~~~
 Style external links
@@ -20,4 +21,6 @@ Some sort of info on the main page.
 
 ~~~~~~ Release 0.2.0 ~~~~~~
 dict cli-arguments readme
+cli_input readme
 readme save/load. Also write why its difficult
+post_init readme. Is this feature done?
