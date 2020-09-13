@@ -96,6 +96,8 @@ def _extract_comments(class_type):
 
       # Extract attribute name
       attribute_name = code_line.split('=')[0]
+      if ':' in attribute_name:
+        attribute_name = attribute_name.split(':')[0]
       attribute_name = attribute_name.strip().replace('self.', '', 1)
 
       # Override parent comment

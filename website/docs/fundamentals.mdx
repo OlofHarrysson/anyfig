@@ -103,8 +103,7 @@ Most people pass the config-object around their code, accessing the config-value
 Global objects are often considered bad practice because multiple components can change the same global object which complicates understandability and debugging. Anyfig's config-objects are **immutable by default** to mitigate this.
 
 ```python title="my_project/another_file.py"
-from anyfig import get_config
-from anyfig import global_cfg
+from anyfig import global_cfg, get_config
 
 class SomeClass:
   def __init__(self):

@@ -139,3 +139,11 @@ def check_allowed_cli_args(config_obj):
         "input argument")
       raise AttributeError(err_msg)
   return allowed_items
+
+
+def post_init(config_obj):
+  ''' Recursively calls the post_init method on a config and it's attributes '''
+  config_obj.post_init()
+  for _, val in config_obj.get_parameters(copy=False).items():
+    if is_config_class(val):
+      post_init(val)

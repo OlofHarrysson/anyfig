@@ -48,9 +48,8 @@ def init_config(default_config, cli_args=None):
   # Overwrite parameters via optional input flags
   config = overwrite(config, cli_args)
 
-  # Perform post init after input flags
-  if hasattr(config, 'post_init') and inspect.ismethod(config.post_init):
-    config.post_init()
+  # Perform deep post init after input flags
+  figutils.post_init(config)
 
   # Unwrap the field values
   fields.resolve_fields(config)

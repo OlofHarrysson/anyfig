@@ -18,6 +18,10 @@ class MasterConfig(ABC):
     ''' Returns the attribute names that can be be overwritten from command line input '''
     return self.get_parameters()
 
+  def post_init(self):
+    ''' A function that is called after overwriting from command line input '''
+    pass
+
   def comments_string(self):
     ''' Returns string for config class's attributes and comments '''
     return print_utils.comments_string(self)
@@ -25,6 +29,9 @@ class MasterConfig(ABC):
   def frozen(self, freeze=True):
     ''' Freeze/unfreeze config '''
     self._frozen = freeze
+    for _, val in self.get_parameters(copy=False).items():
+      if figutils.is_config_class(val):
+        val.frozen(freeze)
     return self
 
   def get_parameters(self, copy=True):

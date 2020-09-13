@@ -5,12 +5,21 @@ Versioning support - I'd like to create a way to keep track of / load old config
 
 Can I use the "with" statement to maybe say with Anyfig.OnlyOverwrite(self) or something to make sure that people don't add new attributes in configs instead of overwritting existing attributes?
 
+Test frozen for nested obejcts
+
+Move _frozen and other default attributes to a function so it's defined at one place
+
+license as a button in github
+
+when printing available classes in setup, only print the class, not the name.
+
+Make target classes have a special attribute that holds the dict arguments? Good is that you can put other stiff in there, but bad is that it becomes another thing you need to remember about anyfig
 
 
+type for target class for isinstance check
 
-Post init to help constructions objects from input arguments? To put e.g. objects of lists into the config they can't take input arguments. Could also unfreeze the config and have people manually call the function.
-Better to decorate a method as anyfig.post_init and have that function called in setup
-Can I communicate that post_init and allowed_cli are affected by anyfig? Now they look like normal functions but it's not clear when they are called
+
+--help doesn't work with type hints
 
 ~~~~~~ WEBSITE ~~~~~~
 Style external links
