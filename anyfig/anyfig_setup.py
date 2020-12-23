@@ -36,13 +36,8 @@ def init_config(default_config, cli_args=None):
   fields.validate_fields(config)
 
   # Print config help
-  if 'help' in cli_args:
-    config_classes = list(figutils.get_config_classes())
-    print(
-      f"Available config classes {config_classes}. Set config with --config=OtherConfigClass\n",
-      f"\nCurrent config is '{config_str}'. The available input arguments are")
-
-    print(config.comments_string())
+  if 'help' in cli_args or 'h' in cli_args:
+    print(config.cli_help())
     sys.exit(0)
 
   # Overwrite parameters via optional input flags
@@ -118,7 +113,7 @@ def overwrite(main_config_obj, args):
       assert hasattr(config_obj, key_part), err_msg
 
       # Check if the config allows the argument
-      figutils.allowed_input_argument(config_obj, key_part, argument_key)
+      figutils.check_allowed_input_argument(config_obj, key_part, argument_key)
 
       # Check if the outer attributes are config classes
       if key_idx < len(outer_keys):

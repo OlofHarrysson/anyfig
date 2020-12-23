@@ -22,9 +22,8 @@ class MasterConfig(ABC):
     ''' A function that is called after overwriting from command line input '''
     pass
 
-  def comments_string(self):
-    ''' Returns string for config class's attributes and comments '''
-    return print_utils.comments_string(self)
+  def cli_help(self):
+    return print_utils.cli_help(self)
 
   def frozen(self, freeze=True):
     ''' Freeze/unfreeze config '''

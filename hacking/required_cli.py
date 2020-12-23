@@ -3,6 +3,7 @@ import anyfig
 from pathlib import Path
 import time
 import typing
+from anyfig import print_utils
 
 
 @anyfig.config_class  # Registers the class with anyfig
@@ -16,8 +17,20 @@ class MyConfig:
     # The inner config obj
     self.innerfig = InnerConfig()
 
-  def post_init(self):
-    print(type(self).__name__)
+    # self.help = 'heeelp'
+
+  # def allowed_cli_args(self):
+  #   pass
+
+  # def cli_help(self):
+  #   hej = "YOOOLLOOF"
+  #   cmt = print_utils.cli_help(self)
+  #   return hej + cmt
+  # return "YOOOLLOOF"
+
+  # return ['start_time1']
+  # return 'start_time', 'innerfig'
+  # return 'start_time'
 
 
 @anyfig.config_class
@@ -26,9 +39,10 @@ class InnerConfig:
 
     # An integer between the values of 1 and 10 because the world has never seen such apples
     self.inner = 'innner'
+    self.inner2 = 'innner2'
 
-  def post_init(self):
-    print(type(self).__name__)
+  def allowed_cli_args(self):
+    return 11
 
 
 class InnerConfig2:
@@ -37,16 +51,5 @@ class InnerConfig2:
     self.inner = 'innner2'
 
 
-# tt = typing.Union[Path, str]
-# tt = str
-# print(tt)
-# print(type(tt))
 config = anyfig.init_config(default_config=MyConfig)
 print(config)
-
-# config.frozen(False)
-# config.start_time = 123
-# print(config)
-
-# config.innerfig.inner = 'HEEJ'
-# print(config)

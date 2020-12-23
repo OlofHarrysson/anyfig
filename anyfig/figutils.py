@@ -1,7 +1,8 @@
 import inspect
-import dill
-
 from pathlib import Path
+from collections.abc import Iterable
+
+import dill
 
 registered_config_classes = {}
 global_configs = {}
@@ -119,21 +120,30 @@ def find_arguments(callable_):
   return list(parameters), required_args
 
 
-def allowed_input_argument(config_obj, name, deep_name):
+def check_allowed_input_argument(config_obj, name, deep_name):
   ''' Raises error if the input argument isn't marked as "allowed" '''
-  allowed_args = check_allowed_cli_args(config_obj)
+  allowed_args = get_allowed_cli_args(config_obj)
   if name not in allowed_args:
     err_msg = f"Input argument '{deep_name}' is not allowed to be overwritten. See --help for more info"
     raise ValueError(err_msg)
 
 
-def check_allowed_cli_args(config_obj):
+def get_allowed_cli_args(config_obj):
   ''' Returns the attribute names that can be be overwritten from command line input.
-    Raises AttributeError if an attribute doesn't exist '''
+  Raises AttributeError if an attribute doesn't exist '''
   allowed_items = config_obj.allowed_cli_args()
-  attr = config_obj.get_parameters()
+  if allowed_items is None:
+    allowed_items = []
+  if isinstance(allowed_items, str):
+    allowed_items = [allowed_items]
+  err_msg = (
+    f"Expected return type 'String, None or Iterable' for {type(config_obj).__name__}'s allowed_cli_args method, "
+    f"was {allowed_items} with type {type(allowed_items)}")
+  assert isinstance(allowed_items, Iterable), err_msg
+
+  attributes = config_obj.get_parameters()
   for item in allowed_items:
-    if item not in attr:
+    if item not in attributes:
       err_msg = (
         f"'{type(config_obj).__name__}' has no attribute '{item}' and should not be marked as an allowed command line "
         "input argument")

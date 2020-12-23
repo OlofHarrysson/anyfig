@@ -28,8 +28,8 @@ def validate_fields(config):
   for key, val in vars(config).items():
     if type(val) is InterfaceField:  # Don't check InputField or ConstantField
       err_msg = (
-        f"Missing value for the 'anyfig.field' named '{key}' in config '{type(config).__name__}'. "
-        "Set a value or use 'anyfig.cli_input' for input arguments without default values"
+        f"Missing value for '{key}' in config '{type(config).__name__}'. "
+        "Set a value or change the type to 'anyfig.cli_input' to allow input arguments without default values"
       )
       assert hasattr(val, 'value'), err_msg
 

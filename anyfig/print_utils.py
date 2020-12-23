@@ -5,8 +5,8 @@ from . import figutils
 from .fields import InputField, InterfaceField
 
 
-def comments_string(config_obj):
-  ''' Returns a "help" string for the config object that contain attributes and any matching comments '''
+def cli_help(config_obj):
+  ''' Returns string for config's cli-arguments with corresponding comments '''
   comments = extract_config_obj_comments(config_obj)
 
   indent_width = 4  # In spaces
@@ -47,7 +47,20 @@ def comments_string(config_obj):
     help_string = f"{attr_string}{' ' * (n_spaces - len(attr_string))}{comment}"
     help_strings.append(help_string)
 
-  return '\n'.join(help_strings)
+  # Add header info
+  cli_help_header = []
+  config_classes = list(figutils.get_config_classes())
+  if len(config_classes) > 1:
+    header = (
+      f"Current config is '{type(config_obj).__name__}'. Available config classes {config_classes}. "
+      "Set config with --config=OtherConfigClass")
+    cli_help_header.append(header)
+
+  if help_strings:
+    cli_help_header.append("{}The available input arguments are".format(
+      '\n' if cli_help_header else ''))
+
+  return '\n'.join(cli_help_header + help_strings)
 
 
 def extract_config_obj_comments(config_obj):
@@ -56,7 +69,7 @@ def extract_config_obj_comments(config_obj):
   comments = _extract_comments(type(config_obj))
 
   # Remove the keys that aren't allowed from command line input
-  allowed_cli_args = figutils.check_allowed_cli_args(config_obj)
+  allowed_cli_args = figutils.get_allowed_cli_args(config_obj)
   comments = {k: v for k, v in comments.items() if k in allowed_cli_args}
 
   flat_comments = {}
