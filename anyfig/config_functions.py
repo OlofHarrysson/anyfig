@@ -14,13 +14,23 @@ class MasterConfig(ABC):
   def __init__(self):
     pass  # Add empty init if config doesn't have one
 
-  def comments_string(self):
-    ''' Returns string for config class's attributes and comments '''
-    return print_utils.comments_string(self)
+  def allowed_cli_args(self):
+    ''' Returns the attribute names that can be be overwritten from command line input '''
+    return self.get_parameters()
+
+  def post_init(self):
+    ''' A function that is called after overwriting from command line input '''
+    pass
+
+  def cli_help(self):
+    return print_utils.cli_help(self)
 
   def frozen(self, freeze=True):
     ''' Freeze/unfreeze config '''
-    self.__class__._frozen = freeze  # TODO: .__class__ needed? type(self) instead?
+    self._frozen = freeze
+    for _, val in self.get_parameters(copy=False).items():
+      if figutils.is_config_class(val):
+        val.frozen(freeze)
     return self
 
   def get_parameters(self, copy=True):

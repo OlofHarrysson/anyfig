@@ -2,11 +2,12 @@ import inspect
 import functools
 
 from . import figutils
+from .fields import InputField, InterfaceField
 
 
-def comments_string(config_obj):
-  ''' Returns a "help" string for the config object that contain attributes and any matching comments '''
-  comments = _extract_config_obj_comments(config_obj)
+def cli_help(config_obj):
+  ''' Returns string for config's cli-arguments with corresponding comments '''
+  comments = extract_config_obj_comments(config_obj)
 
   indent_width = 4  # In spaces
   comment_indents = {}  # attribute-name=indent. key = '' for main config class
@@ -20,6 +21,11 @@ def comments_string(config_obj):
 
     # Formats the attribute string
     attribute_type = type(attribute_value).__name__
+    if isinstance(attribute_value, InputField):
+      attribute_type = str(attribute_value.type_pattern.__name__)
+    elif isinstance(attribute_value, InterfaceField):
+      attribute_type = type(attribute_value.value).__name__
+
     nested_level = attribute_name.count('.')
     nested_indent = ' ' * (indent_width * nested_level)
     attr_string = f"{nested_indent}--{attribute_name} ({attribute_type}):"
@@ -41,13 +47,30 @@ def comments_string(config_obj):
     help_string = f"{attr_string}{' ' * (n_spaces - len(attr_string))}{comment}"
     help_strings.append(help_string)
 
-  return '\n'.join(help_strings)
+  # Add header info
+  cli_help_header = []
+  config_classes = list(figutils.get_config_classes())
+  if len(config_classes) > 1:
+    header = (
+      f"Current config is '{type(config_obj).__name__}'. Available config classes {config_classes}. "
+      "Set config with --config=OtherConfigClass")
+    cli_help_header.append(header)
+
+  if help_strings:
+    cli_help_header.append("{}The available input arguments are".format(
+      '\n' if cli_help_header else ''))
+
+  return '\n'.join(cli_help_header + help_strings)
 
 
-def _extract_config_obj_comments(config_obj):
+def extract_config_obj_comments(config_obj):
   ''' Extracts comments for a config object and any config-class children objects '''
   config_classes = figutils.get_config_classes().values()
   comments = _extract_comments(type(config_obj))
+
+  # Remove the keys that aren't allowed from command line input
+  allowed_cli_args = figutils.get_allowed_cli_args(config_obj)
+  comments = {k: v for k, v in comments.items() if k in allowed_cli_args}
 
   flat_comments = {}
   for attribute_name, comment in comments.items():
@@ -56,7 +79,7 @@ def _extract_config_obj_comments(config_obj):
     # Check if config class has config-class children
     attribute_value = getattr(config_obj, attribute_name)
     if type(attribute_value) in config_classes:
-      child_comments = _extract_config_obj_comments(attribute_value)
+      child_comments = extract_config_obj_comments(attribute_value)
 
       # Add child comments
       for child_attribute_name, child_comment in child_comments.items():
@@ -86,6 +109,8 @@ def _extract_comments(class_type):
 
       # Extract attribute name
       attribute_name = code_line.split('=')[0]
+      if ':' in attribute_name:
+        attribute_name = attribute_name.split(':')[0]
       attribute_name = attribute_name.strip().replace('self.', '', 1)
 
       # Override parent comment

@@ -1,7 +1,8 @@
 import inspect
-import dill
-
 from pathlib import Path
+from collections.abc import Iterable
+
+import dill
 
 registered_config_classes = {}
 global_configs = {}
@@ -46,8 +47,8 @@ def is_config_class(obj):
   return inspect.isclass(obj) and obj.__name__ in registered_config_classes
 
 
-def cfg():
-  ''' Returns the config object that is registed with anyfig '''
+def get_config():
+  ''' Returns the config object that is registered with anyfig '''
 
   # Normal case
   if len(global_configs) == 1:
@@ -55,7 +56,7 @@ def cfg():
 
   # init_config function adds one so this should never happen
   elif len(global_configs) == 0:
-    raise RuntimeError("No global config has been registered")
+    raise RuntimeError("No config object has been registered")
 
   # If multiple config objects has been marked as global
   raise RuntimeError(
@@ -117,3 +118,42 @@ def find_arguments(callable_):
     if param.default == inspect.Parameter.empty
   ]
   return list(parameters), required_args
+
+
+def check_allowed_input_argument(config_obj, name, deep_name):
+  ''' Raises error if the input argument isn't marked as "allowed" '''
+  allowed_args = get_allowed_cli_args(config_obj)
+  if name not in allowed_args:
+    err_msg = f"Input argument '{deep_name}' is not allowed to be overwritten. See --help for more info"
+    raise ValueError(err_msg)
+
+
+def get_allowed_cli_args(config_obj):
+  ''' Returns the attribute names that can be be overwritten from command line input.
+  Raises AttributeError if an attribute doesn't exist '''
+  allowed_items = config_obj.allowed_cli_args()
+  if allowed_items is None:
+    allowed_items = []
+  if isinstance(allowed_items, str):
+    allowed_items = [allowed_items]
+  err_msg = (
+    f"Expected return type 'String, None or Iterable' for {type(config_obj).__name__}'s allowed_cli_args method, "
+    f"was {allowed_items} with type {type(allowed_items)}")
+  assert isinstance(allowed_items, Iterable), err_msg
+
+  attributes = config_obj.get_parameters()
+  for item in allowed_items:
+    if item not in attributes:
+      err_msg = (
+        f"'{type(config_obj).__name__}' has no attribute '{item}' and should not be marked as an allowed command line "
+        "input argument")
+      raise AttributeError(err_msg)
+  return allowed_items
+
+
+def post_init(config_obj):
+  ''' Recursively calls the post_init method on a config and it's attributes '''
+  config_obj.post_init()
+  for _, val in config_obj.get_parameters(copy=False).items():
+    if is_config_class(val):
+      post_init(val)

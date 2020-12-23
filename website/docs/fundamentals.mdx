@@ -12,7 +12,7 @@ Anyfig allows you to specify configs in Python code. Instead of defining values 
 import anyfig
 
 @anyfig.config_class  # Registers the class with anyfig
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Config-values goes as attributes
     self.experiment_note = 'Changed stuff'
@@ -32,7 +32,7 @@ from pathlib import Path
 import time
 
 @anyfig.config_class  # Registers the class with anyfig
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Config-values goes as attributes
     self.experiment_note = 'Changed stuff'
@@ -53,7 +53,7 @@ from pathlib import Path
 import time
 
 @anyfig.config_class  # Registers the class with anyfig
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Config-parameters goes as attributes
     self.experiment_note = 'Changed stuff'
@@ -81,7 +81,7 @@ import time
 from myproject.io import FileWriter
 
 @anyfig.config_class  # Registers the class with anyfig
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Config-parameters goes as attributes
     self.experiment_note = 'Changed stuff'
@@ -98,18 +98,21 @@ writer = FileWriter(config.save_directory)
 
 
 ### Global Config
-Most people pass the config-object around their code, accessing the config-values at various places to initilize their other components. Anyfig offers an alternative to this. The anyfig.init_config function registers the config-object with Anyfig, allowing it to be accessed from any file with the anyfig.cfg() function. 
+Most people pass the config-object around their code, accessing the config-values at various places to initilize their other components. Anyfig offers an alternative to this. The `anyfig.init_config()` function registers the config-object with Anyfig, allowing it to be accessed from any file through `anyfig.get_config()` or the proxy class `anyfig.global_cfg`.
 
- Global objects are often considered bad practice and is thus _not recommended_ but often very practical from small projects or experimentation. The problem is allevited in Anyfig's case as **config-objects are immutable** by default, avoiding confusion if multiple components were to change the same config-values.
+Global objects are often considered bad practice because multiple components can change the same global object which complicates understandability and debugging. Anyfig's config-objects are **immutable by default** to mitigate this.
 
 ```python title="my_project/another_file.py"
-import anyfig
+from anyfig import global_cfg, get_config
 
-class SomeClass():
+class SomeClass:
   def __init__(self):
-    config = anyfig.cfg()  # Returns the config object registered in Anyfig
-    print(config.start_time)  # Access config-values with the dot notation
-    # ... Use config-values in program
+    # Access the config directly through an instance of the GlobalConfig helper class
+    self.save_dir = global_cfg.save_directory
+
+    # Or get the actual config-object. This is needed for e.g. isinstance(...) checks
+    config = get_config()
+    self.save_dir = config.save_directory
 ```
 
 ## Saving & Loading

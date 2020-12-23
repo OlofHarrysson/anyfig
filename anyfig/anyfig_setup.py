@@ -33,22 +33,20 @@ def init_config(default_config, cli_args=None):
   # Create config
   config_str = cli_args.pop('config', default_config.__name__)
   config = create_config(config_str)
+  fields.validate_fields(config)
 
   # Print config help
-  if 'help' in cli_args:
-    config_classes = list(figutils.get_config_classes())
-    print(
-      f"Available config classes {config_classes}. Set config with --config=OtherConfigClass\n",
-      f"\nCurrent config is '{config_str}'. The available input arguments are")
-
-    help_string = config.comments_string()
-    print(help_string)
+  if 'help' in cli_args or 'h' in cli_args:
+    print(config.cli_help())
     sys.exit(0)
 
   # Overwrite parameters via optional input flags
   config = overwrite(config, cli_args)
 
-  # Resolve required values
+  # Perform deep post init after input flags
+  figutils.post_init(config)
+
+  # Unwrap the field values
   fields.resolve_fields(config)
 
   # Freezes config
@@ -110,20 +108,20 @@ def overwrite(main_config_obj, args):
     config_obj = main_config_obj
     config_class = type(config_obj).__name__
 
-    for key_part in outer_keys:
+    for key_idx, key_part in enumerate(argument_key.split('.')):
       err_msg = f"{base_err_msg}. '{key_part}' isn't an attribute in '{config_class}'"
       assert hasattr(config_obj, key_part), err_msg
 
-      config_obj = getattr(config_obj, key_part)
-      config_class = type(config_obj).__name__
-      err_msg = f"{base_err_msg}. '{'.'.join(outer_keys)}' isn't a registered Anyfig config class"
-      assert figutils.is_config_class(config_obj), err_msg
+      # Check if the config allows the argument
+      figutils.check_allowed_input_argument(config_obj, key_part, argument_key)
 
-    # Error if trying to set unknown attribute key
-    err_msg = f"{base_err_msg}. '{inner_key}' isn't an attribute in '{config_class}'"
-    assert inner_key in vars(config_obj), err_msg
+      # Check if the outer attributes are config classes
+      if key_idx < len(outer_keys):
+        config_obj = getattr(config_obj, key_part)
+        config_class = type(config_obj).__name__
+        err_msg = f"{base_err_msg}. '{'.'.join(outer_keys)}' isn't a registered Anyfig config class"
+        assert figutils.is_config_class(config_obj), err_msg
 
-    # Class definition
     value_class = type(getattr(config_obj, inner_key))
     base_err_msg = f"Input argument '{argument_key}' with value {val} can't create an object of the expected type"
 
@@ -134,9 +132,14 @@ def overwrite(main_config_obj, args):
     # Create new object that follows the InterfaceField's rules
     elif issubclass(value_class, fields.InterfaceField):
       field = getattr(config_obj, inner_key)
+
+      if isinstance(value_class, fields.InputField):
+        value_class = field.type_pattern
+      else:
+        value_class = type(field.value)
+
       try:
-        # TODO: Naive solution. Doesn't handle e.g. typing.Union[Path, str]
-        val = field.type_pattern(val)
+        val = value_class(val)
       except Exception as e:
         err_msg = f"{base_err_msg} {field.type_pattern}. {e}"
         raise RuntimeError(err_msg) from None

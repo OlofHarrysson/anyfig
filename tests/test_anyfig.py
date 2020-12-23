@@ -30,3 +30,5 @@ def test_duplicate_name(main_config):
 # def test_build_args(target_config):
 #   config = anyfig.init_config(default_config=main_config, cli_args={})
 #   print(config)
+
+# TODO: Test that checks that get_parameters() get the expexted params. When I add more default attributes I also need to change that function

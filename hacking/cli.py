@@ -5,7 +5,7 @@ import argparse
 
 
 @anyfig.config_class  # Registers the class with anyfig
-class MyConfig():
+class MyConfig:
   def __init__(self):
     # Config-parameters goes as attributes
     self.experiment_note = 'Changed stuff'

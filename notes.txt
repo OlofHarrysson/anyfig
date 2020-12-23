@@ -3,28 +3,23 @@ Support json - Have it work out of the box for configs that are pure json-types.
 Versioning support - I'd like to create a way to keep track of / load old configs. Something like a versioning system. Perhaps save this information alongside the config, or create a config-component that has the versioning elements and can be added into a mainconfig. Could add git information via gitpython (or show users how to do it). I like a built in versioning config-class that can save version number, creation time, git commit, maybe the entrypoint script filename
 
 
-Implement accessing config values with square brackets/get(name, default_value)? __get_item__
-
-name wrangling with double underscore? __build_target
-
-
-Post init to help constructions objects from input arguments? To put e.g. objects of lists into the config they can't take input arguments.
-
 Can I use the "with" statement to maybe say with Anyfig.OnlyOverwrite(self) or something to make sure that people don't add new attributes in configs instead of overwritting existing attributes?
-Or something like with Anyfig.JsonCompatible() that checks that all attributes are json-compatible / have saving+loading functions?
-Or marks a config as allowed/dissallowed from cli
-Or used for the helpstring?
+"with" statement to set config attributes without having to set frozen(False) then back to frozen(True)
 
-Some kind of help string about the program that can be sent to init_config or place in a config? for --help output
+Test frozen for nested obejcts
 
-A way to control which arguments that can be overwritten by cli/visible by the --help. I don't see a good way to do this that doesn't require lots of maintainence for the user. Better to do an opt-in system than an opt-out, so whitelist the ones you want exposed.
-Should also be able to say if the flag should be ignored by Anyfig or raise an error.
+Move _frozen and other default attributes to a function so it's defined at one place
 
-https://github.com/OlofHarrysson/anyfig
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OlofHarrysson/anyfig/master)
+license as a button in github
 
-https://mybinder.org/v2/gh/OlofHarrysson/anyfig/master?filepath=examples/online_demo.ipynb
-TODO: Test anyfig in a notebook. Maybe have to change the way classes are registered. How to handle input parameters in notebook?
+Make target classes have a special attribute that holds the dict arguments? Good is that you can put other stiff in there, but bad is that it becomes another thing you need to remember about anyfig
+
+type for target class for isinstance check
+
+Assume unchanged instead of that ignore thing in git for user configs? It had some problems when changing branches as git couldn't handle.
+
+--help doesn't work with type hints
+Don't allow --help (or -h in config)
 
 
 ~~~~~~ WEBSITE ~~~~~~
@@ -36,8 +31,7 @@ Some sort of info on the main page.
 
 ~~~~~~ Release 0.2.0 ~~~~~~
 dict cli-arguments readme
+cli_input readme
 readme save/load. Also write why its difficult
-
-
-Off topic:
-AI to read lips. Can train with videos that has subtitles. Pretrain to classify the words within a sentence and then let it predict the word from scratch.
+post_init readme. Is this feature done? post init can be done to validate config or somethink
+allowed_cli_args readme
