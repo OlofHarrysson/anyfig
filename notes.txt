@@ -6,20 +6,9 @@ Versioning support - I'd like to create a way to keep track of / load old config
 Can I use the "with" statement to maybe say with Anyfig.OnlyOverwrite(self) or something to make sure that people don't add new attributes in configs instead of overwritting existing attributes?
 "with" statement to set config attributes without having to set frozen(False) then back to frozen(True)
 
-Test frozen for nested obejcts
-
-Move _frozen and other default attributes to a function so it's defined at one place
-
 license as a button in github
 
-Make target classes have a special attribute that holds the dict arguments? Good is that you can put other stiff in there, but bad is that it becomes another thing you need to remember about anyfig
-
-type for target class for isinstance check
-
 Assume unchanged instead of that ignore thing in git for user configs? It had some problems when changing branches as git couldn't handle.
-
---help doesn't work with type hints
-Don't allow --help (or -h in config)
 
 
 ~~~~~~ WEBSITE ~~~~~~

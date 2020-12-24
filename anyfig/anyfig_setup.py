@@ -187,11 +187,14 @@ def config_class(cls=None, *, target=None):
 
     # Wrap init function to add attributes
     def init_wrapper(func):
+      default_attributes = figutils.default_config_attributes()
+
       @wraps(func)
       def wrapper(*args, **kwargs):
         self = args[0]
-        self._frozen = False
-        self._build_target = target
+        self._frozen = default_attributes['_frozen']
+        self._build_target = target if target else default_attributes[
+          '_build_target']
         func(*args, **kwargs)
 
       return wrapper

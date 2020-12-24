@@ -35,8 +35,8 @@ class MasterConfig(ABC):
 
   def get_parameters(self, copy=True):
     ''' Returns the config attributes. Doesn't include Anyfig built-ins '''
-    builtins = ['_frozen', '_build_target']
-    params = {k: v for k, v in vars(self).items() if k not in builtins}
+    default_attrs = figutils.default_config_attributes()
+    params = {k: v for k, v in vars(self).items() if k not in default_attrs}
     if copy:
       return deepcopy(params)
     return params

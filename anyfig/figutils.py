@@ -12,6 +12,11 @@ def get_website():
   return 'https://anyfig.now.sh/'
 
 
+def default_config_attributes():
+  ''' Default attributes every config class instance will have '''
+  return dict(_frozen=False, _build_target=None)
+
+
 def register_config_class(class_name, class_def):
   ''' Saves the config class name and definition '''
   err_msg = (

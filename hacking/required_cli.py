@@ -10,7 +10,7 @@ from anyfig import print_utils
 class MyConfig:
   def __init__(self):
     # Note help
-    self.experiment_note: str = 'Changed stuff'
+    self.experiment_note: int = 'Changed stuff'
     # Start help
     self.start_time = time.time()
 
@@ -40,9 +40,6 @@ class InnerConfig:
     # An integer between the values of 1 and 10 because the world has never seen such apples
     self.inner = 'innner'
     self.inner2 = 'innner2'
-
-  def allowed_cli_args(self):
-    return 11
 
 
 class InnerConfig2:
