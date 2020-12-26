@@ -1,9 +1,19 @@
 import anyfig
-# from anyfig import input_argument as inp_arg
 from pathlib import Path
 import time
-import typing
-from anyfig import print_utils
+
+
+class Unfrozen:
+  def __init__(self, config):
+    self.config = config
+    self.frozen_enter = config._frozen
+    config.frozen(False)
+
+  def __enter__(self):
+    return self.config
+
+  def __exit__(self, exc_type, exc_val, exc_tb):
+    self.config.frozen(self.frozen_enter)
 
 
 @anyfig.config_class  # Registers the class with anyfig
@@ -17,21 +27,6 @@ class MyConfig:
     # The inner config obj
     self.innerfig = InnerConfig()
 
-    # self.help = 'heeelp'
-
-  # def allowed_cli_args(self):
-  #   pass
-
-  # def cli_help(self):
-  #   hej = "YOOOLLOOF"
-  #   cmt = print_utils.cli_help(self)
-  #   return hej + cmt
-  # return "YOOOLLOOF"
-
-  # return ['start_time1']
-  # return 'start_time', 'innerfig'
-  # return 'start_time'
-
 
 @anyfig.config_class
 class InnerConfig:
@@ -39,14 +34,19 @@ class InnerConfig:
 
     # An integer between the values of 1 and 10 because the world has never seen such apples
     self.inner = 'innner'
-    self.inner2 = 'innner2'
-
-
-class InnerConfig2:
-  def __init__(self):
-    # Note help
-    self.inner = 'innner2'
 
 
 config = anyfig.init_config(default_config=MyConfig)
 print(config)
+
+# config.start_time = 123
+
+# with Unfrozen(config):
+with config.frozen(False):
+  config.start_time = 123
+# with some_lock:
+
+config.start_time = 123
+
+# with open() as f:
+#   lines = f.read().splitlines()

@@ -36,7 +36,10 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .pytest_cache
 
 test: ## run tests quickly with the default Python
-	pytest
+	pytest tests
+
+test-debug: ## run tests with printing enabled
+	pytest tests -s
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source anyfig -m pytest

@@ -65,7 +65,7 @@ class MasterConfig(ABC):
       value = old_value.update_value(name, value, config_class)
 
     # Raise error if frozen unless we're trying to unfreeze the config
-    if hasattr(self, '_frozen') and self._frozen and name != '_frozen':
+    if getattr(self, '_frozen', False) and name != '_frozen':
       err_msg = f"Can't set attribute '{name}'. Config object is frozen. Unfreeze the config to make it mutable"
       raise FrozenInstanceError(err_msg)
 
