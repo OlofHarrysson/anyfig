@@ -5,159 +5,6 @@ hide_title: False
 ---
 
 
-## anyfig.anyfig_setup
-<div className="section" id="module-anyfig.anyfig_setup">
-<span id="anyfig-anyfig-setup"></span>
-<p className="rubric">Functions</p>
-<table className="longtable docutils align-default">
-<colgroup>
-
-</colgroup>
-<tbody>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.anyfig_setup.config_class" title="anyfig.anyfig_setup.config_class"><code className="xref py py-obj docutils literal notranslate"><span className="pre">config_class</span></code></a></p></td>
-<td><p>Adds Anyfig functionality to the class and registers it to known config classes</p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.anyfig_setup.create_config" title="anyfig.anyfig_setup.create_config"><code className="xref py py-obj docutils literal notranslate"><span className="pre">create_config</span></code></a></p></td>
-<td><p>Instantiates a config class object</p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.anyfig_setup.init_config" title="anyfig.anyfig_setup.init_config"><code className="xref py py-obj docutils literal notranslate"><span className="pre">init_config</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.anyfig_setup.overwrite" title="anyfig.anyfig_setup.overwrite"><code className="xref py py-obj docutils literal notranslate"><span className="pre">overwrite</span></code></a></p></td>
-<td><p>Overwrites parameters with input flags</p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.anyfig_setup.parse_cli_args" title="anyfig.anyfig_setup.parse_cli_args"><code className="xref py py-obj docutils literal notranslate"><span className="pre">parse_cli_args</span></code></a></p></td>
-<td><p>Parses command line input arguments.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-## anyfig.figutils
-<div className="section" id="module-anyfig.figutils">
-<span id="anyfig-figutils"></span>
-<p className="rubric">Functions</p>
-<table className="longtable docutils align-default">
-<colgroup>
-
-</colgroup>
-<tbody>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.figutils.check_allowed_input_argument" title="anyfig.figutils.check_allowed_input_argument"><code className="xref py py-obj docutils literal notranslate"><span className="pre">check_allowed_input_argument</span></code></a></p></td>
-<td><p>Raises error if the input argument isn’t marked as “allowed”</p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.figutils.default_config_attributes" title="anyfig.figutils.default_config_attributes"><code className="xref py py-obj docutils literal notranslate"><span className="pre">default_config_attributes</span></code></a></p></td>
-<td><p>Default attributes every config class instance will have</p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.figutils.find_arguments" title="anyfig.figutils.find_arguments"><code className="xref py py-obj docutils literal notranslate"><span className="pre">find_arguments</span></code></a></p></td>
-<td><p>Returns the arguments and required arguments for a function/class</p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.figutils.get_allowed_cli_args" title="anyfig.figutils.get_allowed_cli_args"><code className="xref py py-obj docutils literal notranslate"><span className="pre">get_allowed_cli_args</span></code></a></p></td>
-<td><p>Returns the attribute names that can be be overwritten from command line input.</p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.figutils.get_config" title="anyfig.figutils.get_config"><code className="xref py py-obj docutils literal notranslate"><span className="pre">get_config</span></code></a></p></td>
-<td><p>Returns the config object that is registered with anyfig</p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.figutils.get_config_classes" title="anyfig.figutils.get_config_classes"><code className="xref py py-obj docutils literal notranslate"><span className="pre">get_config_classes</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.figutils.get_website" title="anyfig.figutils.get_website"><code className="xref py py-obj docutils literal notranslate"><span className="pre">get_website</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.figutils.is_config_class" title="anyfig.figutils.is_config_class"><code className="xref py py-obj docutils literal notranslate"><span className="pre">is_config_class</span></code></a></p></td>
-<td><p>Returns True if the config class definition is registered with anyfig</p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.figutils.load_config" title="anyfig.figutils.load_config"><code className="xref py py-obj docutils literal notranslate"><span className="pre">load_config</span></code></a></p></td>
-<td><p>Loads the config from file</p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.figutils.post_init" title="anyfig.figutils.post_init"><code className="xref py py-obj docutils literal notranslate"><span className="pre">post_init</span></code></a></p></td>
-<td><p>Recursively calls the post_init method on a config and it’s attributes</p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.figutils.register_config_class" title="anyfig.figutils.register_config_class"><code className="xref py py-obj docutils literal notranslate"><span className="pre">register_config_class</span></code></a></p></td>
-<td><p>Saves the config class name and definition</p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.figutils.register_globally" title="anyfig.figutils.register_globally"><code className="xref py py-obj docutils literal notranslate"><span className="pre">register_globally</span></code></a></p></td>
-<td><p>Registers the config with anyfig to be accessible anywhere</p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.figutils.save_config" title="anyfig.figutils.save_config"><code className="xref py py-obj docutils literal notranslate"><span className="pre">save_config</span></code></a></p></td>
-<td><p>Serialize and saves the config.</p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.figutils.unregister_config_classes" title="anyfig.figutils.unregister_config_classes"><code className="xref py py-obj docutils literal notranslate"><span className="pre">unregister_config_classes</span></code></a></p></td>
-<td><p>Unregisteres config classes with anyfig</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-## anyfig.dummyfields
-<div className="section" id="module-anyfig.dummyfields">
-<span id="anyfig-dummyfields"></span>
-<p className="rubric">Functions</p>
-<table className="longtable docutils align-default">
-<colgroup>
-
-</colgroup>
-<tbody>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.dummyfields.cli_input" title="anyfig.dummyfields.cli_input"><code className="xref py py-obj docutils literal notranslate"><span className="pre">cli_input</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.dummyfields.constant" title="anyfig.dummyfields.constant"><code className="xref py py-obj docutils literal notranslate"><span className="pre">constant</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.dummyfields.field" title="anyfig.dummyfields.field"><code className="xref py py-obj docutils literal notranslate"><span className="pre">field</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.dummyfields.raise_error" title="anyfig.dummyfields.raise_error"><code className="xref py py-obj docutils literal notranslate"><span className="pre">raise_error</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-## anyfig.fields
-<div className="section" id="module-anyfig.fields">
-<span id="anyfig-fields"></span>
-<p className="rubric">Functions</p>
-<table className="longtable docutils align-default">
-<colgroup>
-
-</colgroup>
-<tbody>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.fields.cli_input" title="anyfig.fields.cli_input"><code className="xref py py-obj docutils literal notranslate"><span className="pre">cli_input</span></code></a></p></td>
-<td><p>Returns an InputField</p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.fields.constant" title="anyfig.fields.constant"><code className="xref py py-obj docutils literal notranslate"><span className="pre">constant</span></code></a></p></td>
-<td><p>Returns a ConstantField</p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.fields.field" title="anyfig.fields.field"><code className="xref py py-obj docutils literal notranslate"><span className="pre">field</span></code></a></p></td>
-<td><p>Returns an InterfaceField</p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.fields.resolve_fields" title="anyfig.fields.resolve_fields"><code className="xref py py-obj docutils literal notranslate"><span className="pre">resolve_fields</span></code></a></p></td>
-<td><p>Removes wrapping for InterfaceFields</p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.fields.validate_fields" title="anyfig.fields.validate_fields"><code className="xref py py-obj docutils literal notranslate"><span className="pre">validate_fields</span></code></a></p></td>
-<td><p>Validates that fields has a value</p></td>
-</tr>
-</tbody>
-</table>
-<p className="rubric">Classes</p>
-<table className="longtable docutils align-default">
-<colgroup>
-
-</colgroup>
-<tbody>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.fields.ConstantField" title="anyfig.fields.ConstantField"><code className="xref py py-obj docutils literal notranslate"><span className="pre">ConstantField</span></code></a></p></td>
-<td><p>Used to define config-attribute that can’t be overriden</p></td>
-</tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.fields.InputField" title="anyfig.fields.InputField"><code className="xref py py-obj docutils literal notranslate"><span className="pre">InputField</span></code></a></p></td>
-<td><p>Used to define required config-attribute from command line input</p></td>
-</tr>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.fields.InterfaceField" title="anyfig.fields.InterfaceField"><code className="xref py py-obj docutils literal notranslate"><span className="pre">InterfaceField</span></code></a></p></td>
-<td><p>Used to define allowed values for a config-attribute</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-
 ## anyfig.config_functions
 <div className="section" id="module-anyfig.config_functions">
 <span id="anyfig-config-functions"></span>
@@ -167,7 +14,7 @@ hide_title: False
 
 </colgroup>
 <tbody>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.config_functions.MasterConfig" title="anyfig.config_functions.MasterConfig"><code className="xref py py-obj docutils literal notranslate"><span className="pre">MasterConfig</span></code></a></p></td>
+<tr className="row-odd"><td><p><a className="reference internal" href="config_functions#MasterConfig" title="anyfig.config_functions.MasterConfig"><code className="xref py py-obj docutils literal notranslate"><span className="pre">MasterConfig</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -183,11 +30,139 @@ hide_title: False
 
 </colgroup>
 <tbody>
-<tr className="row-odd"><td><p><a className="reference internal" href="anyfig.print_utils.cli_help" title="anyfig.print_utils.cli_help"><code className="xref py py-obj docutils literal notranslate"><span className="pre">cli_help</span></code></a></p></td>
+<tr className="row-odd"><td><p><a className="reference internal" href="print_utils#cli_help" title="anyfig.print_utils.cli_help"><code className="xref py py-obj docutils literal notranslate"><span className="pre">cli_help</span></code></a></p></td>
 <td><p>Returns string for config’s cli-arguments with corresponding comments</p></td>
 </tr>
-<tr className="row-even"><td><p><a className="reference internal" href="anyfig.print_utils.extract_config_obj_comments" title="anyfig.print_utils.extract_config_obj_comments"><code className="xref py py-obj docutils literal notranslate"><span className="pre">extract_config_obj_comments</span></code></a></p></td>
+<tr className="row-even"><td><p><a className="reference internal" href="print_utils#extract_config_obj_comments" title="anyfig.print_utils.extract_config_obj_comments"><code className="xref py py-obj docutils literal notranslate"><span className="pre">extract_config_obj_comments</span></code></a></p></td>
 <td><p>Extracts comments for a config object and any config-class children objects</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+## anyfig.anyfig_setup
+<div className="section" id="module-anyfig.anyfig_setup">
+<span id="anyfig-anyfig-setup"></span>
+<p className="rubric">Functions</p>
+<table className="longtable docutils align-default">
+<colgroup>
+
+</colgroup>
+<tbody>
+<tr className="row-odd"><td><p><a className="reference internal" href="anyfig_setup#config_class" title="anyfig.anyfig_setup.config_class"><code className="xref py py-obj docutils literal notranslate"><span className="pre">config_class</span></code></a></p></td>
+<td><p>Adds Anyfig functionality to the class and registers it to known config classes</p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="anyfig_setup#create_config" title="anyfig.anyfig_setup.create_config"><code className="xref py py-obj docutils literal notranslate"><span className="pre">create_config</span></code></a></p></td>
+<td><p>Instantiates a config class object</p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="anyfig_setup#init_config" title="anyfig.anyfig_setup.init_config"><code className="xref py py-obj docutils literal notranslate"><span className="pre">init_config</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="anyfig_setup#overwrite" title="anyfig.anyfig_setup.overwrite"><code className="xref py py-obj docutils literal notranslate"><span className="pre">overwrite</span></code></a></p></td>
+<td><p>Overwrites parameters with input flags</p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="anyfig_setup#parse_cli_args" title="anyfig.anyfig_setup.parse_cli_args"><code className="xref py py-obj docutils literal notranslate"><span className="pre">parse_cli_args</span></code></a></p></td>
+<td><p>Parses command line input arguments.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+## anyfig.figutils
+<div className="section" id="module-anyfig.figutils">
+<span id="anyfig-figutils"></span>
+<p className="rubric">Functions</p>
+<table className="longtable docutils align-default">
+<colgroup>
+
+</colgroup>
+<tbody>
+<tr className="row-odd"><td><p><a className="reference internal" href="figutils#check_allowed_input_argument" title="anyfig.figutils.check_allowed_input_argument"><code className="xref py py-obj docutils literal notranslate"><span className="pre">check_allowed_input_argument</span></code></a></p></td>
+<td><p>Raises error if the input argument isn’t marked as “allowed”</p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="figutils#default_config_attributes" title="anyfig.figutils.default_config_attributes"><code className="xref py py-obj docutils literal notranslate"><span className="pre">default_config_attributes</span></code></a></p></td>
+<td><p>Default attributes every config class instance will have</p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="figutils#find_arguments" title="anyfig.figutils.find_arguments"><code className="xref py py-obj docutils literal notranslate"><span className="pre">find_arguments</span></code></a></p></td>
+<td><p>Returns the arguments and required arguments for a function/class</p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="figutils#get_allowed_cli_args" title="anyfig.figutils.get_allowed_cli_args"><code className="xref py py-obj docutils literal notranslate"><span className="pre">get_allowed_cli_args</span></code></a></p></td>
+<td><p>Returns the attribute names that can be be overwritten from command line input.</p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="figutils#get_config" title="anyfig.figutils.get_config"><code className="xref py py-obj docutils literal notranslate"><span className="pre">get_config</span></code></a></p></td>
+<td><p>Returns the config object that is registered with anyfig</p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="figutils#get_config_classes" title="anyfig.figutils.get_config_classes"><code className="xref py py-obj docutils literal notranslate"><span className="pre">get_config_classes</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="figutils#get_website" title="anyfig.figutils.get_website"><code className="xref py py-obj docutils literal notranslate"><span className="pre">get_website</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="figutils#is_config_class" title="anyfig.figutils.is_config_class"><code className="xref py py-obj docutils literal notranslate"><span className="pre">is_config_class</span></code></a></p></td>
+<td><p>Returns True if the config class definition is registered with anyfig</p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="figutils#load_config" title="anyfig.figutils.load_config"><code className="xref py py-obj docutils literal notranslate"><span className="pre">load_config</span></code></a></p></td>
+<td><p>Loads the config from file</p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="figutils#post_init" title="anyfig.figutils.post_init"><code className="xref py py-obj docutils literal notranslate"><span className="pre">post_init</span></code></a></p></td>
+<td><p>Recursively calls the post_init method on a config and it’s attributes</p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="figutils#register_config_class" title="anyfig.figutils.register_config_class"><code className="xref py py-obj docutils literal notranslate"><span className="pre">register_config_class</span></code></a></p></td>
+<td><p>Saves the config class name and definition</p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="figutils#register_globally" title="anyfig.figutils.register_globally"><code className="xref py py-obj docutils literal notranslate"><span className="pre">register_globally</span></code></a></p></td>
+<td><p>Registers the config with anyfig to be accessible anywhere</p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="figutils#save_config" title="anyfig.figutils.save_config"><code className="xref py py-obj docutils literal notranslate"><span className="pre">save_config</span></code></a></p></td>
+<td><p>Serialize and saves the config.</p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="figutils#unregister_config_classes" title="anyfig.figutils.unregister_config_classes"><code className="xref py py-obj docutils literal notranslate"><span className="pre">unregister_config_classes</span></code></a></p></td>
+<td><p>Unregisteres config classes with anyfig</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+## anyfig.fields
+<div className="section" id="module-anyfig.fields">
+<span id="anyfig-fields"></span>
+<p className="rubric">Functions</p>
+<table className="longtable docutils align-default">
+<colgroup>
+
+</colgroup>
+<tbody>
+<tr className="row-odd"><td><p><a className="reference internal" href="fields#cli_input" title="anyfig.fields.cli_input"><code className="xref py py-obj docutils literal notranslate"><span className="pre">cli_input</span></code></a></p></td>
+<td><p>Returns an InputField</p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="fields#constant" title="anyfig.fields.constant"><code className="xref py py-obj docutils literal notranslate"><span className="pre">constant</span></code></a></p></td>
+<td><p>Returns a ConstantField</p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="fields#field" title="anyfig.fields.field"><code className="xref py py-obj docutils literal notranslate"><span className="pre">field</span></code></a></p></td>
+<td><p>Returns an InterfaceField</p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="fields#resolve_fields" title="anyfig.fields.resolve_fields"><code className="xref py py-obj docutils literal notranslate"><span className="pre">resolve_fields</span></code></a></p></td>
+<td><p>Removes wrapping for InterfaceFields</p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="fields#validate_fields" title="anyfig.fields.validate_fields"><code className="xref py py-obj docutils literal notranslate"><span className="pre">validate_fields</span></code></a></p></td>
+<td><p>Validates that fields has a value</p></td>
+</tr>
+</tbody>
+</table>
+<p className="rubric">Classes</p>
+<table className="longtable docutils align-default">
+<colgroup>
+
+</colgroup>
+<tbody>
+<tr className="row-odd"><td><p><a className="reference internal" href="fields#ConstantField" title="anyfig.fields.ConstantField"><code className="xref py py-obj docutils literal notranslate"><span className="pre">ConstantField</span></code></a></p></td>
+<td><p>Used to define config-attribute that can’t be overriden</p></td>
+</tr>
+<tr className="row-even"><td><p><a className="reference internal" href="fields#InputField" title="anyfig.fields.InputField"><code className="xref py py-obj docutils literal notranslate"><span className="pre">InputField</span></code></a></p></td>
+<td><p>Used to define required config-attribute from command line input</p></td>
+</tr>
+<tr className="row-odd"><td><p><a className="reference internal" href="fields#InterfaceField" title="anyfig.fields.InterfaceField"><code className="xref py py-obj docutils literal notranslate"><span className="pre">InterfaceField</span></code></a></p></td>
+<td><p>Used to define allowed values for a config-attribute</p></td>
 </tr>
 </tbody>
 </table>

@@ -4,67 +4,83 @@ title: fields
 hide_title: false
 ---
 
+
+## constant
 <div class="section" id="anyfig-fields-constant">
-<h1>anyfig.fields.constant<a class="headerlink" href="#anyfig-fields-constant" title="Permalink to this headline">¶</a></h1>
+
 <dl class="py function">
 <dt id="anyfig.fields.constant">
-<code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">constant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">strict</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields.py#L15"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.constant" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">constant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">strict</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields#L15"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.constant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a ConstantField</p>
 </dd></dl>
 </div>
+
+## field
 <div class="section" id="anyfig-fields-field">
-<h1>anyfig.fields.field<a class="headerlink" href="#anyfig-fields-field" title="Permalink to this headline">¶</a></h1>
+
 <dl class="py function">
 <dt id="anyfig.fields.field">
-<code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">field</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_pattern</span><span class="o">=</span><span class="default_value">typing.Any</span></em>, <em class="sig-param"><span class="n">tests</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields.py#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.field" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">field</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_pattern</span><span class="o">=</span><span class="default_value">typing.Any</span></em>, <em class="sig-param"><span class="n">tests</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an InterfaceField</p>
 </dd></dl>
 </div>
+
+## InterfaceField
 <div class="section" id="anyfig-fields-interfacefield">
-<h1>anyfig.fields.InterfaceField<a class="headerlink" href="#anyfig-fields-interfacefield" title="Permalink to this headline">¶</a></h1>
+
 <dl class="py class">
 <dt id="anyfig.fields.InterfaceField">
-<em class="property">class </em><code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">InterfaceField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_pattern</span><span class="o">=</span><span class="default_value">typing.Any</span></em>, <em class="sig-param"><span class="n">tests</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields.py#L55"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.InterfaceField" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">InterfaceField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_pattern</span><span class="o">=</span><span class="default_value">typing.Any</span></em>, <em class="sig-param"><span class="n">tests</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields#L55"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.InterfaceField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used to define allowed values for a config-attribute</p>
 </dd></dl>
 </div>
+
+## resolve_fields
 <div class="section" id="anyfig-fields-resolve-fields">
-<h1>anyfig.fields.resolve_fields<a class="headerlink" href="#anyfig-fields-resolve-fields" title="Permalink to this headline">¶</a></h1>
+
 <dl class="py function">
 <dt id="anyfig.fields.resolve_fields">
-<code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">resolve_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">cli_name</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields.py#L41"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.resolve_fields" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">resolve_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">cli_name</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields#L41"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.resolve_fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes wrapping for InterfaceFields</p>
 </dd></dl>
 </div>
+
+## cli_input
 <div class="section" id="anyfig-fields-cli-input">
-<h1>anyfig.fields.cli_input<a class="headerlink" href="#anyfig-fields-cli-input" title="Permalink to this headline">¶</a></h1>
+
 <dl class="py function">
 <dt id="anyfig.fields.cli_input">
-<code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">cli_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_pattern</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields.py#L20"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.cli_input" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">cli_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_pattern</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields#L20"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.cli_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an InputField</p>
 </dd></dl>
 </div>
+
+## validate_fields
 <div class="section" id="anyfig-fields-validate-fields">
-<h1>anyfig.fields.validate_fields<a class="headerlink" href="#anyfig-fields-validate-fields" title="Permalink to this headline">¶</a></h1>
+
 <dl class="py function">
 <dt id="anyfig.fields.validate_fields">
-<code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">validate_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields.py#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.validate_fields" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">validate_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.validate_fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates that fields has a value</p>
 </dd></dl>
 </div>
+
+## ConstantField
 <div class="section" id="anyfig-fields-constantfield">
-<h1>anyfig.fields.ConstantField<a class="headerlink" href="#anyfig-fields-constantfield" title="Permalink to this headline">¶</a></h1>
+
 <dl class="py class">
 <dt id="anyfig.fields.ConstantField">
-<em class="property">class </em><code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">ConstantField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">strict</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields.py#L107"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.ConstantField" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">ConstantField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">strict</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields#L107"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.ConstantField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used to define config-attribute that can’t be overriden</p>
 </dd></dl>
 </div>
+
+## InputField
 <div class="section" id="anyfig-fields-inputfield">
-<h1>anyfig.fields.InputField<a class="headerlink" href="#anyfig-fields-inputfield" title="Permalink to this headline">¶</a></h1>
+
 <dl class="py class">
 <dt id="anyfig.fields.InputField">
-<em class="property">class </em><code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">InputField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_pattern</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields.py#L122"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.InputField" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">anyfig.fields.</code><code class="sig-name descname">InputField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_pattern</span></em><span class="sig-paren">)</span><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/fields#L122"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.fields.InputField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used to define required config-attribute from command line input</p>
 </dd></dl>
 </div>
