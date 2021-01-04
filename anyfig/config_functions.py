@@ -12,7 +12,8 @@ from . import figutils
 # Class which is used to define functions that goes into every config class
 class MasterConfig(ABC):
   def __init__(self):
-    pass  # Add empty init if config doesn't have one
+    ''' Empty init by default '''
+    pass
 
   def allowed_cli_args(self):
     ''' Returns the attribute names that can be be overwritten from command line input '''

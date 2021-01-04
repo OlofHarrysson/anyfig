@@ -54,23 +54,23 @@ module.exports = {
       },
 
       items: [{
-          to: 'docs/introduction',
-          activeBasePath: 'docs',
-          label: 'Docs',
-          position: 'left',
-        },
+        to: 'docs/introduction',
+        activeBasePath: 'docs',
+        label: 'Docs',
+        position: 'left',
+      },
 
-        {
-          to: 'https://github.com/OlofHarrysson/anyfig',
-          label: 'Github',
-          position: 'left',
-        },
+      {
+        to: 'https://github.com/OlofHarrysson/anyfig',
+        label: 'Github',
+        position: 'left',
+      },
 
-        {
-          to: 'https://mybinder.org/v2/gh/OlofHarrysson/anyfig/master?filepath=examples/online_demo.ipynb',
-          label: 'Online Demo',
-          position: 'left',
-        },
+      {
+        to: 'https://mybinder.org/v2/gh/OlofHarrysson/anyfig/master?filepath=examples/online_demo.ipynb',
+        label: 'Online Demo',
+        position: 'left',
+      },
       ],
     },
     footer: {

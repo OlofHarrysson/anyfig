@@ -17,7 +17,12 @@ module.exports = {
 
     {
       type: 'doc',
-      id: 'API',
+      id: 'api/api-reference',
+    },
+
+    {
+      type: 'doc',
+      id: 'api/anyfig_setup',
     },
 
   ],
