@@ -93,16 +93,14 @@ def read_content(html_filepath):
   return soup.find("div", {"class": "body"}).find("div")
 
 
-def add_docusaurus_metadata(content, md_id, title):
-  return f"---\nid: {id}\ntitle: {title}\n---\n\n" + content
-
-
 def write_markdown(md_filepath, content, md_id, title):
   with open(md_filepath, "w") as f:
-    content = add_docusaurus_metadata(content,
-                                      md_id='api-reference',
-                                      title='API Reference')
+    content = add_docusaurus_metadata(content, md_id, title)
     f.write(content)
+
+
+def add_docusaurus_metadata(content, md_id, title):
+  return f"---\nid: {md_id}\ntitle: {title}\n---\n\n" + content
 
 
 def fix_document(soup):
