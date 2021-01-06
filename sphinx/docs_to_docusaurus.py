@@ -1,23 +1,4 @@
-#!/usr/bin/env python3
-"""
-Takes the output from Sphinx, clean it and send it to Docusaurus.
-
-1. Get four main modules from _build/html/
-    - Extract only the 'body' html and store it as a md file under 
-            ./website/docs/api-{module_name}.md
-
-2. Get all files under _build/html/api/
-    - Extract 'body' html and store it as a md file under
-            ./website/docs/api/{filenames}.md
-
-3. Update 'sidebars.json' with the new markdown files
-    - Update the 'api' section.
-    - Add each module under a sub-directory.
-"""
-"""
-Takes all relevant html files from the html output sphinx folder, parse it with Beautifulsoup, remove unnecessary html data (such as <head>) and
-save a markdown file.
-"""
+# Takes the output from Sphinx, clean it and send it to Docusaurus.
 
 from bs4 import BeautifulSoup
 import glob
@@ -28,15 +9,18 @@ import json
 import inspect
 import anyfig
 from collections import defaultdict
-"""
-PARAMETERS
-"""
 
-# MODULES = ["figutils", "config_functions"]
-# MODULES = ["_autosummary"]
-ROOT_HTML_DIRECTORY = "./build/html"
-ROOT_MD_DIRECTORY = "../website/docs"
-# TODO: Check that they exist
+
+def main():
+  ROOT_HTML_DIRECTORY = Path("./build/html/_autosummary")
+  ROOT_MD_DIRECTORY = Path("../website/docs")
+
+  # make sure folder exists
+  Path(ROOT_MD_DIRECTORY / "api").mkdir(parents=True, exist_ok=True)
+  Path(ROOT_MD_DIRECTORY / "api/source").mkdir(parents=True, exist_ok=True)
+
+  html_modules = convert_modules(ROOT_HTML_DIRECTORY, ROOT_MD_DIRECTORY)
+  convert_root(html_modules, ROOT_MD_DIRECTORY)
 
 
 def get_content(soup):
@@ -68,15 +52,14 @@ def convert_to_docusaurus(soup):
   return doc
 
 
-def to_md(in_html_filepath: str, out_md_filepath: str, id: str, title: str,
-          hide_title: str) -> None:
-  with open(in_html_filepath, "r") as f:
-    soup = BeautifulSoup(f.read(), "html.parser")
-    body = get_content(soup)
+def fix_document(soup):
+  soup = str(soup).replace('¶', '')
 
-  with open(out_md_filepath, "w") as f:
-    content = add_docusaurus_metadata(str(body), id, title, hide_title)
-    f.write(content)
+  # Fix syntax errors
+  soup = soup.replace('class=', 'className=')
+  soup = soup.replace('<col style="width: 10%"/>\n<col style="width: 90%"/>',
+                      '')
+  return soup
 
 
 def convert_modules(ROOT_HTML_DIRECTORY, ROOT_MD_DIRECTORY):
@@ -98,19 +81,35 @@ def convert_modules(ROOT_HTML_DIRECTORY, ROOT_MD_DIRECTORY):
         soup = BeautifulSoup(f.read(), "html.parser")
 
       body = get_content(soup)
-      a = body.find("a", {"class": "reference internal"})
-      release = '0.2.0'  # TODO
+      # print(body)
+      print(html_file.stem)
+      func_defs = body.find_all('dt')
+      for func_def in func_defs:
+        # Add class
+        if not func_def.get("class"):
+          func_def['class'] = 'function-definition'
+
+        # Code tag -> span
+        for code_block in func_def.find_all('code'):
+          code_block.name = 'span'
+
+      # qwe
+      source_link = body.find("a", {"class": "reference internal"})
+      release = 'master'  # TODO: Change to latest release instead?
       module = eval(id_)
       line_number = inspect.findsource(module)[1] + 1
-      url = f"https://github.com/OlofHarrysson/anyfig/blob/{release}/anyfig/{module_name}#L{line_number}"
-      a['href'] = url
+      url = f"https://github.com/OlofHarrysson/anyfig/blob/{release}/anyfig/{module_name}.py#L{line_number}"
+      source_link['href'] = url
 
       # Fix table of content
       title = body.find("h1").extract().text.replace('¶', '').split('.')[-1]
-      print(title)
+      # print(title)
       body = f"\n## {title}\n{body}"
+      body = str(body).replace('¶', '')
+      body = body.replace('reference internal',
+                          'reference internal source-link')
 
-      content.append(str(body))
+      content.append(body)
 
     content = '\n'.join(content)
     content = add_docusaurus_metadata(content, module_name, module_name,
@@ -139,28 +138,6 @@ def convert_root(html_modules, ROOT_MD_DIRECTORY):
                                       id='api-reference',
                                       title='API Reference')
     f.write(content)
-
-
-def get_module_names(MODULE_SOURCE_DIR):
-  module_names = [f.stem for f in MODULE_SOURCE_DIR.glob('**/*.html')]
-  module_names.remove('anyfig')  # TODO
-  module_names.remove('index')  # TODO
-  return module_names
-
-
-def main():
-  ROOT_HTML_DIRECTORY = Path("./build/html/_autosummary")
-  MODULE_SOURCE_DIR = ROOT_HTML_DIRECTORY / '../_modules'
-  ROOT_MD_DIRECTORY = "../website/docs"  # TODO: Change to pathlib __file__
-  module_names = get_module_names(MODULE_SOURCE_DIR)
-
-  # make sure folder exists
-  Path(ROOT_MD_DIRECTORY + "api").mkdir(parents=True, exist_ok=True)
-  Path(ROOT_MD_DIRECTORY + "api/source").mkdir(parents=True, exist_ok=True)
-
-  module_dir = Path(ROOT_HTML_DIRECTORY) / '_autosummary'
-  html_modules = convert_modules(ROOT_HTML_DIRECTORY, ROOT_MD_DIRECTORY)
-  convert_root(html_modules, ROOT_MD_DIRECTORY)
 
 
 if __name__ == '__main__':

@@ -94,7 +94,16 @@ def create_config(config_str):
 
 
 def overwrite(main_config_obj, args):
-  ''' Overwrites parameters with input flags '''
+  """
+  Overwrites parameters with input flags
+
+  Args:
+      main_config_obj (ConfigClass): config instance
+      args (dict): arguments used to overwrite
+
+  Returns:
+      ConfigClass: config instance
+  """
 
   # Sort on nested level to override shallow items first
   args = dict(sorted(args.items(), key=lambda item: item[0].count('.')))

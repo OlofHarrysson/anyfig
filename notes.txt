@@ -15,18 +15,11 @@ Assume unchanged instead of that ignore thing in git for user configs? It had so
 command line tab autocomplete?
 
 ~~~~~~ Docs ~~~~~~
-API Reference
-  Module name
-    Module summary. Func names
-  Module2 name
-    Module summary. Func names. Click on func name, go to its page. Link to source here
-
-Methods for classes
 Remove the ¶ link symbol, or change it.
-Fix source links
-Create table of content for main view. Only for modules, otherwise too cluttered.
-Group by module? Now every function has its own file, nicer to have more in one file to skip switching pages so much
 Sort by line lumber in a file
+Linestart and end in Github? It becomes yellow which is nice.
+Fix highlighting and spacing. Via css? Html?
+Change bottom margin in table on overview page.
 
 ~~~~~~ WEBSITE ~~~~~~
 Style external links

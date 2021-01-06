@@ -1,5 +1,4 @@
 # Minimal makefile for Sphinx documentation
-#
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
@@ -21,4 +20,6 @@ help:
 buildapi: ## Builds api and adds to website
 	rm -rf source/_autosummary
 	rm -rf build
+	rm -rf ../website/docs/api/source
 	make html
+	python docs_to_docusaurus.py

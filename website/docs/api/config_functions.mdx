@@ -9,7 +9,47 @@ hide_title: false
 <div class="section" id="anyfig-config-functions-masterconfig">
 
 <dl class="py class">
-<dt id="anyfig.config_functions.MasterConfig">
-<em class="property">class </em><code class="sig-prename descclassname">anyfig.config_functions.</code><code class="sig-name descname">MasterConfig</code><a class="reference internal" href="https://github.com/OlofHarrysson/anyfig/blob/0.2.0/anyfig/config_functions#L13"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.config_functions.MasterConfig" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="function-definition" id="anyfig.config_functions.MasterConfig">
+<em class="property">class </em><span class="sig-prename descclassname">anyfig.config_functions.</span><span class="sig-name descname">MasterConfig</span><a class="reference internal source-link" href="https://github.com/OlofHarrysson/anyfig/blob/master/anyfig/config_functions.py#L12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.config_functions.MasterConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Defines functions that goes into every config class</p>
+<dl class="py method">
+<dt class="function-definition" id="anyfig.config_functions.MasterConfig.allowed_cli_args">
+<span class="sig-name descname">allowed_cli_args</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal source-link" href="../../_modules/anyfig/config_functions.html#MasterConfig.allowed_cli_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.config_functions.MasterConfig.allowed_cli_args" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the attribute names that can be be overwritten from command line input</p>
+</dd></dl>
+<dl class="py method">
+<dt class="function-definition" id="anyfig.config_functions.MasterConfig.build">
+<span class="sig-name descname">build</span><span class="sig-paren">(</span><em class="sig-param"><span class="n">external_args</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal source-link" href="../../_modules/anyfig/config_functions.html#MasterConfig.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.config_functions.MasterConfig.build" title="Permalink to this definition"></a></dt>
+<dd><p>Instantiates target object connected to config class</p>
+</dd></dl>
+<dl class="py method">
+<dt class="function-definition" id="anyfig.config_functions.MasterConfig.frozen">
+<span class="sig-name descname">frozen</span><span class="sig-paren">(</span><em class="sig-param"><span class="n">freeze</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal source-link" href="../../_modules/anyfig/config_functions.html#MasterConfig.frozen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.config_functions.MasterConfig.frozen" title="Permalink to this definition"></a></dt>
+<dd><p>Freeze/unfreeze the config. Frozen configs are unmutable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>freeze</strong> (<em>bool</em><em>, </em><em>optional</em>) – Freeze config. Defaults to True.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>ConfigClass</em> – Config instance</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="function-definition" id="anyfig.config_functions.MasterConfig.get_parameters">
+<span class="sig-name descname">get_parameters</span><span class="sig-paren">(</span><em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal source-link" href="../../_modules/anyfig/config_functions.html#MasterConfig.get_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.config_functions.MasterConfig.get_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the config attributes. Doesn’t include Anyfig built-ins</p>
+</dd></dl>
+<dl class="py method">
+<dt class="function-definition" id="anyfig.config_functions.MasterConfig.post_init">
+<span class="sig-name descname">post_init</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal source-link" href="../../_modules/anyfig/config_functions.html#MasterConfig.post_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.config_functions.MasterConfig.post_init" title="Permalink to this definition"></a></dt>
+<dd><p>A function that is called after overwriting from command line input</p>
+</dd></dl>
+<dl class="py method">
+<dt class="function-definition" id="anyfig.config_functions.MasterConfig.pretty">
+<span class="sig-name descname">pretty</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal source-link" href="../../_modules/anyfig/config_functions.html#MasterConfig.pretty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anyfig.config_functions.MasterConfig.pretty" title="Permalink to this definition"></a></dt>
+<dd><p>Pretty string representation of the config</p>
+</dd></dl>
+</dd></dl>
 </div>
