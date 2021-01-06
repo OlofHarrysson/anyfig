@@ -15,11 +15,9 @@ Assume unchanged instead of that ignore thing in git for user configs? It had so
 command line tab autocomplete?
 
 ~~~~~~ Docs ~~~~~~
-Remove the ¶ link symbol, or change it.
 Sort by line lumber in a file
 Linestart and end in Github? It becomes yellow which is nice.
-Fix highlighting and spacing. Via css? Html?
-Change bottom margin in table on overview page.
+Source links for methods
 
 ~~~~~~ WEBSITE ~~~~~~
 Style external links
