@@ -1,0 +1,32 @@
+sidebar:
+  Basic Tutorial:
+    - Getting Started: README.md
+    - License: LICENSE
+  Guides:
+    - Fundamentals: website/docs/fundamentals.md
+
+  
+  Important API:
+  - init_config: api/anyfig/anyfig_setup/init_config
+ 
+
+autodocSettings:
+  Public API:
+    language: python
+    INPUT: anyfig
+    EXCLUDE: test tests examples setup.py test.py tests.py
+    EXCLUDE_PATTERNS: '*/tests/* */test/*'
+    includeApi: []
+    excludeApi: []
+    documentSingleUnderscore: false
+    documentStatic: true
+    documentProtected: true
+    extractNonDocComments: false
+    extract_namespace_comments: true
+    sort_by_type: true
+    sort_alphabetically: true
+    separate_defines: false
+    star_mentioned: true
+    star_list: []
+    ALIASES: ''
+    EXAMPLE_PATH: ''
