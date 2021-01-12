@@ -17,7 +17,6 @@ command line tab autocomplete?
 ~~~~~~ Docs ~~~~~~
 Sort by line lumber in a file
 Linestart and end in Github? It becomes yellow which is nice.
-Source links for methods
 
 ~~~~~~ WEBSITE ~~~~~~
 Style external links
