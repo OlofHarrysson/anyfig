@@ -1,3 +1,5 @@
+Have the class inherit from MasterConfig instead of transfering functions possible? Might play better with IDEs
+
 Support json - Have it work out of the box for configs that are pure json-types. Offer ability to extend.
 
 Versioning support - I'd like to create a way to keep track of / load old configs. Something like a versioning system. Perhaps save this information alongside the config, or create a config-component that has the versioning elements and can be added into a mainconfig. Could add git information via gitpython (or show users how to do it). I like a built in versioning config-class that can save version number, creation time, git commit, maybe the entrypoint script filename
@@ -10,17 +12,39 @@ license as a button in github
 
 Assume unchanged instead of that ignore thing in git for user configs? It had some problems when changing branches as git couldn't handle.
 
+command line tab autocomplete?
+
+~~~~~~ Docs ~~~~~~
+Sort by line lumber in a file
+Linestart and end in Github? It becomes yellow which is nice.
 
 ~~~~~~ WEBSITE ~~~~~~
 Style external links
+Online demo on introduction is broken
 
 Some sort of info on the main page.
 - Add some gifs of code being written?
 
 
-~~~~~~ Release 0.2.0 ~~~~~~
+~~~~~~ Release 0.3.0 ~~~~~~
 dict cli-arguments readme
 cli_input readme
 readme save/load. Also write why its difficult
 post_init readme. Is this feature done? post init can be done to validate config or somethink
 allowed_cli_args readme
+
+
+Json/Yaml serialization
+a = 1
+b = 2
+inner = InnerConfig()
+
+{
+  __anyfig_config_class = MainConfig 
+  a = 1
+  b = 2
+  inner = {
+    __config_class= InnerConfig
+    innnnn = "in"
+  }
+}

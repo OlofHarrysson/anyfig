@@ -9,10 +9,15 @@ from .fields import InterfaceField
 from . import figutils
 
 
-# Class which is used to define functions that goes into every config class
 class MasterConfig(ABC):
+  """
+  Defines functions that goes into every config class
+  """
   def __init__(self):
-    pass  # Add empty init if config doesn't have one
+    """
+    Empty init by default
+    """
+    pass
 
   def allowed_cli_args(self):
     ''' Returns the attribute names that can be be overwritten from command line input '''
@@ -26,7 +31,15 @@ class MasterConfig(ABC):
     return print_utils.cli_help(self)
 
   def frozen(self, freeze=True):
-    ''' Freeze/unfreeze config '''
+    """
+    Freeze/unfreeze the config. Frozen configs are unmutable
+
+    Args:
+        freeze (bool, optional): Freeze config. Defaults to True.
+
+    Returns:
+        ConfigClass: Config instance
+    """
     self._frozen = freeze
     for _, val in self.get_parameters(copy=False).items():
       if figutils.is_config_class(val):

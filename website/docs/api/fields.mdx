@@ -1,0 +1,88 @@
+---
+id: fields
+title: fields
+---
+
+
+## constant
+<div className="section" id="anyfig-fields-constant">
+
+<dl className="py function">
+<dt className="function-definition" id="anyfig.fields.constant">
+<span className="sig-prename descclassname">anyfig.fields.</span><span className="sig-name descname">constant</span><span className="sig-paren">(</span><em className="sig-param"><span className="n">value</span></em>, <em className="sig-param"><span className="n">strict</span><span className="o">=</span><span className="default_value">False</span></em><span className="sig-paren">)</span><a className="reference internal source-link" href="https://github.com/OlofHarrysson/anyfig/blob/master/anyfig/fields.py#L15"><span className="viewcode-link">[source]</span></a><a className="headerlink" href="#anyfig.fields.constant" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a ConstantField</p>
+</dd></dl>
+</div>
+
+## field
+<div className="section" id="anyfig-fields-field">
+
+<dl className="py function">
+<dt className="function-definition" id="anyfig.fields.field">
+<span className="sig-prename descclassname">anyfig.fields.</span><span className="sig-name descname">field</span><span className="sig-paren">(</span><em className="sig-param"><span className="n">type_pattern</span><span className="o">=</span><span className="default_value">typing.Any</span></em>, <em className="sig-param"><span className="n">tests</span><span className="o">=</span><span className="default_value">None</span></em><span className="sig-paren">)</span><a className="reference internal source-link" href="https://github.com/OlofHarrysson/anyfig/blob/master/anyfig/fields.py#L10"><span className="viewcode-link">[source]</span></a><a className="headerlink" href="#anyfig.fields.field" title="Permalink to this definition"></a></dt>
+<dd><p>Returns an InterfaceField</p>
+</dd></dl>
+</div>
+
+## InterfaceField
+<div className="section" id="anyfig-fields-interfacefield">
+
+<dl className="py class">
+<dt className="function-definition" id="anyfig.fields.InterfaceField">
+<em className="property">class </em><span className="sig-prename descclassname">anyfig.fields.</span><span className="sig-name descname">InterfaceField</span><span className="sig-paren">(</span><em className="sig-param"><span className="n">type_pattern</span><span className="o">=</span><span className="default_value">typing.Any</span></em>, <em className="sig-param"><span className="n">tests</span><span className="o">=</span><span className="default_value">None</span></em><span className="sig-paren">)</span><a className="reference internal source-link" href="https://github.com/OlofHarrysson/anyfig/blob/master/anyfig/fields.py#L55"><span className="viewcode-link">[source]</span></a><a className="headerlink" href="#anyfig.fields.InterfaceField" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code className="xref py py-class docutils literal notranslate"><span className="pre">object</span></code></p>
+<p>Used to define allowed values for a config-attribute</p>
+</dd></dl>
+</div>
+
+## resolve_fields
+<div className="section" id="anyfig-fields-resolve-fields">
+
+<dl className="py function">
+<dt className="function-definition" id="anyfig.fields.resolve_fields">
+<span className="sig-prename descclassname">anyfig.fields.</span><span className="sig-name descname">resolve_fields</span><span className="sig-paren">(</span><em className="sig-param"><span className="n">config</span></em>, <em className="sig-param"><span className="n">cli_name</span><span className="o">=</span><span className="default_value">''</span></em><span className="sig-paren">)</span><a className="reference internal source-link" href="https://github.com/OlofHarrysson/anyfig/blob/master/anyfig/fields.py#L41"><span className="viewcode-link">[source]</span></a><a className="headerlink" href="#anyfig.fields.resolve_fields" title="Permalink to this definition"></a></dt>
+<dd><p>Removes wrapping for InterfaceFields</p>
+</dd></dl>
+</div>
+
+## cli_input
+<div className="section" id="anyfig-fields-cli-input">
+
+<dl className="py function">
+<dt className="function-definition" id="anyfig.fields.cli_input">
+<span className="sig-prename descclassname">anyfig.fields.</span><span className="sig-name descname">cli_input</span><span className="sig-paren">(</span><em className="sig-param"><span className="n">type_pattern</span></em><span className="sig-paren">)</span><a className="reference internal source-link" href="https://github.com/OlofHarrysson/anyfig/blob/master/anyfig/fields.py#L20"><span className="viewcode-link">[source]</span></a><a className="headerlink" href="#anyfig.fields.cli_input" title="Permalink to this definition"></a></dt>
+<dd><p>Returns an InputField</p>
+</dd></dl>
+</div>
+
+## validate_fields
+<div className="section" id="anyfig-fields-validate-fields">
+
+<dl className="py function">
+<dt className="function-definition" id="anyfig.fields.validate_fields">
+<span className="sig-prename descclassname">anyfig.fields.</span><span className="sig-name descname">validate_fields</span><span className="sig-paren">(</span><em className="sig-param"><span className="n">config</span></em><span className="sig-paren">)</span><a className="reference internal source-link" href="https://github.com/OlofHarrysson/anyfig/blob/master/anyfig/fields.py#L26"><span className="viewcode-link">[source]</span></a><a className="headerlink" href="#anyfig.fields.validate_fields" title="Permalink to this definition"></a></dt>
+<dd><p>Validates that fields has a value</p>
+</dd></dl>
+</div>
+
+## ConstantField
+<div className="section" id="anyfig-fields-constantfield">
+
+<dl className="py class">
+<dt className="function-definition" id="anyfig.fields.ConstantField">
+<em className="property">class </em><span className="sig-prename descclassname">anyfig.fields.</span><span className="sig-name descname">ConstantField</span><span className="sig-paren">(</span><em className="sig-param"><span className="n">value</span></em>, <em className="sig-param"><span className="n">strict</span></em><span className="sig-paren">)</span><a className="reference internal source-link" href="https://github.com/OlofHarrysson/anyfig/blob/master/anyfig/fields.py#L107"><span className="viewcode-link">[source]</span></a><a className="headerlink" href="#anyfig.fields.ConstantField" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a className="reference internal" href="anyfig.fields.InterfaceField.html#anyfig.fields.InterfaceField" title="anyfig.fields.InterfaceField"><code className="xref py py-class docutils literal notranslate"><span className="pre">anyfig.fields.InterfaceField</span></code></a></p>
+<p>Used to define config-attribute that can’t be overriden</p>
+</dd></dl>
+</div>
+
+## InputField
+<div className="section" id="anyfig-fields-inputfield">
+
+<dl className="py class">
+<dt className="function-definition" id="anyfig.fields.InputField">
+<em className="property">class </em><span className="sig-prename descclassname">anyfig.fields.</span><span className="sig-name descname">InputField</span><span className="sig-paren">(</span><em className="sig-param"><span className="n">type_pattern</span></em><span className="sig-paren">)</span><a className="reference internal source-link" href="https://github.com/OlofHarrysson/anyfig/blob/master/anyfig/fields.py#L122"><span className="viewcode-link">[source]</span></a><a className="headerlink" href="#anyfig.fields.InputField" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a className="reference internal" href="anyfig.fields.InterfaceField.html#anyfig.fields.InterfaceField" title="anyfig.fields.InterfaceField"><code className="xref py py-class docutils literal notranslate"><span className="pre">anyfig.fields.InterfaceField</span></code></a></p>
+<p>Used to define required config-attribute from command line input</p>
+</dd></dl>
+</div>
