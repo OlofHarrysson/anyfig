@@ -1,0 +1,33 @@
+sidebar:
+  Tutorial:
+    - Get Started: docsforge-website/docs/get_started.md
+    - License: LICENSE
+    - Fundamentals: docsforge-website/docs/fundamentals.md
+    - Advanced: docsforge-website/docs/advanced.md
+    - Best Practices: docsforge-website/docs/best-practices.md
+  
+  Important API:
+  - init_config: api/anyfig/anyfig_setup/init_config
+ 
+
+autodocSettings:
+  Public API:
+    language: python
+    INPUT: anyfig
+    EXCLUDE: test tests examples setup.py test.py tests.py
+    EXCLUDE_PATTERNS: '*/tests/* */test/*'
+    includeApi: []
+    excludeApi: []
+    documentSingleUnderscore: false
+    documentStatic: true
+    documentProtected: true
+    extractNonDocComments: false
+    extract_namespace_comments: true
+    sort_by_type: true
+    sort_alphabetically: true
+    separate_defines: false
+    star_mentioned: true
+    star_list: []
+    ALIASES: ''
+    EXAMPLE_PATH: ''
+

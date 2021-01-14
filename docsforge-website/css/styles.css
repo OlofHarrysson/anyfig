@@ -1,0 +1,95 @@
+/* Docsforge -> extra css <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/OlofHarrysson/anyfig@master/docsforge-website/styles.css"> */
+
+.heroLogo {
+  align-self: flex-end;
+  animation-duration: 2s;
+  animation-name: jackInTheBox;
+  width: 20vw;
+  max-width: 450px;
+  min-width: 300px;
+}
+
+@keyframes jackInTheBox {
+  from {
+    opacity: 0;
+    transform: scale(0.1) rotate(30deg);
+    transform-origin: center bottom;
+  }
+
+  50% {
+    transform: rotate(-10deg);
+  }
+
+  70% {
+    transform: rotate(3deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.heroInner {
+  margin: 0 auto;
+  max-width: 900px;
+  display: flex;
+  flex-wrap: wrap-reverse;
+}
+
+.heroLeft {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroRight {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.heroProjectTitle {
+  font-weight: 700;
+  font-size: 80px;
+  margin: 0;
+}
+
+.heroProjectTagline {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.heroProjectKeywords {
+  color: #00b838;
+}
+
+.heroProjectKeywordsAlt {
+  color: #ff0074;
+}
+
+.badges {
+  text-align: center;
+  margin-top: 3em;
+}
+
+
+@media only screen and (max-width: 768px) {
+  .heroInner {
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+  }
+
+  .heroProjectTagline {
+    font-size: 30px;
+  }
+
+  .heroLogo {
+    display: block;
+    float: none;
+    margin: 0 auto;
+  }
+
+}

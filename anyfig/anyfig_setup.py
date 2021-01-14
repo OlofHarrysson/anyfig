@@ -94,7 +94,16 @@ def create_config(config_str):
 
 
 def overwrite(main_config_obj, args):
-  ''' Overwrites parameters with input flags '''
+  """
+  Overwrites parameters with input flags
+
+  Args:
+      main_config_obj (ConfigClass): config instance
+      args (dict): arguments used to overwrite
+
+  Returns:
+      ConfigClass: config instance
+  """
 
   # Sort on nested level to override shallow items first
   args = dict(sorted(args.items(), key=lambda item: item[0].count('.')))
@@ -187,11 +196,14 @@ def config_class(cls=None, *, target=None):
 
     # Wrap init function to add attributes
     def init_wrapper(func):
+      default_attributes = figutils.default_config_attributes()
+
       @wraps(func)
       def wrapper(*args, **kwargs):
         self = args[0]
-        self._frozen = False
-        self._build_target = target
+        self._frozen = default_attributes['_frozen']
+        self._build_target = target if target else default_attributes[
+          '_build_target']
         func(*args, **kwargs)
 
       return wrapper

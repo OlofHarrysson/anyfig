@@ -1,0 +1,322 @@
+## Command Line Input
+
+Anyfig offers the functionality to override config-values through command line arguments. Anyfig will throw an error if the user inputs a key that doesn't exist making it possible to **override argument**, not to define new ones. By not allowing new keys, Anyfig protects against misspellings that can result in silent errors.
+
+```python
+import anyfig
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+    self.experiment_note = 'Changed stuff'
+
+config = anyfig.init_config(default_config=MyConfig)
+
+# ~~~ ⬇ Command line ⬇ ~~~
+# config.experiment_note will contain: A new note
+python path/to/file.py --experiment_note='A new note'
+
+# Throws an error due to missing key
+python path/to/file.py --xperiment_note='A new note'
+```
+
+### Argument Types
+Google's [Fire project](https://github.com/google/python-fire) is used to parse command line arguments' types and validity. It support any Python literals (numbers, strings, tuples, lists, dictionaries, sets). Read more about how Fire [handles parsing](https://github.com/google/python-fire/blob/master/docs/guide.md#argument-parsing). 
+
+ A problem arises when one wants to override a non-literal, like a Pathlib Path, from the command line. Anyfig solves this by parsing the input to a Python literal and use that to create a new object from the class definition of the old value.
+
+```python
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+    self.save_directory = Path('output')
+
+config = anyfig.init_config(default_config=MyConfig)
+
+# ~~~ ⬇ Command line ⬇ ~~~
+python path/to/file.py --save_directory='other_output'
+# config.save_directory will be a Path object with value: other_output
+# It's created by wrapping the input string in a Path object: Path('other_output')
+```
+
+### Command Line Help
+Help for the config-options are exposed to the command line when the user inputs the --help flag.
+
+```python
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+
+    # Describes the thought behind the experiment
+    self.experiment_note = 'Changed stuff'
+
+    ''' Supports
+    multiline
+    comments '''
+    self.save_directory = Path('output')
+
+    self.some_values_need_no_comment = 1
+
+# ~~~ ⬇ Command line ⬇ ~~~
+python path/to/file.py --help
+
+# ~~~ ⬇ Output ⬇ ~~~
+Available config classes ['MyConfig']
+Current config is 'MyConfig'. Set config with --config=OtherConfigClass
+
+--experiment_note (str):                Describes the thought behind the experiment
+--save_directory (PosixPath):           Supports
+                                        multiline
+                                        comments
+--some_values_need_no_comment (int):
+```
+
+## Multiple Config Classes
+
+Sometimes it's useful to have multiple config-classes. Perhaps one config for every main script or one config for normal use and one for debugging. The ability to create multiple config-classes is very powerful and essential to Anyfig.
+
+One can choose which config-class to use via the command line. If a config-class is not supplied, it will default to the config-class given in the anyfig.init_config function. 
+
+
+```python
+import anyfig
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+    self.experiment_note = 'Changed stuff'
+
+@anyfig.config_class
+class SecondConfig:
+  def __init__(self):
+    self.experiment_note = 'Number 2'
+    self.anyfig_tip = 'Configs can contain different values from each other'
+
+# The "default_config" argument decides which class is used to create the config
+config = anyfig.init_config(default_config=MyConfig)
+
+# ~~~ ⬇ Command line ⬇ ~~~
+# config.experiment_note will contain: Changed stuff
+python path/to/file.py
+
+# config.experiment_note will contain: Number 2
+python path/to/file.py --config=SecondConfig
+
+# It's possible to override config-classes and values at the same time
+# config.experiment_note will contain: A new note
+python path/to/file.py --config=SecondConfig --experiment_note="A new note"
+```
+
+### Inheritance
+<details><summary>What's the object oriented way to become wealthy?</summary>
+💰 Inheritance
+</details>
+
+For situations where multiple config-classes are similar to one another it often makes sense to use inheritance to avoid code duplication.
+
+```python
+import anyfig
+import logging
+
+@anyfig.config_class
+class NormalConfig:
+  def __init__(self):
+    self.logger = logging.getLogger('my-app')
+    # ... More config values
+
+@anyfig.config_class
+class DebugConfig(NormalConfig):
+  def __init__(self):
+    super().__init___()  # Inherits all attributes from NormalConfig
+    self.logger.setLevel(logging.DEBUG)
+
+config = anyfig.init_config(default_config=NormalConfig)
+```
+
+### Modular Configs
+For projects where the configuration grows large it helps to modularize the config-values. Anyfig allows for nested config-classes to reduce code duplication and increase code readability. 
+
+```python
+import anyfig
+
+@anyfig.config_class
+class MainConfig:
+  def __init__(self):
+    self.experiment_note = 'Changed stuff'
+    self.module = ModuleConfig()  # Yo dawg!
+
+@anyfig.config_class
+class ModuleConfig:
+  def __init__(self):
+    self.anyfig_tip = 'Config-classes can be used as parts or wholes'
+
+config = anyfig.init_config(default_config=MainConfig)
+
+# ~~~ ⬇ Command line ⬇ ~~~
+# It's possible to override nested values
+python path/to/file.py --module.anyfig_tip="A new tip"
+```
+
+## Constraining Config-Values
+To avoid unintended behaviours its good practice to validate the config. This can be done by checking that the config-values are the correct types and within a subset of allowed values.
+
+<!-- Anyfig offers this functionality though the field function. -->
+
+### Types
+Anyfig assures that a config-value will have the correct type if it's declared via the `anyfig.field` function.
+
+The field serves as an interface that defines the allowed type for that particular config-value.
+
+That config-value is required to be overridden which allows the developer to e.g. enforce that certain config-values are supplied through the command line input. 
+
+```python
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+    # Define allowed values
+    self.save_directory = anyfig.field(Path)
+
+    # Set value directly, in subclass or from command line input
+    self.save_directory = Path('output')  # OK
+    self.save_directory = 'output'  # Error. Value is not correct type
+```
+
+More complex types are supported through Python's [typing module](https://docs.python.org/3/library/typing.html). This makes it possible to specify that a config-value should be a list of ints, written as `typing.List[int]` or any other schema supported by the [typeguard package](https://github.com/agronholm/typeguard) that performs the type checking.
+
+
+```python
+import anyfig
+from pathlib import Path
+import typing
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+    # Define allowed values
+    self.save_directory = anyfig.field(typing.Union[Path, str])  # Path or String
+
+    # Set value directly, in subclass or from command line input
+    self.save_directory = Path('output')  # OK
+    self.save_directory = 'output'  # OK
+```
+
+### Values
+Validating the type for config-values is a great start but can't protect against unallowed values of that type. For example, if a config-value controls the age of a person, a negative number could pass the type test whilst still being nonsensical.
+
+By allowing developers to define their own tests for the config-values within Anyfig, config-errors are caught in the setup phase with a clear error message instead of creating bugs downsteam.
+
+It also clearly communicates the allowed values in contrast to a json config-file where one has to also read any validation code to understand which options are allowed.
+
+```python title="this_file.py"
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+    # Define tests
+    file_exists = lambda new_value: new_value.exists()
+    self.python_file = anyfig.field(tests=file_exists)
+
+    # Set value directly, in subclass or from command line input
+    self.python_file = Path('this_file.py')  # OK
+    self.python_file = Path('other_file.py')  # Error. File doesn't exist
+```
+
+```python title="this_file.py"
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+    # Define tests
+    file_exists = lambda new_value: new_value.exists()
+    allowed_files = [Path('this_file.py'), Path('other_file.py')]
+    file_allowed = lambda new_value: new_value in allowed_files
+    file_tests = [file_exists, file_allowed]
+    self.python_file = anyfig.field(tests=file_tests)
+
+    # Set value directly, in subclass or from command line input
+    self.python_file = Path('this_file.py')  # OK
+    self.python_file = Path('other_file.py')  # Error. File doesn't exist
+    self.python_file = Path('anyfig.txt')  # Error. File exist but isn't allowed
+```
+
+### Constants
+It's possible to mark attributes as constants to avoid that they are overridden in a subclass or from command line input. Anyfig handles constants as a special case of `anyfig.field(tests=mytest)` where the mytest compares object equality via `==` or the `is` operator.
+
+```python title="this_file.py"
+import anyfig
+from pathlib import Path
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+    self.PYTHON_FILE = anyfig.constant(Path('this_file.py'))
+
+    # Set value directly, in subclass or from command line input
+    self.PYTHON_FILE = Path('this_file.py')  # Ok. Compares with == by default
+    self.PYTHON_FILE = Path('other_file.py')  # Error
+
+@anyfig.config_class
+class StrictConfig:
+  def __init__(self):
+    self.PYTHON_FILE = anyfig.constant(Path('this_file.py'), strict=True)
+
+    # Set value directly, in subclass or from command line input
+    self.PYTHON_FILE = Path('this_file.py')  # Error. Compares with 'is'
+    self.PYTHON_FILE = Path('other_file.py')  # Error
+```
+
+
+## Target Classes
+Config-classes also support configuring objects with dependencies that are not available at config initialization. Connect the config-class to any callable via the "target" argument.
+
+```python
+import anyfig
+from datetime import datetime
+
+@anyfig.config_class(target=datetime)
+class MyConfig:
+  def __init__(self):
+    self.year = 1996  # Specify the values that should be configurable
+    self.month = 12
+
+config = anyfig.init_config(default_config=MyConfig)
+build_args = dict(day=13)  # Dict of non-configurable values 
+date = config.build(build_args)  # Calls the target with both config-values and build_args
+print(date)  # 1996-12-13 00:00:00
+```
+
+```python
+import anyfig
+
+class DataProcesser:
+  def __init__(self, algorithm, data):
+    self.algorithm = algorithm
+    self.data = data
+
+  def solve(self):
+    # Use algorithm & data
+    pass
+
+@anyfig.config_class(target=DataProcesser)
+class MyConfig:
+  def __init__(self):
+    self.algorithm = lambda x: x + 1
+
+config = anyfig.init_config(default_config=MyConfig)
+data = [1, 2, 3]  # Some complex data that can't be put into the config
+build_args = dict(data=data)
+data_processor = config.build(build_args)
+```

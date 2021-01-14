@@ -3,12 +3,9 @@
 
 import pytest
 import anyfig
-from datetime import datetime
+from dataclasses import FrozenInstanceError
 
-# import configs
-
-# from configs import MainConfig
-from configs import main_config
+import conftest  # Config class fixtures
 
 
 def test_types(main_config):
@@ -18,7 +15,7 @@ def test_types(main_config):
   assert type(config.string_var) == str
 
 
-def test_duplicate_name(main_config):
+def test_duplicate_config_name(main_config):
   with pytest.raises(AssertionError):
 
     @anyfig.config_class()
@@ -26,9 +23,28 @@ def test_duplicate_name(main_config):
       pass
 
 
-# @pytest.mark.parametrize('tester_arg', [datetime, datetime])
-# def test_build_args(target_config):
-#   config = anyfig.init_config(default_config=main_config, cli_args={})
-#   print(config)
+class TestFrozenConfig:
+  def test_init(self, main_config):
+    anyfig.init_config(default_config=main_config, cli_args={})
 
-# TODO: Test that checks that get_parameters() get the expexted params. When I add more default attributes I also need to change that function
+  def test_frozen(self, main_config):
+    config = anyfig.init_config(default_config=main_config, cli_args={})
+    with pytest.raises(FrozenInstanceError):
+      config.int_var = 2
+
+  def test_unfreeze(self, main_config):
+    config = anyfig.init_config(default_config=main_config, cli_args={})
+    config.frozen(False).int_var = 2
+
+  def test_refreeze(self, main_config):
+    config = anyfig.init_config(default_config=main_config, cli_args={})
+    with pytest.raises(FrozenInstanceError):
+      config.frozen(False).frozen().int_var = 2
+
+  def test_nested(self, main_config):
+    config = anyfig.init_config(default_config=main_config, cli_args={})
+    with pytest.raises(FrozenInstanceError):
+      config.innerfig.inner = 'new'
+
+    config.frozen(False).innerfig.inner = 'new'
+    config.frozen().innerfig.frozen(False).inner = 'new'

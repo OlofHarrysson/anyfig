@@ -1,9 +1,3 @@
----
-id: best-practices
-title: Best Practices
-sidebar_label: Best Practices
----
-
 ## Config Structure
 
 Programs with simple configuration options most likely only need a single config-file, or not even that if the config is defined in the program's main file. As the configurations become more complex, it's better to set up a system to organize them.
@@ -26,11 +20,14 @@ One good approach is to create a configs directory next to the program's main Py
 
 ### User Configs
 
+
+
 Different developers often want to configure their common projects slightly differently from one another. Adding those config changes to Git isn't appreciated by the other developers and can potentially cause merge conflicts.
 
 A winning approach adopted by many systems is to apply user configs that override certain keys in the default config. If the user configs are untracked by Git there is no risk of unwanted config changes spilling over to others. 
 
 This can easily be implemented in Anyfig. 
+
 
 1. Create one or several dedicated user config files.
 ```python

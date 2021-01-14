@@ -29,3 +29,25 @@
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
 }
+
+.reference {
+  position: relative;
+  top: 50%;
+}
+
+tr td p {
+  margin: 0px;
+}
+
+.source-link {
+  position: relative;
+  float: right;
+}
+
+.function-definition {
+  background-color: rgb(40, 40, 40);
+  font-size: 1.2em;
+  padding: 0.2em 0.5em;
+  border-radius: 0.2em;
+  margin-bottom: 1em;
+}

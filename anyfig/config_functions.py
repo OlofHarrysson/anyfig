@@ -9,10 +9,15 @@ from .fields import InterfaceField
 from . import figutils
 
 
-# Class which is used to define functions that goes into every config class
 class MasterConfig(ABC):
+  """
+  Defines functions that goes into every config class
+  """
   def __init__(self):
-    pass  # Add empty init if config doesn't have one
+    """
+    Empty init by default
+    """
+    pass
 
   def allowed_cli_args(self):
     ''' Returns the attribute names that can be be overwritten from command line input '''
@@ -26,7 +31,15 @@ class MasterConfig(ABC):
     return print_utils.cli_help(self)
 
   def frozen(self, freeze=True):
-    ''' Freeze/unfreeze config '''
+    """
+    Freeze/unfreeze the config. Frozen configs are unmutable
+
+    Args:
+        freeze (bool, optional): Freeze config. Defaults to True.
+
+    Returns:
+        ConfigClass: Config instance
+    """
     self._frozen = freeze
     for _, val in self.get_parameters(copy=False).items():
       if figutils.is_config_class(val):
@@ -35,8 +48,8 @@ class MasterConfig(ABC):
 
   def get_parameters(self, copy=True):
     ''' Returns the config attributes. Doesn't include Anyfig built-ins '''
-    builtins = ['_frozen', '_build_target']
-    params = {k: v for k, v in vars(self).items() if k not in builtins}
+    default_attrs = figutils.default_config_attributes()
+    params = {k: v for k, v in vars(self).items() if k not in default_attrs}
     if copy:
       return deepcopy(params)
     return params
@@ -65,7 +78,7 @@ class MasterConfig(ABC):
       value = old_value.update_value(name, value, config_class)
 
     # Raise error if frozen unless we're trying to unfreeze the config
-    if hasattr(self, '_frozen') and self._frozen and name != '_frozen':
+    if getattr(self, '_frozen', False) and name != '_frozen':
       err_msg = f"Can't set attribute '{name}'. Config object is frozen. Unfreeze the config to make it mutable"
       raise FrozenInstanceError(err_msg)
 
