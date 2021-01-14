@@ -30,9 +30,9 @@ function Home() {
                   Create{' '}
                   <span className={styles.heroProjectKeywords}>modular</span>{' '}
                   and{' '}
-                  <span className={styles.heroProjectKeywords}>scaleable</span>{' '}
-                  configurations for any Python project at{' '}
-                  <span className={styles.heroProjectKeywordsAlt}>runtime</span>
+                  <span className={styles.heroProjectKeywords}>flexible</span>{' '}
+                  <span className={styles.heroProjectKeywordsAlt}>configurations</span>{' '}
+                  in Python{' '}
                 </h1>
 
                 {/* Get Started Button */}

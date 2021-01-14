@@ -1,10 +1,10 @@
 sidebar:
-  Basic Tutorial:
-    - Getting Started: README.md
+  Tutorial:
+    - Get Started: docsforge-website/docs/get_started.md
     - License: LICENSE
-  Guides:
-    - Fundamentals: website/docs/fundamentals.md
-
+    - Fundamentals: docsforge-website/docs/fundamentals.md
+    - Advanced: docsforge-website/docs/advanced.md
+    - Best Practices: docsforge-website/docs/best-practices.md
   
   Important API:
   - init_config: api/anyfig/anyfig_setup/init_config
@@ -30,3 +30,4 @@ autodocSettings:
     star_list: []
     ALIASES: ''
     EXAMPLE_PATH: ''
+

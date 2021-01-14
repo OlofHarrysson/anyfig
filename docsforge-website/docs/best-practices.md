@@ -1,0 +1,117 @@
+## Config Structure
+
+Programs with simple configuration options most likely only need a single config-file, or not even that if the config is defined in the program's main file. As the configurations become more complex, it's better to set up a system to organize them.
+
+One good approach is to create a configs directory next to the program's main Python files and put all the config-files in that directory. 
+
+```python
+.
+├── main_program.py
+└── configs
+    ├── controllers.py # Main configs that utilize the other config-modules
+    ├── data
+    │   ├── datasets.py
+    │   └── transforms.py
+    └── models.py
+```
+
+
+## Git
+
+### User Configs
+
+
+
+Different developers often want to configure their common projects slightly differently from one another. Adding those config changes to Git isn't appreciated by the other developers and can potentially cause merge conflicts.
+
+A winning approach adopted by many systems is to apply user configs that override certain keys in the default config. If the user configs are untracked by Git there is no risk of unwanted config changes spilling over to others. 
+
+This can easily be implemented in Anyfig. 
+
+
+1. Create one or several dedicated user config files.
+```python
+.
+├── main_program.py
+└── configs
+    ├── controllers.py # Main configs that utilize the other config-modules
+    ├── userconfigs.py # Configs that wrap main configs and aren't tracked by Git
+    ├── data
+    │   ├── datasets.py
+    │   └── transforms.py
+    └── models.py
+```
+
+2. Wrap the main config classes inside the userconfigs.py
+```python
+from .controllers import MainConfig
+
+@anyfig.config_class
+class UserMainConfig(MainConfig):
+  def __init__(self):
+    super().__init__()
+    # Override config values...
+```
+
+3. Import the user config in the main program.
+```python
+import anyfig
+from configs.userconfigs import UserMainConfig
+
+config = anyfig.init_config(default_config=UserMainConfig)
+```
+
+4. Add the changes to Git and commit. Tell Git that further changes to the user config files shouldn't be tracked with the command `git update-index --skip-worktree configs/userconfigs.py`. The developers can now put their custom overrides in the user config files.
+
+<br />
+
+:::tip Easily Run the Main Config
+Seamlessly switch between user config and main config by returning before overriding user config values based on a flag.
+
+```python
+@anyfig.config_class
+class UserMainConfig(MainConfig):
+  def __init__(self):
+    super().__init__()
+    use_main_config = False  # Set to True to run the MainConfig
+    if use_main_config:
+      return
+
+    # Overwrite with user values...
+```
+:::
+
+
+### Sensitive Information
+
+Sensitive information such as passwords should most likely not be put into files tracked by git for security reasons. This creates a dilemma if one wants to track Anyfig config-class files but not the sensitive information within. 
+
+A workaround would be to put the sensitive information in a file, have git ignore the file and point to the file from Anyfig.
+
+```python
+import anyfig
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+    self.password_file = 'secrets/password.txt'
+
+config = anyfig.init_config(default_config=MyConfig)
+with open(config.password_file) as file:
+    password = file.read()
+```
+
+It's also possible to create a function to read the password from the file directly in an Anyfig config-class. If you prefer this approach, be careful for if you save the config, the password will be saved as well. 
+
+
+```python
+import anyfig
+
+@anyfig.config_class
+class MyConfig:
+  def __init__(self):
+    with open('secrets/password.txt') as file:
+      self.password = file.read()
+
+config = anyfig.init_config(default_config=MyConfig)
+```
