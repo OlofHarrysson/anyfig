@@ -1,3 +1,4 @@
+# Best Practices
 ## Config Structure
 
 Programs with simple configuration options most likely only need a single config-file, or not even that if the config is defined in the program's main file. As the configurations become more complex, it's better to set up a system to organize them.

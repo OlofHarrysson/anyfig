@@ -25,6 +25,8 @@
   [![image](https://img.shields.io/pypi/pyversions/anyfig.svg)](https://pypi.org/project/anyfig/)
   [![Travis](https://img.shields.io/travis/OlofHarrysson/anyfig/master.svg?logo=travis)](https://travis-ci.org/c4urself/anyfig)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OlofHarrysson/anyfig/master)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://choosealicense.com/licenses/mit/)
+
 </div>
 
 
@@ -37,9 +39,8 @@ Anyfig is a Python library for creating configurations (settings) at runtime. An
 Anyfig was developed for my own machine learning experiments but has since generalized to support other types of Python projects. Since the configs are defined in normal Python code, Anyfig offers freedom and flexibility that isn't possible with other solutions.
 
 
-### Features in a nutshell
-* Work in Python. No reading from .json or .yaml (unless you want to)
-* Utilize Python code / packages to define configs at runtime
+### Features
+* Code in Python. No reading from .json or .yaml (unless you want to)
 * Avoid duplicated config-parameters with the help of inheritance and modularization
 * Override config-values via command line input
 * Freeze configs for immutability
@@ -68,29 +69,27 @@ config = anyfig.init_config(default_config=MyConfig)
 print(config.start_time)
 ```
 
-Feel free to play with the [Online Demo](https://pyfiddle.io/fiddle/4de2f70f-e421-4326-bbb8-b06d5efa547d/?i=true) hosted by Pyfiddle or start learning about Anyfig in the [Fundamentals](fundamentals.mdx) guide.
+### Online Demo
+Feel free to play with the [Online Demo](https://mybinder.org/v2/gh/OlofHarrysson/anyfig/master?filepath=examples/online_demo.ipynb) hosted by Binder.
 
-# Requirements
-Python 3.6+ but 3.8+ is recommended for all features
+## Installation
+Install Anyfig from pip or the github repo
 
-# Installation
-The Anyfig package is in its infancy. Install it from pip or the github repo
-
-<pre><code class="bash Python 3.6">
-pip install anyfig dataclasses
+```Python-3.7+
+pip install anyfig
+```
+```Python-3.6
 # dataclasses is a backport of the built-in dataclasses in Python 3.7
 # More info at https://github.com/ericvsmith/dataclasses
-</code></pre>
-<pre><code class="bash Python 3.7+">
-pip install anyfig
-</code></pre>
-<pre><code class="bash Nightly">
+pip install anyfig dataclasses
+```
+```Latest
 # From GitHub master branch
 pip install git+https://github.com/OlofHarrysson/anyfig/archive/master.zip
-</code></pre>
+```
 
 
-# Citing Anyfig
+## Citing Anyfig
 Feel free to cite Anyfig in your research:
 
 ```
