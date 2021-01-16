@@ -20,6 +20,6 @@ help:
 buildapi: ## Builds api and adds to website
 	rm -rf source/_autosummary
 	rm -rf build
-	rm -rf ../website/docs/api/source
+	rm -rf ../website/docs/api
 	make html
 	python docs_to_docusaurus.py

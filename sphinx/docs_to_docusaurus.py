@@ -12,7 +12,6 @@ def main():
 
   # make sure folder exists
   Path(ROOT_MD_DIRECTORY / "api").mkdir(parents=True, exist_ok=True)
-  Path(ROOT_MD_DIRECTORY / "api/source").mkdir(parents=True, exist_ok=True)
 
   html_modules = convert_modules(ROOT_HTML_DIRECTORY, ROOT_MD_DIRECTORY)
   convert_root(html_modules, ROOT_MD_DIRECTORY)
@@ -23,6 +22,11 @@ def convert_modules(ROOT_HTML_DIRECTORY, ROOT_MD_DIRECTORY):
 
   for module_filepath in ROOT_HTML_DIRECTORY.iterdir():
     module_name = module_filepath.name
+
+    # Skip __init__
+    if module_name == '__init__':
+      continue
+
     content = []
     for html_file in module_filepath.glob('**/*.html'):
       if html_file.stem == f'anyfig.{module_name}':
