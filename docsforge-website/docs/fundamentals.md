@@ -1,3 +1,4 @@
+# Fundamentals
 ## Config Classes
 
 Anyfig allows you to specify configs in Python code. Instead of defining values in json or yaml, you add them to an Anyfig config-class as attributes. 

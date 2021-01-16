@@ -1,3 +1,4 @@
+# Advanced
 ## Command Line Input
 
 Anyfig offers the functionality to override config-values through command line arguments. Anyfig will throw an error if the user inputs a key that doesn't exist making it possible to **override argument**, not to define new ones. By not allowing new keys, Anyfig protects against misspellings that can result in silent errors.

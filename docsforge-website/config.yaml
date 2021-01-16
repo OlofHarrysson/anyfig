@@ -1,23 +1,25 @@
 sidebar:
   Tutorial:
-    - Get Started: docsforge-website/docs/get_started.md
-    - License: LICENSE
+    - Get Started: docsforge-website/docs/get-started.md
     - Fundamentals: docsforge-website/docs/fundamentals.md
     - Advanced: docsforge-website/docs/advanced.md
     - Best Practices: docsforge-website/docs/best-practices.md
+    - License: LICENSE
   
   Important API:
-  - init_config: api/anyfig/anyfig_setup/init_config
- 
+    - config_class: api/anyfig/anyfig_setup/config_class
+    - init_config: api/anyfig/anyfig_setup/init_config
+    - get_config: api/anyfig/figutils/get_config
 
 autodocSettings:
   Public API:
     language: python
     INPUT: anyfig
-    EXCLUDE: test tests examples setup.py test.py tests.py
+    EXCLUDE: test tests examples setup.py test.py tests.py anyfig/dummyfields.py
     EXCLUDE_PATTERNS: '*/tests/* */test/*'
     includeApi: []
-    excludeApi: []
+    excludeApi:
+      - anyfig/dummyfields
     documentSingleUnderscore: false
     documentStatic: true
     documentProtected: true
@@ -31,3 +33,12 @@ autodocSettings:
     ALIASES: ''
     EXAMPLE_PATH: ''
 
+source_browser:
+  title: 'Source Browser'
+  base_url: 'source'
+  input: 'anyfig'
+  exclude: 'include/private'
+  filename_extensions: '.py .pyw'
+
+additionalSettings:
+  markdown_fenced_code_tabs: true
