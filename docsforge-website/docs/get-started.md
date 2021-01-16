@@ -73,30 +73,17 @@ print(config.start_time)
 Feel free to play with the [Online Demo](https://mybinder.org/v2/gh/OlofHarrysson/anyfig/master?filepath=examples/online_demo.ipynb) hosted by Binder.
 
 ## Installation
-The Anyfig package is in its infancy. Install it from pip or the github repo
+Install Anyfig from pip or the github repo
 
-<pre><code class="bash Python&nbsp;3.6">
-pip install anyfig dataclasses
-# dataclasses is a backport of the built-in dataclasses in Python 3.7
-# More info at https://github.com/ericvsmith/dataclasses
-</code></pre>
-<pre><code class="bash Python 3.7+">
-pip install anyfig
-</code></pre>
-<pre><code class="bash Nightly">
-# From GitHub master branch
-pip install git+https://github.com/OlofHarrysson/anyfig/archive/master.zip
-</code></pre>
-
-```Python&nbsp;3.6
-pip install anyfig dataclasses
-# dataclasses is a backport of the built-in dataclasses in Python 3.7
-# More info at https://github.com/ericvsmith/dataclasses
-```
-```Python 3.7+
+```Python-3.7+
 pip install anyfig
 ```
+```Python-3.6
+# dataclasses is a backport of the built-in dataclasses in Python 3.7
+# More info at https://github.com/ericvsmith/dataclasses
+pip install anyfig dataclasses
 ```
+```Latest
 # From GitHub master branch
 pip install git+https://github.com/OlofHarrysson/anyfig/archive/master.zip
 ```
