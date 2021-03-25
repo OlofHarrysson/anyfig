@@ -1,4 +1,5 @@
 import inspect
+import contextlib
 from abc import ABC
 from dataclasses import FrozenInstanceError
 from copy import deepcopy
@@ -18,6 +19,20 @@ class MasterConfig(ABC):
     Empty init by default
     """
     pass
+
+  @contextlib.contextmanager
+  def __call__(self, *, freeze=None):
+    ''' Allow the config object to temporarily be set in a certain state using the "with" keyword.
+
+    Args:
+        freeze (bool, optional): Temporarily freeze/unfreeze config
+    '''
+    if freeze is not None:
+      was_frozen = self._frozen
+      self.frozen(freeze=freeze)
+    yield self
+    if freeze is not None:
+      self.frozen(freeze=was_frozen)
 
   def allowed_cli_args(self):
     ''' Returns the attribute names that can be be overwritten from command line input '''

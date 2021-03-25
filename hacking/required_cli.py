@@ -10,9 +10,11 @@ class Unfrozen:
     config.frozen(False)
 
   def __enter__(self):
+    print("ENTER")
     return self.config
 
   def __exit__(self, exc_type, exc_val, exc_tb):
+    print("EXIT")
     self.config.frozen(self.frozen_enter)
 
 
@@ -42,11 +44,19 @@ print(config)
 # config.start_time = 123
 
 # with Unfrozen(config):
-with config.frozen(False):
+#   config.start_time = 1234
+# config.start_time = 1
+
+# Return an Unfrozen wrapper somehow without importing it in file.
+# print(config.frozen2(False))
+# with config.frozen2(False) as cfg:
+#   # config.start_time = 123
+#   cfg.start_time = 123
+#   print(cfg)
+# config.start_time = 1  # Show error
+
+# print(config.frozen3(False))
+with config(freeze=False):
   config.start_time = 123
-# with some_lock:
-
-config.start_time = 123
-
-# with open() as f:
-#   lines = f.read().splitlines()
+  # cfg.start_time = 123
+config.start_time = 1  # Show error

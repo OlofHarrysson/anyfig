@@ -6,7 +6,7 @@ Versioning support - I'd like to create a way to keep track of / load old config
 
 
 Can I use the "with" statement to maybe say with Anyfig.OnlyOverwrite(self) or something to make sure that people don't add new attributes in configs instead of overwritting existing attributes?
-"with" statement to set config attributes without having to set frozen(False) then back to frozen(True)
+What other context-managers?
 
 license as a button in github
 
@@ -15,16 +15,7 @@ Assume unchanged instead of that ignore thing in git for user configs? It had so
 command line tab autocomplete?
 
 ~~~~~~ Docs ~~~~~~
-Sort by line lumber in a file
-Linestart and end in Github? It becomes yellow which is nice.
-
-~~~~~~ WEBSITE ~~~~~~
-Style external links
-Online demo on introduction is broken
-
-Some sort of info on the main page.
-- Add some gifs of code being written?
-
+Docsearch v3 when it's released
 
 ~~~~~~ Release 0.3.0 ~~~~~~
 dict cli-arguments readme
@@ -34,7 +25,7 @@ post_init readme. Is this feature done? post init can be done to validate config
 allowed_cli_args readme
 
 
-Json/Yaml serialization
+Json/Yaml serialization. Use json-pickle?
 a = 1
 b = 2
 inner = InnerConfig()
@@ -44,7 +35,7 @@ inner = InnerConfig()
   a = 1
   b = 2
   inner = {
-    __config_class= InnerConfig
+    __anyfig_config_class = InnerConfig
     innnnn = "in"
   }
 }

@@ -9,7 +9,7 @@ global_configs = {}
 
 
 def get_website():
-  return 'https://anyfig.now.sh/'
+  return 'https://anyfig.docsforge.com/'
 
 
 def default_config_attributes():
